@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-12 text-right">
+    <a class="btn btn-primary mr-2"><i class="fas fa-plus"></i>新增</a>
+  </div>
+
+  <table class="table table-striped mt-2">
+    <thead>
+    <tr class="table-primary">
+      <th>序号</th>
+      <th>学校</th>
+      <th>学期名称</th>
+      <th>开学日期</th>
+      <th>结束日期</th>
+      <th>状态</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let term of terms; index as i">
+      <td>{{ i + 1 }}</td>
+      <td>天职师大</td>
+      <td>{{ term.term}}</td>
+      <td>{{ term.start_time}}</td>
+      <td>{{ term.end_time}}</td>
+      <td *ngIf="term.status; else termIsFreeze">冻结</td>
+      <td>
+        <a class="btn btn-outline-primary btn-sm">
+          <i class="fa fa-pen"></i>编辑
+        </a>
+        <span *ngIf="term.status === 0" class="btn btn-sm btn-outline-danger">
+          <i class="fa fa-asterisk"></i>冻结
+        </span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <ng-template #termIsFreeze>
+    <td>置入</td>
+  </ng-template>
+</div>
