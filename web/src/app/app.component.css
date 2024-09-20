@@ -8,16 +8,14 @@
   align-items: center;/*居中显示*/
   justify-content: flex-start;/*水平靠左对齐*/
 }
-/*导航栏字体大小*/
+/*导航栏字体大小，颜色*/
 .nav-link {
   font-size: 1.25rem;
+  color:  #000000ec;
 }
 /*导航栏被点亮是变颜色*/
 .nav-link.active {
   background-color:  #b9a8e1ec;
-}
-.nav-link {
-  color:  #000000ec;
 }
 /*防止屏幕放大时导航栏的内容换行*/
 .nav-pills .nav-item {
@@ -25,11 +23,17 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.nowrap {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 .spacing > svg {
   margin-right: 0.3em;
+}
+.col-auto {
+  flex: 0 0 200px;
+  max-width: 200px
+}
+/*内容区域自适应剩余空间*/
+.col {
+  flex: 1;
+}
+.bold-text {
+  font-weight: 600
 }
