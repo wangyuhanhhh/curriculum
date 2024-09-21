@@ -1,5 +1,5 @@
 <?php
-namespace app\index\model;
+namespace app\common\model;
 class User
 {
     // 用户名

@@ -1,10 +1,17 @@
 <?php
-namespace app\controller;
-use app\model\Term;
+namespace app\index\controller;
 use think\Request;
+use app\common\model\Term;
+use think\Controller;
 
-class TermController
+class TermController extends Controller
 {
+    public function index() {
+         $Term = new Term;
+         $totalTerm = Term::select();
+        return json($totalTerm);
+    }
+    
     // 新增学期
     public function add(Request $request){
         // 接收前台数据
@@ -23,8 +30,5 @@ class TermController
     }
 
     // 显示学期列表
-    public function index(Request $request){
-        // 获取所有学期
-    }
-    ß
+
 }
