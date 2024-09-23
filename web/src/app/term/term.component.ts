@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { TermService } from '../../service/term.service';
 
 @Component({
   selector: 'app-term',
@@ -10,11 +10,13 @@ export class TermComponent implements OnInit {
   // 用于存储从后端获取的数据
   terms: any[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private termService: TermService) {
+    console.log('term组件成功注入termService', termService);
+  }
 
   ngOnInit(): void {
-    this.http.get<string>('/api/term/index').subscribe(v => {
-      console.log(v);
+    this.termService.getAllTerms().subscribe(terms => {
+      this.terms = terms;
     });
   }
 
