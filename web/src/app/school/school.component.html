@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-12 text-right">
-    <a class="btn btn-primary mr-2"><i class="fas fa-plus"></i>新增</a>
+    <a class="btn btn-primary mr-2" routerLink="./add"><i class="fas fa-plus"></i>新增</a>
   </div>
 </div>
   <table class="table table-striped mt-2">
@@ -14,12 +14,12 @@
     <tbody>
     <tr *ngFor="let school of schools; index as i">
       <td>{{ i + 1 }}</td>
-      <td>天职师大</td>
+      <td>{{school.school}}</td>
       <td>
         <a class="btn btn-outline-primary btn-sm">
           <i class="fa fa-pen"></i>编辑
         </a>
-        <span class="btn btn-outline-danger btn-sm" (click)="onDelete(school.id)">
+        <span class="btn btn-outline-danger btn-sm" (click)="onDelete">
           <i class="far fa-trash-alt"></i>删除
         </span>
       </td>
