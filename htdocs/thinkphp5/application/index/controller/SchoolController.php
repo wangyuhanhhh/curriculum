@@ -1,5 +1,5 @@
 <?php
-namespace app\common\controller;
+namespace app\index\controller;
 use think\Controller;
 use app\index\model\School;
 use think\Request;
@@ -35,8 +35,6 @@ class SchoolController extends Controller {
         $schools = $schoolModel -> select();
         // 转换成JSON字符串 JSON_UNESCAPED_UNICODE避免中文字符被转义
         $schoolJson = json_encode($schools, JSON_UNESCAPED_UNICODE);
-        var_dump($schoolJson);
-        die();
         return $schoolJson;
     }
 }
