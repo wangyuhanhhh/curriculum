@@ -7,7 +7,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class TermService {
-  private baseUrl = 'http://localhost:8088/api/term';
+  private baseUrl = '/api/term';
 
   constructor(private http: HttpClient) { }
 
@@ -16,6 +16,15 @@ export class TermService {
     return this.http.get(this.baseUrl).pipe(
       catchError(this.handleError)
     );
+  }
+
+  // 学期新增
+  addTerm(termData: any): Observable<any> {
+    // 构建完整的URL
+    const addUrl = `${this.baseUrl}/add`;
+
+    // 发送POST请求到后端
+    return this.http.post<any>(addUrl, termData);
   }
 
   // 错误处理
