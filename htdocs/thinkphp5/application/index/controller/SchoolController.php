@@ -1,10 +1,9 @@
 <?php
 namespace app\index\controller;
-use think\Controller;
-use app\index\model\School;
+use app\common\model\School;
 use think\Request;
 
-class SchoolController extends Controller {
+class SchoolController extends IndexController {
     /**
      * 接受数据并执行新增操作
      */
@@ -28,6 +27,23 @@ class SchoolController extends Controller {
             }
         }
         return json(['success' => false, 'error' => '缺少学校数据']);
+    }
+
+    public function delete() {
+        $request = Request::instance();
+        $id = IndexController::getParamId($request);
+        // 查询学校是否存在
+        $school = School::get($id);
+        if (!$school) {
+            return json(['code' => 404, 'msg' => '学校不存在']);
+        }
+
+        // 删除
+        if ($school->delete()) {
+            return json(['code' => 200, 'msg' => '删除成功']);
+        } else {
+            return json(['code' => 500, 'msg' => '删除失败']);
+        }
     }
     public function index() {
         $schoolModel = new School();
