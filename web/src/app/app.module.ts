@@ -4,8 +4,9 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TermComponent } from './term/term.component';
-import { HttpClientModule } from '@angular/common/http';
 import { SchoolComponent } from './school/school.component';
+import { HttpClientModule } from '@angular/common/http';
+import { AddComponent } from './school/add/add.component';
 import { AddComponent } from './term/add/add.component';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
@@ -13,7 +14,7 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {NzDatePickerModule} from 'ng-zorro-antd/date-picker';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 
 registerLocaleData(en);
 

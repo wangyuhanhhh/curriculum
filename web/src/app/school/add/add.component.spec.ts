@@ -1,29 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SchoolComponent } from './school.component';
+import { AddComponent } from './add.component';
+import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 
-describe('SchoolComponent', () => {
-  let component: SchoolComponent;
-  let fixture: ComponentFixture<SchoolComponent>;
+describe('AddComponent', () => {
+  let component: AddComponent;
+  let fixture: ComponentFixture<AddComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      declarations: [ AddComponent ],
       imports: [
+        FormsModule,
         HttpClientModule
-      ],
-      declarations: [ SchoolComponent ]
+      ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SchoolComponent);
+    fixture = TestBed.createComponent(AddComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  fit('should create', () => {
     expect(component).toBeTruthy();
   });
 });
