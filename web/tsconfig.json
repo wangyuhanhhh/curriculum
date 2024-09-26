@@ -21,6 +21,12 @@
       "dom"
     ]
   },
+  "include": [
+    "src/service/term.service.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
