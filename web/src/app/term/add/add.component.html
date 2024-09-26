@@ -1,0 +1,50 @@
+<form class="container-sm" (ngSubmit)="onSubmit()">
+  <div class="mb-3 row">
+    <label for="name" class="col-sm-2 col-form-label">学校</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="name">
+    </div>
+  </div>
+  <div class="mb-3 row">
+    <label for="term" class="col-sm-2 col-form-label">学期名称</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" name="term" [(ngModel)]="term.term" id="term">
+    </div>
+  </div>
+  <div class="mb-3 row">
+    <label for="startTime" class="col-sm-2 col-form-label">开学日期</label>
+    <div class="col-sm-10">
+      <nz-date-picker id="startTime" class="form-control" name="startTime" [(ngModel)]="term.start_time"></nz-date-picker>
+    </div>
+  </div>
+  <div class="mb-3 row">
+    <label for="endTime" class="col-sm-2 col-form-label">结束日期</label>
+    <div class="col-sm-10">
+      <nz-date-picker id="endTime" class="form-control" name="endTime" [(ngModel)]="term.end_time"></nz-date-picker>
+    </div>
+  </div>
+  <div class="mb-3 row">
+    <label class="col-sm-2 col-form-label">状态</label>
+    <div class="col-sm-10">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="normal"
+               name="status"
+               [(ngModel)]="term.status"
+               [value]="0">
+        <label class="form-check-label" for="normal">置入</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="freeze"
+               name="status"
+               [(ngModel)]="term.status"
+               [value]="1">
+        <label class="form-check-label" for="freeze">冻结</label>
+      </div>
+    </div>
+  </div>
+  <div class="mb-3 row">
+    <div class="col-sm-10 offset-2">
+      <button class="btn btn-primary">保存</button>
+    </div>
+  </div>
+</form>

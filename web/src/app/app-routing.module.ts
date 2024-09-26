@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {TermComponent} from './term/term.component';
 
 const routes: Routes = [
   {
     path: 'term',
-    component: TermComponent
+    loadChildren: () => import('./term/term.module').then(m => m.TermModule)
   }
-  ];
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
