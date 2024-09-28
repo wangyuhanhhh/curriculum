@@ -2,10 +2,10 @@
  * 学校
  */
 export class School {
-    id: number;
-    school: string;
-    constructor(school: string, id: number) {
-      this.school = school;
-      this.id = id;
-    }
+  id: number;
+  school: string;
+  constructor(id?: number, school?: string) {
+    this.id = id as number;
+    this.school = school as string;
   }
+}

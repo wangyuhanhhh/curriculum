@@ -23,7 +23,7 @@ export class AddComponent implements OnInit {
     console.log(this.addSchool);
     // 向后台发起http请求
     this.httpClient.post('http://localhost:8088/api/school/add', this.addSchool)
-      .subscribe((result) => this.router.navigateByUrl('/school'), 
+      .subscribe((result) => this.router.navigateByUrl('/school'),
       error => console.log('保存失败', error));
   }
 
