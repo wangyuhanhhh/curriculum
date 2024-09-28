@@ -3,6 +3,7 @@ namespace app\index\controller;
 use think\Request;
 use app\common\model\Term;
 use think\Controller;
+use app\common\validate\TermValidate;
 
 class TermController extends Controller
 {
@@ -20,14 +21,29 @@ class TermController extends Controller
         $data = json_decode($request, true);
   
         // 将毫秒级时间戳转换为秒级时间戳  
-        $startTime = (int)($data['start_time'] / 1000);  
-        $endTime = (int)($data['end_time'] / 1000); // 如果 end_time 也是毫秒级时间戳的话  
+        $startTimeStamp = (int)($data['startTime'] / 1000);  
+        $endTimeStamp = (int)($data['endTime'] / 1000); // 如果 endTime 也是毫秒级时间戳的话  
 
         $term = new Term;
-        $term->start_time = date('Y-m-d', $startTime); 
-        $term->end_time = date('Y-m-d', $endTime); 
+        $term->start_time = date('Y-m-d', $startTimeStamp); 
+        $term->end_time = date('Y-m-d', $endTimeStamp); 
         $term->term = $data['term'];
         $term->status = $data['status'];
+        $term->school_id = $data['schoolId'];
+
+        // 实例化验证器
+        $validate = new TermValidate;
+        // 进行数据验证
+        if(!$validate->scene('add')->check($term)) {
+            // 验证失败，返回错误信息
+            $success = false;
+            $message = $validate->getError();
+            return json([
+                'success' => $success,
+                'message' => $message
+            ]);
+        }
+        // 验证通过，处理数据
         $result = $term->save();
 
         if($result) {

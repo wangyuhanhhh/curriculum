@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { Term} from '../app/entity/term';
 
 @Injectable({
   providedIn: 'root'
@@ -13,18 +14,16 @@ export class TermService {
 
   // 获取所有的terms
   getAllTerms(): Observable<any> {
-    return this.http.get(this.baseUrl).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get(this.baseUrl);
   }
 
   // 学期新增
-  addTerm(termData: any): Observable<any> {
+  addTerm(termData: { term: string; startTime: number; endTime: number; status: boolean; schoolId: number }): Observable<any> {
     // 构建完整的URL
     const addUrl = `${this.baseUrl}/add`;
 
     // 发送POST请求到后端
-    return this.http.post<any>(addUrl, termData);
+    return this.http.post<Term>(addUrl, termData);
   }
 
   // 错误处理

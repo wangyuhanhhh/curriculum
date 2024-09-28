@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { TermService } from '../../../service/term.service';
 import Swal from 'sweetalert2';
+import { Term } from '../../entity/term';
+import { School } from '../../entity/school';
+import { HttpClient } from '@angular/common/http';
+import {ControlValueAccessor, FormControl, FormGroup, Validators} from '@angular/forms';
+
 
 @Component({
   selector: 'app-add',
@@ -8,20 +13,39 @@ import Swal from 'sweetalert2';
   styleUrls: ['./add.component.css']
 })
 export class AddComponent implements OnInit {
-  term = {} as {
-    term: string,
-    start_time: Date,
-    end_time: Date,
-    status: number;
-  };
+  formGroup = new FormGroup({
+    term: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    startTime: new FormControl(null, Validators.required),
+    endTime: new FormControl(null, Validators.required),
+    status: new FormControl(null, Validators.required),
+    schoolId: new FormControl(null, Validators.required),
+  });
+  term = {} as Term;
+  schools = new Array<School>();
 
-  constructor(private termService: TermService) { }
+  constructor(private termService: TermService,
+              private httpClient: HttpClient) { }
 
   ngOnInit(): void {
+    // 获取所有学校
+    this.httpClient.get<School[]>('http://localhost:8088/api/school/index')
+      .subscribe(schoolJson => {
+        this.schools = schoolJson;
+        console.log(this.schools);
+      }, error => {
+        console.log(error);
+      });
+  }
+
+  disableEndDate = (endDate: Date): boolean => {
+    const time = endDate.getTime();
+    return this.formGroup.get('startTime')?.value.getTime() > time;
   }
 
   onSubmit(): void {
-    const term = {term: this.term.term, start_time: this.term.start_time.getTime(), end_time: this.term.end_time.getTime(), status: this.term.status};
+    const term = this.formGroup.value;
+    term.endTime = term.endTime.getTime();
+    term.startTime = term.startTime.getTime();
     this.termService.addTerm(term).subscribe(
       response => {
         console.log(response.success);
@@ -40,7 +64,7 @@ export class AddComponent implements OnInit {
   }
 
   // 显示成功弹窗
-  private showSuccessAlert(message: string) {
+  private showSuccessAlert(message: string): void {
     Swal.fire({
       icon: 'success',
       title: '成功',
@@ -51,11 +75,17 @@ export class AddComponent implements OnInit {
   }
 
   // 显示失败弹窗
-  private showErrorAlert(message: string) {
+  private showErrorAlert(message: string): void {
     Swal.fire({
       icon: 'error',
       title: '错误',
       text: message
     });
   }
+
+  // initForm() {
+  //   this.termForm = new FormGroup({
+  //     schoolId: new FormControl(null, []),
+  //   });
+  // }
 }
