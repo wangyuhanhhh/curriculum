@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import {RouterModule} from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 registerLocaleData(en);
 
@@ -34,7 +35,8 @@ registerLocaleData(en);
     FormsModule,
     BrowserAnimationsModule,
     NzDatePickerModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]

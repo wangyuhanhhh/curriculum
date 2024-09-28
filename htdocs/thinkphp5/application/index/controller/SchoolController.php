@@ -1,5 +1,6 @@
 <?php
 namespace app\index\controller;
+use think\Controller;
 use app\common\model\School;
 use think\Request;
 use app\common\validate\SchoolValidator;
