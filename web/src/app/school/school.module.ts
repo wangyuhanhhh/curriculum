@@ -16,7 +16,7 @@ const routes: Routes = [
   }
 ];
 @NgModule({
-  declarations: [],
+  declarations: [AddComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes) // 不是根模块，使用forChild
