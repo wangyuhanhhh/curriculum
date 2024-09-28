@@ -5,6 +5,7 @@ import { Term } from '../../entity/term';
 import { School } from '../../entity/school';
 import { HttpClient } from '@angular/common/http';
 import {ControlValueAccessor, FormControl, FormGroup, Validators} from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class AddComponent implements OnInit {
   schools = new Array<School>();
 
   constructor(private termService: TermService,
-              private httpClient: HttpClient) { }
+              private httpClient: HttpClient,
+              private router: Router) { }
 
   ngOnInit(): void {
     // 获取所有学校
@@ -52,6 +54,8 @@ export class AddComponent implements OnInit {
         // 根据服务器返回的响应来显示成功或失败的弹窗
         if (response.success) {
           this.showSuccessAlert(response.message);
+          // 新增成功，重定向到 term.component.html 对应的路由
+          this.router.navigate(['/term']);
         } else {
           this.showErrorAlert(response.message);
         }
