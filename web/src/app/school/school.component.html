@@ -16,7 +16,7 @@
       <td>{{ i + 1 }}</td>
       <td>{{school.school}}</td>
       <td>
-        <a class="btn btn-outline-primary btn-sm">
+        <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + school.id">
           <i class="fa fa-pen"></i>编辑
         </a>
         <span class="btn btn-outline-danger btn-sm" (click)="onDelete(i, school.id)">
