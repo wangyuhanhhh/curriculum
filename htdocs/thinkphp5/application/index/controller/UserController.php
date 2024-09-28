@@ -1,6 +1,6 @@
 <?php
 namespace app\index\controller;
-use app\index\model\User;
+use app\common\model\User;
 use think\Controller;
 use think\Request;
 

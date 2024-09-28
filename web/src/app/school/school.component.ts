@@ -17,11 +17,9 @@ export class SchoolComponent implements OnInit {
     this.httpClient.get<School[]>('http://localhost:8088/api/school/index')
       .subscribe(schoolJson => {
         this.schools = schoolJson;
-        console.log(this.schools);
       }, error => {
         console.log(error);
       });
-    console.log(1);
   }
   // index 索引 schoolId 当前迭代到的学校的ID
   onDelete(index: number, schoolId: number): void {
