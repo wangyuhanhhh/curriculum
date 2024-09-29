@@ -14,15 +14,15 @@ class TermController extends IndexController
         $data = json_decode($request, true);
   
         // 将毫秒级时间戳转换为秒级时间戳  
-        $startTimeStamp = (int)($data['startTime'] / 1000);  
-        $endTimeStamp = (int)($data['endTime'] / 1000); // 如果 endTime 也是毫秒级时间戳的话  
+        $startTimeStamp = (int)($data['start_time'] / 1000);  
+        $endTimeStamp = (int)($data['end_time'] / 1000); // 如果 endTime 也是毫秒级时间戳的话  
 
         $term = new Term;
         $term->start_time = date('Y-m-d', $startTimeStamp); 
         $term->end_time = date('Y-m-d', $endTimeStamp); 
         $term->term = $data['term'];
         $term->status = $data['status'];
-        $term->school_id = $data['schoolId'];
+        $term->school_id = $data['school_id'];
 
         // 实例化验证器
         $validate = new TermValidate;
@@ -94,13 +94,13 @@ class TermController extends IndexController
         if ($term->term !== $newTerm['term']) {
             $noChange = false;
         }
-        if ($term->school_id !== $newTerm['schoolId']) {
+        if ($term->school_id !== $newTerm['school_id']) {
             $noChange = false;
         }
-        if ($term->start_time !== $newTerm['startTime']) {
+        if ($term->start_time !== $newTerm['start_time']) {
             $noChange = false;
         }
-        if ($term->end_time !== $newTerm['endTime']) {
+        if ($term->end_time !== $newTerm['end_time']) {
             $noChange = false;
         }
         if ($term->status !== $newTerm['status']) {
@@ -114,22 +114,22 @@ class TermController extends IndexController
 
         // 判断start_time和end_time是否需要转化类型
         // 如果改动了start_time和end_time就需要转化类型
-        if (ctype_digit($newTerm['startTime'])) {
-            $startTimeStamp = (int)($newTerm['startTime'] / 1000);
+        if (ctype_digit($newTerm['start_time'])) {
+            $startTimeStamp = (int)($newTerm['start_time'] / 1000);
             $term->start_time = date('Y-m-d', $startTimeStamp);  
         } else {
             // 不需要转型，则直接赋值
             $term->start_time = $term->start_time;
         }
-        if (ctype_digit($newTerm['endTime'])) {
-            $endTimeStamp = (int)($newTerm['endTime'] / 1000);
+        if (ctype_digit($newTerm['end_time'])) {
+            $endTimeStamp = (int)($newTerm['end_time'] / 1000);
             $term->end_time = date('Y-m-d', $endTimeStamp);  
         } else {
             $term->end_time = $term->end_time;
         }
 
         $term->term = isset($newTerm['term']) ? $newTerm['term'] : $term->term;
-        $term->school_id = isset($newTerm['schoolId']) ? $newTerm['schoolId'] : $term->school_id;
+        $term->school_id = isset($newTerm['school_id']) ? $newTerm['school_id'] : $term->school_id;
         $term->status = isset($newTerm['status']) ? $newTerm['status'] : $term->status;
 
         // 保存更新

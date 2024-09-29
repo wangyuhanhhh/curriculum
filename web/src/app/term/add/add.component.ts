@@ -16,10 +16,10 @@ import { Router } from '@angular/router';
 export class AddComponent implements OnInit {
   formGroup = new FormGroup({
     term: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    startTime: new FormControl(null, Validators.required),
-    endTime: new FormControl(null, Validators.required),
+    start_time: new FormControl(null, Validators.required),
+    end_time: new FormControl(null, Validators.required),
     status: new FormControl(null, Validators.required),
-    schoolId: new FormControl(null, Validators.required),
+    school_id: new FormControl(null, Validators.required),
   });
   term = {} as Term;
   schools = new Array<School>();
@@ -41,13 +41,13 @@ export class AddComponent implements OnInit {
 
   disableEndDate = (endDate: Date): boolean => {
     const time = endDate.getTime();
-    return this.formGroup.get('startTime')?.value.getTime() > time;
+    return this.formGroup.get('start_time')?.value.getTime() > time;
   }
 
   onSubmit(): void {
     const term = this.formGroup.value;
-    term.endTime = term.endTime.getTime();
-    term.startTime = term.startTime.getTime();
+    term.end_time = term.end_time.getTime();
+    term.start_time = term.start_time.getTime();
     this.termService.addTerm(term).subscribe(
       response => {
         console.log(response.success);
@@ -86,10 +86,4 @@ export class AddComponent implements OnInit {
       text: message
     });
   }
-
-  // initForm() {
-  //   this.termForm = new FormGroup({
-  //     schoolId: new FormControl(null, []),
-  //   });
-  // }
 }

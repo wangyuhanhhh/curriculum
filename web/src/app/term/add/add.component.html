@@ -1,13 +1,13 @@
 <form class="container-sm" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
   <div class="mb-3 row">
-    <label for="school" class="col-sm-2 col-form-label">学校</label>
+    <label for="school_id" class="col-sm-2 col-form-label">学校</label>
     <div class="col-sm-10">
-      <select id="school" class="form-control"
-              formControlName="schoolId"
-              name="school">
+      <select id="school_id" class="form-control"
+              formControlName="school_id"
+              name="school_id">
         <option *ngFor="let school of schools" [ngValue]="school.id">{{ school.school }}</option>
       </select>
-      <div *ngIf="formGroup.get('schoolId')?.invalid" class="text-danger mt-1">必须指定一个学校</div>
+      <div *ngIf="formGroup.get('school_id')?.invalid" class="text-danger mt-1">必须指定一个学校</div>
     </div>
   </div>
   <div class="mb-3 row">
@@ -18,19 +18,19 @@
     </div>
   </div>
   <div class="mb-3 row">
-    <label for="startTime" class="col-sm-2 col-form-label">开学日期</label>
+    <label for="start_time" class="col-sm-2 col-form-label">开学日期</label>
     <div class="col-sm-10">
-      <nz-date-picker id="startTime"
-                       formControlName="startTime" class="form-control"></nz-date-picker>
-      <div *ngIf="formGroup.get('startTime')?.invalid" class="text-danger mt-1">必须选择开学日期</div>
+      <nz-date-picker id="start_time"
+                       formControlName="start_time" class="form-control"></nz-date-picker>
+      <div *ngIf="formGroup.get('start_time')?.invalid" class="text-danger mt-1">必须选择开学日期</div>
     </div>
   </div>
   <div class="mb-3 row">
-    <label for="endTime" class="col-sm-2 col-form-label">结束日期</label>
+    <label for="end_time" class="col-sm-2 col-form-label">结束日期</label>
     <div class="col-sm-10">
-      <nz-date-picker id="endTime" [nzDisabledDate]="disableEndDate"
-                      formControlName="endTime" class="form-control"></nz-date-picker>
-      <div *ngIf="formGroup.get('endTime')?.invalid"  class="text-danger mt-1">必须选择结束日期</div>
+      <nz-date-picker id="end_time" [nzDisabledDate]="disableEndDate"
+                      formControlName="end_time" class="form-control"></nz-date-picker>
+      <div *ngIf="formGroup.get('end_time')?.invalid"  class="text-danger mt-1">必须选择结束日期</div>
     </div>
   </div>
   <div class="mb-3 row">

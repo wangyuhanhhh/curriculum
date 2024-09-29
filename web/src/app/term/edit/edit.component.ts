@@ -18,10 +18,10 @@ export class EditComponent implements OnInit {
   term: Term = {} as Term;
   formGroup = new FormGroup({
     term: new FormControl('', Validators.required),
-    startTime: new FormControl(null, Validators.required),
-    endTime: new FormControl(null, Validators.required),
+    start_time: new FormControl(null, Validators.required),
+    end_time: new FormControl(null, Validators.required),
     status: new FormControl(null, Validators.required),
-    schoolId: new FormControl(null, Validators.required),
+    school_id: new FormControl(null, Validators.required),
   });
 
   constructor(private activeRoute: ActivatedRoute,
@@ -46,9 +46,9 @@ export class EditComponent implements OnInit {
         // 填充信息（编辑前的学期信息）
         term: term.term,
         status: term.status,
-        endTime: term.end_time,
-        startTime: term.start_time,
-        schoolId: term.school_id
+        end_time: term.end_time,
+        start_time: term.start_time,
+        school_id: term.school_id
       });
       console.log(this.formGroup.value);
       }, error => console.log('失败', error)
@@ -68,13 +68,13 @@ export class EditComponent implements OnInit {
     console.log('点击保存按钮');
     const id = this.activeRoute.snapshot.params.id;
     const term = this.formGroup.value;
-    // 判断 startTime和endTime是不是Date对象
+    // 判断 startTime和end_time是不是Date对象
     // 如果是Date对象，说明前台改动了；如果不是Date对象，说明前台没有改动，直接赋值，不需要调用getTime方法
-    if (term.endTime instanceof Date) {
-      term.endTime = term.endTime.getTime();
+    if (term.end_time instanceof Date) {
+      term.end_time = term.end_time.getTime();
     }
-    if (term.startTime instanceof Date) {
-      term.startTime = term.startTime.getTime();
+    if (term.start_time instanceof Date) {
+      term.start_time = term.start_time.getTime();
     }
 
     this.termSeries.updateTerm(id, term).subscribe(
@@ -118,6 +118,6 @@ export class EditComponent implements OnInit {
 
   disableEndDate = (endDate: Date): boolean => {
     const time = endDate.getTime();
-    return this.formGroup.get('startTime')?.value.getTime() > time;
+    return this.formGroup.get('start_time')?.value.getTime() > time;
   }
 }
