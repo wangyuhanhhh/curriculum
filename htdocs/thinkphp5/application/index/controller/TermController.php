@@ -5,15 +5,8 @@ use app\common\model\Term;
 use think\Controller;
 use app\common\validate\TermValidate;
 
-class TermController extends Controller
+class TermController extends IndexController
 {
-    // 显示学期列表
-    public function index() {
-        $Term = new Term;
-        $totalTerm = Term::select();
-        return json($totalTerm);
-    }
-    
     // 新增学期
     public function add(){
         // 接收前台数据
@@ -63,6 +56,87 @@ class TermController extends Controller
                 'success' => $success,
                 'message' => $message
             ]);
+        }
+    }
+
+    // 根据id获取学期信息，用来显示编辑前的信息，填充表单
+    public function edit() {
+        $request = Request::instance();
+        $id = IndexController::getParamId($request);
+        if(!$id) {
+            return (['success' => true, 'message' => '该学期不存在']);
+        }
+        $term = Term::get($id);
+        return json($term);
+    }
+
+    // 显示学期列表
+    public function index() {
+        $Term = new Term;
+        $totalTerm = Term::select();
+        return json($totalTerm);
+    }
+
+    // 更新学期
+    public function update() {
+        $request = Request::instance();
+        $id = IndexController::getParamId($request);
+        $data = Request::instance()->getContent();
+        $newTerm = json_decode($data, true);
+        $term = Term::get($id);
+
+        if(!$term) {
+            return json(['success' => false, 'message' => '学期不存在']);
+        }
+
+        // 比较各字段是否有改动
+        $noChange = true;
+        if ($term->term !== $newTerm['term']) {
+            $noChange = false;
+        }
+        if ($term->school_id !== $newTerm['schoolId']) {
+            $noChange = false;
+        }
+        if ($term->start_time !== $newTerm['startTime']) {
+            $noChange = false;
+        }
+        if ($term->end_time !== $newTerm['endTime']) {
+            $noChange = false;
+        }
+        if ($term->status !== $newTerm['status']) {
+            $noChange = false;
+        }
+
+        // 如果没有任何改动，返回 false
+        if ($noChange) {
+            return json(['success' => false, 'message' => '没有任何改动，更新失败']);
+        }
+
+        // 判断start_time和end_time是否需要转化类型
+        // 如果改动了start_time和end_time就需要转化类型
+        if (ctype_digit($newTerm['startTime'])) {
+            $startTimeStamp = (int)($newTerm['startTime'] / 1000);
+            $term->start_time = date('Y-m-d', $startTimeStamp);  
+        } else {
+            // 不需要转型，则直接赋值
+            $term->start_time = $term->start_time;
+        }
+        if (ctype_digit($newTerm['endTime'])) {
+            $endTimeStamp = (int)($newTerm['endTime'] / 1000);
+            $term->end_time = date('Y-m-d', $endTimeStamp);  
+        } else {
+            $term->end_time = $term->end_time;
+        }
+
+        $term->term = isset($newTerm['term']) ? $newTerm['term'] : $term->term;
+        $term->school_id = isset($newTerm['schoolId']) ? $newTerm['schoolId'] : $term->school_id;
+        $term->status = isset($newTerm['status']) ? $newTerm['status'] : $term->status;
+
+        // 保存更新
+        if ($term->save()) {
+            return json(['success' => true, 'message' => '学期更新成功']);
+        } else {
+            return json(['success' => false, 'message' => '学期更新失败']);
         }
     }
 }

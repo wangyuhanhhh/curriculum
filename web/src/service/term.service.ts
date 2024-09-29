@@ -26,9 +26,13 @@ export class TermService {
     return this.http.post<Term>(addUrl, termData);
   }
 
-  // 错误处理
-  // tslint:disable-next-line:typedef
-  private handleError(error: any) {
-    return throwError(error.massage || 'Server Error');
+  editTerm(id: number): Observable<any> {
+    const updateUrl = `${this.baseUrl}/edit/${id}`;
+    return this.http.get<any>(updateUrl);
+  }
+
+  updateTerm(id: number, termData: Term): Observable<any> {
+    const updateUrl = `${this.baseUrl}/update/${id}`;
+    return this.http.post(updateUrl, termData);
   }
 }
