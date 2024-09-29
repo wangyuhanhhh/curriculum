@@ -4,34 +4,37 @@
 export class Term {
   id: number;
   term: string;
-  startTime: Date;
-  endTime: Date;
+  // tslint:disable-next-line:variable-name
+  start_time: Date;
+  // tslint:disable-next-line:variable-name
+  end_time: Date;
   status: boolean;
-  schoolId: number;
+  // tslint:disable-next-line:variable-name
+  school_id: number;
 
   constructor(
     {
       id = 0,
       term = '',
-      startTime = new Date(0),
-      endTime = new Date(0),
+      start_time = new Date(0),
+      end_time = new Date(0),
       status = false,
-      schoolId = 1,
+      school_id = 1,
     }: {
       id?: number;
       term?: string;
-      startTime?: Date;
-      endTime?: Date;
+      start_time?: Date;
+      end_time?: Date;
       status?: boolean;
-      schoolId?: number;
+      school_id?: number;
     } = {}
   ) {
     this.id = id;
     this.term = term;
-    this.startTime = startTime;
-    this.endTime = endTime;
+    this.start_time = start_time;
+    this.end_time = end_time;
     this.status = status;
-    this.schoolId = schoolId;
+    this.school_id = school_id;
   }
 }
 
