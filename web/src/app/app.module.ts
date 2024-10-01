@@ -17,6 +17,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import {RouterModule} from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UserComponent } from './user/user.component';
 
 registerLocaleData(en);
 
@@ -26,7 +27,8 @@ registerLocaleData(en);
     TermComponent,
     SchoolComponent,
     SchoolAddComponent,
-    TermAddComponent
+    TermAddComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-12 text-right">
+    <a class="btn btn-primary mr-2" routerLink="./add"><i class="fas fa-plus"></i>新增</a>
+  </div>
+
+  <table class="table table-striped mt-2">
+    <thead>
+    <tr class="table-primary">
+      <th>序号</th>
+      <th>姓名</th>
+      <th>班级</th>
+      <th>角色</th>
+      <th>状态</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users; index as i">
+      <td>{{ i + 1 }}</td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.clazz_id }}</td>
+      <td [ngSwitch]="user.role">
+        <span *ngSwitchCase="0">学生</span>
+        <span *ngSwitchCase="1">管理员</span>
+        <span *ngSwitchCase="2">超级管理员</span>
+      </td>
+      <td *ngIf="user.status; else userIsFreeze">
+        <span class="badge badge-pill badge-success">激活</span>
+      </td>
+      <td>
+        <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + user.id">
+          <i class="fa fa-pen"></i>编辑
+        </a>
+        <span *ngIf="user.status === 0; else freezeButton" class="btn btn-sm btn-outline-success">
+          <i class="fa fa-refresh" aria-hidden="true"></i>激活
+        </span>
+        <span class="btn btn-outline-danger btn-sm">
+          <i class="far fa-trash-alt"></i>删除
+        </span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <ng-template #userIsFreeze>
+    <td>
+      <span class="badge badge-pill badge-danger">冻结</span>
+    </td>
+  </ng-template>
+  <ng-template #freezeButton>
+    <span class="btn btn-sm btn-outline-danger">
+       <i class="fa fa-asterisk"></i>冻结
+    </span>
+  </ng-template>
+</div>
