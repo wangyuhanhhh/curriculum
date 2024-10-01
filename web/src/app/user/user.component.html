@@ -31,10 +31,12 @@
         <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + user.id">
           <i class="fa fa-pen"></i>编辑
         </a>
-        <span *ngIf="user.status === 0; else freezeButton" class="btn btn-sm btn-outline-success">
+        <ng-container *ngIf="user.role !== 2">
+          <span *ngIf="user.status === 0; else freezeButton" class="btn btn-sm btn-outline-success">
           <i class="fa fa-refresh" aria-hidden="true"></i>激活
         </span>
-        <span class="btn btn-outline-danger btn-sm">
+        </ng-container>
+        <span *ngIf="user.role !== 2; else noDelete" class="btn btn-outline-danger btn-sm">
           <i class="far fa-trash-alt"></i>删除
         </span>
       </td>
@@ -51,5 +53,7 @@
     <span class="btn btn-sm btn-outline-danger">
        <i class="fa fa-asterisk"></i>冻结
     </span>
+  </ng-template>
+  <ng-template #noDelete>
   </ng-template>
 </div>
