@@ -1,5 +1,6 @@
 <?php
 namespace app\index\controller;
+use think\Db;
 use think\Request;
 use app\common\model\Term;
 use think\Controller;
@@ -7,8 +8,36 @@ use app\common\validate\TermValidate;
 
 class TermController extends IndexController
 {
+    // 学期激活
+    public function active() {
+        $request = Request::instance();
+        // 获取对应数据的id
+        $id = IndexController::getParamId($request);
+        $data = Request::instance()->getContent();
+        $needChangeTerm = Term::get($id);
+        $schoolId = $needChangeTerm->school_id;
+        $condition = [];
+        $condition['school_id'] = $schoolId;
+        $terms = Term::where($condition)->select();  // 获取指定字段的记录
+        if (is_array($terms)) {
+            foreach ($terms as $term) {
+                $term->status = 0;
+                $term->save();
+            }
+        } else {
+            echo '没有找到符合条件的记录';
+        }
+        $needChangeTerm->status = 1;
+
+        if ($needChangeTerm->save()) {
+            return json(['success' => true, 'message' => '激活成功']);
+        } else {
+            return json(['success' => false, 'message' => '激活失败']);
+        }
+    }
+
     // 新增学期
-    public function add(){
+    public function add() {
         // 接收前台数据
         $request = Request::instance()->getContent();
         $data = json_decode($request, true);
@@ -21,7 +50,8 @@ class TermController extends IndexController
         $term->start_time = date('Y-m-d', $startTimeStamp); 
         $term->end_time = date('Y-m-d', $endTimeStamp); 
         $term->term = $data['term'];
-        $term->status = $data['status'];
+        //新增学期，状态默认为冻结状态（0）
+        $term->status = 0;
         $term->school_id = $data['school_id'];
 
         // 实例化验证器
@@ -103,9 +133,6 @@ class TermController extends IndexController
         if ($term->end_time !== $newTerm['end_time']) {
             $noChange = false;
         }
-        if ($term->status !== $newTerm['status']) {
-            $noChange = false;
-        }
 
         // 如果没有任何改动，返回 false
         if ($noChange) {
@@ -130,7 +157,6 @@ class TermController extends IndexController
 
         $term->term = isset($newTerm['term']) ? $newTerm['term'] : $term->term;
         $term->school_id = isset($newTerm['school_id']) ? $newTerm['school_id'] : $term->school_id;
-        $term->status = isset($newTerm['status']) ? $newTerm['status'] : $term->status;
 
         // 保存更新
         if ($term->save()) {
