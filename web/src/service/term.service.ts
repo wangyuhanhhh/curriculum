@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Term} from '../app/entity/term';
-import {ResponseBody} from "../app/entity/response-body";
+import {ResponseBody} from '../app/entity/response-body';
 
 @Injectable({
   providedIn: 'root'

@@ -1,43 +1,45 @@
 <?php
 namespace app\common\model;
-class User
+use think\Model;
+
+class User extends Model
 {
-    // 用户名
-    private $username;
+    // // 用户名
+    // private $username;
 
-    // 密码（通常应该加密存储）
-    private $password;
+    // // 密码（通常应该加密存储）
+    // private $password;
 
-    // 构造函数
-    public function __construct()
-    {
-    }
+    // // 构造函数
+    // public function __construct()
+    // {
+    // }
 
-    public function getUsername()
-    {
-        return $this->username;
-    }
+    // public function getUsername()
+    // {
+    //     return $this->username;
+    // }
 
-    public function setUsername($username)
-    {
-        $this->username = $username;
-    }
+    // public function setUsername($username)
+    // {
+    //     $this->username = $username;
+    // }
 
-    public function getPassword()
-    {
-        return $this->password;
-    }
+    // public function getPassword()
+    // {
+    //     return $this->password;
+    // }
 
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
+    // public function setPassword($password)
+    // {
+    //     $this->password = $password;
+    // }
 
-    public function toArray()
-    {
-        return [
-            'username' => $this->username,
-            'password' => $this->password,
-        ];
-    }
+    // public function toArray()
+    // {
+    //     return [
+    //         'username' => $this->username,
+    //         'password' => $this->password,
+    //     ];
+    // }
 }
