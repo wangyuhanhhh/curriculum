@@ -5,8 +5,8 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Term} from '../../entity/term';
 import {HttpClient} from '@angular/common/http';
 import {School} from '../../entity/school';
-import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
+import {CommonService} from '../../../service/common.service';
 
 @Component({
   selector: 'app-edit',
@@ -20,14 +20,14 @@ export class EditComponent implements OnInit {
     term: new FormControl('', Validators.required),
     start_time: new FormControl(null, Validators.required),
     end_time: new FormControl(null, Validators.required),
-    status: new FormControl(null, Validators.required),
     school_id: new FormControl(null, Validators.required),
   });
 
   constructor(private activeRoute: ActivatedRoute,
               private termSeries: TermService,
               private httpClient: HttpClient,
-              private router: Router) {
+              private router: Router,
+              private commonService: CommonService){
   }
 
   ngOnInit(): void {
@@ -45,7 +45,6 @@ export class EditComponent implements OnInit {
       this.formGroup.patchValue({
         // 填充信息（编辑前的学期信息）
         term: term.term,
-        status: term.status,
         end_time: term.end_time,
         start_time: term.start_time,
         school_id: term.school_id
@@ -78,42 +77,22 @@ export class EditComponent implements OnInit {
     }
 
     this.termSeries.updateTerm(id, term).subscribe(
-      response => {
-        console.log(response.success);
+      responseBody => {
+        console.log(responseBody.success);
         // 根据服务器返回的响应来显示成功或失败的弹窗
-        if (response.success) {
-          this.showSuccessAlert(response.message);
+        if (responseBody.success) {
+          this.commonService.showSuccessAlert(responseBody.message);
           // 新增成功，重定向到 term.component.html 对应的路由
           this.router.navigate(['/term']);
         } else {
-          this.showErrorAlert(response.message);
+          this.commonService.showErrorAlert(responseBody.message);
         }
       },
       error => {
         // 处理HTTP错误
-        this.showErrorAlert('请求失败，请稍后再试');
+        this.commonService.showErrorAlert('请求失败，请稍后再试');
       }
     );
-  }
-
-  // 显示成功弹窗
-  private showSuccessAlert(message: string): void {
-    Swal.fire({
-      icon: 'success',
-      title: '成功',
-      text: message,
-      showConfirmButton: false,
-      timer: 1500
-    });
-  }
-
-  // 显示失败弹窗
-  private showErrorAlert(message: string): void {
-    Swal.fire({
-      icon: 'error',
-      title: '错误',
-      text: message
-    });
   }
 
   disableEndDate = (endDate: Date): boolean => {
