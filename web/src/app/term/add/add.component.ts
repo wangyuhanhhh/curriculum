@@ -3,9 +3,9 @@ import { TermService } from '../../../service/term.service';
 import Swal from 'sweetalert2';
 import { Term } from '../../entity/term';
 import { School } from '../../entity/school';
-import { HttpClient } from '@angular/common/http';
 import {ControlValueAccessor, FormControl, FormGroup, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
+import {SchoolService} from '../../../service/school.service';
 
 
 @Component({
@@ -25,12 +25,12 @@ export class AddComponent implements OnInit {
   schools = new Array<School>();
 
   constructor(private termService: TermService,
-              private httpClient: HttpClient,
+              private schoolService: SchoolService,
               private router: Router) { }
 
   ngOnInit(): void {
     // 获取所有学校
-    this.httpClient.get<School[]>('http://localhost:8088/api/school/index')
+    this.schoolService.getAll()
       .subscribe(schoolJson => {
         this.schools = schoolJson;
         console.log(this.schools);

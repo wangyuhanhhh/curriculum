@@ -25,7 +25,9 @@ class SchoolController extends IndexController {
         $parsedData = json_decode($content, true);
         $School = new School();
         if (json_last_error() !== JSON_ERROR_NONE) {
-            return json(['success' => false, 'error' => '无效的json数据']);
+            $success = false;
+            $message = '无效的json数据';
+            return json(['success' => $success, 'message' => $message]);
         }
         // 验证数据
         $validator = new SchoolValidator();
@@ -34,31 +36,49 @@ class SchoolController extends IndexController {
             if (is_array($parsedData) && isset($parsedData['school'])) {
                 // 接收到的学校名
                 $schoolName = $parsedData['school'];
-                $School->school = $schoolName;
-                if ($School->save()) {
-                    return json(['success' => true]);
+                // 检查数据是否已经存在
+                $isExist = School::where('school', $schoolName)->find();
+                if ($isExist) {
+                    $success = false;
+                    $message = '学校已存在';
+                    return json(['success' => $success, 'message' => $message]);
                 } else {
-                    return json(['success' => false]);
+                    $School->school = $schoolName;
+                    if ($School->save()) {
+                        $success = true;
+                        $message = '新增成功';
+                        return json(['success' => $success, 'message' => $message]);
+                    } else {
+                        $success = false;
+                        $message = '新增失败';
+                        return json(['success' => $success, 'message' => $message]);
+                    }
                 }
             }
         } else {
-            return json(['success' => false, 'error' => $validator->getError()]);
+            $success = false;
+            $message = $validator->getError();
+            return json(['success' => $success, 'message' => $message]);
         }
-        
-        return json(['success' => false, 'error' => '缺少学校数据']);
     }
 
     public function delete() {
         $school = SchoolController::getSchool();
         if (!$school) {
-            return json(['code' => 404, 'msg' => '学校不存在']);
+            $success = false;
+            $message = '学校不存在';
+            return json(['success' => $success, 'message' => $message]);
         }
 
         // 删除
         if ($school->delete()) {
-            return json(['code' => 200, 'msg' => '删除成功']);
+            $success = true;
+            $message = '删除成功';
+            return json(['success' => $success, 'message' => $message]);
         } else {
-            return json(['code' => 500, 'msg' => '删除失败']);
+            $success = false;
+            $message = '删除失败';
+            return json(['success' => $success, 'message' => $message]);
         }
     }
 
@@ -95,7 +115,7 @@ class SchoolController extends IndexController {
             $school->school = $updateSchool;
             $result = $school->save();
             if ($result) {
-                $success = true;;
+                $success = true;
                 $message = '编辑成功';
                 return json(['success' => $success, 'message' => $message]);
             } else {
