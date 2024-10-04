@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {School} from '../../entity/school';
-import {HttpClient} from '@angular/common/http';
 import Swal from 'sweetalert2';
+import {SchoolService} from '../../../service/school.service';
 
 @Component({
   selector: 'app-edit',
@@ -15,13 +15,13 @@ export class EditComponent implements OnInit {
     school: ''
   } as School;
   constructor(private activeRoute: ActivatedRoute,
-              private httpClient: HttpClient,
+              private schoolService: SchoolService,
               private router: Router) {
   }
 
   ngOnInit(): void {
     const id = this.activeRoute.snapshot.params.id;
-    this.httpClient.get<School>(`/api/school/edit/${id}`)
+    this.schoolService.getSchoolById(id)
       .subscribe(data => {
         this.editSchool = data;
       }, error => {
@@ -31,7 +31,7 @@ export class EditComponent implements OnInit {
   onSubmit(): void {
     console.log(this.editSchool);
     const id = this.activeRoute.snapshot.params.id;
-    this.httpClient.put<{success: string, message: string}>(`/api/school/update/${id}`, this.editSchool)
+    this.schoolService.update(id, this.editSchool)
       .subscribe(data => {
         console.log('更新成功', data);
         if (data.success) {
