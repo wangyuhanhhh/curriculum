@@ -15,6 +15,10 @@ const routes: Routes = [
   {
     path: 'user',
     component: UserComponent,
+  },
+  {
+    path: 'clazz',
+    loadChildren: () => import('./clazz/clazz.module').then(m => m.ClazzModule)
   }
 ];
 

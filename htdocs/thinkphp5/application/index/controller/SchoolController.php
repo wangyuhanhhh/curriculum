@@ -1,9 +1,8 @@
 <?php
 namespace app\index\controller;
-use think\Controller;
 use app\common\model\School;
 use think\Request;
-use app\common\validate\SchoolValidator;
+use app\common\validate\SchoolValidate;
 
 class SchoolController extends IndexController {
     public static function getSchool() {
@@ -30,8 +29,8 @@ class SchoolController extends IndexController {
             return json(['success' => $success, 'message' => $message]);
         }
         // 验证数据
-        $validator = new SchoolValidator();
-        if ($validator -> check($parsedData)) {
+        $validate = new SchoolValidate();
+        if ($validate -> check($parsedData)) {
             // 检查$parsedData是否被正确解析并且包含'school'键
             if (is_array($parsedData) && isset($parsedData['school'])) {
                 // 接收到的学校名
@@ -57,7 +56,7 @@ class SchoolController extends IndexController {
             }
         } else {
             $success = false;
-            $message = $validator->getError();
+            $message = $validate->getError();
             return json(['success' => $success, 'message' => $message]);
         }
     }
