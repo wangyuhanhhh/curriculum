@@ -2,7 +2,7 @@
 namespace app\common\validate;
 use think\Validate;
 
-class SchoolValidator extends Validate {
+class SchoolValidate extends Validate {
     protected $rule = [
         'school' => 'require'
     ];
