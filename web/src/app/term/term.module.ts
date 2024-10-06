@@ -23,7 +23,11 @@ const routes: Routes = [
   }
 ];
 @NgModule({
-  declarations: [EditComponent],
+  declarations: [
+    TermComponent,
+    AddComponent,
+    EditComponent
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

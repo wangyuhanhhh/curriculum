@@ -1,13 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TermComponent } from './term/term.component';
-import { SchoolComponent } from './school/school.component';
 import { HttpClientModule } from '@angular/common/http';
-import { AddComponent as SchoolAddComponent} from './school/add/add.component';
-import { AddComponent as TermAddComponent } from './term/add/add.component';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
@@ -24,10 +19,6 @@ registerLocaleData(en);
 @NgModule({
   declarations: [
     AppComponent,
-    TermComponent,
-    SchoolComponent,
-    SchoolAddComponent,
-    TermAddComponent,
     UserComponent
   ],
   imports: [

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {School} from '../app/entity/school';
 import {Observable} from 'rxjs';
+import {ResponseBody} from '../app/entity/response-body';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,12 @@ export class SchoolService {
   constructor(private httpClient: HttpClient) {
   }
   // 新增学校
-  add(school: {school: string}): Observable<any> {
-    return this.httpClient.post<School>(`${this.baseUrl}/add`, school);
+  add(school: School): Observable<ResponseBody> {
+    return this.httpClient.post<ResponseBody>(`${this.baseUrl}/add`, school);
   }
   // 删除学校
-  delete(schoolId: number): Observable<any> {
-    return this.httpClient.delete(`${this.baseUrl}/delete/${schoolId}`);
+  delete(schoolId: number): Observable<ResponseBody> {
+    return this.httpClient.delete<any>(`${this.baseUrl}/delete/${schoolId}`);
   }
   // 获取所有的学校
   getAll(): Observable<School[]> {
@@ -27,7 +28,7 @@ export class SchoolService {
     return this.httpClient.get<School>(`${this.baseUrl}/edit/${id}`);
   }
   // 更新学校
-  update(id: number, school: {id: number, school: string}): Observable<any> {
-    return this.httpClient.put<School>(`${this.baseUrl}/update/${id}`, school);
+  update(id: number, school: School): Observable<ResponseBody> {
+    return this.httpClient.put<ResponseBody>(`${this.baseUrl}/update/${id}`, school);
   }
 }

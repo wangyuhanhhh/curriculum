@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TermService } from '../../service/term.service';
 import { ActivatedRoute } from '@angular/router';
 import {CommonService} from '../../service/common.service';
-import {HttpClient} from '@angular/common/http';
 import {School} from '../entity/school';
+import { SchoolService } from '../../service/school.service';
 
 @Component({
   selector: 'app-term',
@@ -17,15 +17,15 @@ export class TermComponent implements OnInit {
   schools = new Array<School>();
 
   constructor(private termService: TermService,
+              private schoolService: SchoolService,
               private activeRoute: ActivatedRoute,
-              private commonService: CommonService,
-              private httpClient: HttpClient) {
+              private commonService: CommonService) {
   }
 
   ngOnInit(): void {
     this.getAll();
     // 获取学校
-    this.httpClient.get<School[]>('http://localhost:8088/api/school/index')
+    this.schoolService.getAll()
       .subscribe(schoolJson => {
         this.schools = schoolJson;
         console.log(this.schools);
