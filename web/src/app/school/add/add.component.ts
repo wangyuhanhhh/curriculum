@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 export class AddComponent implements OnInit {
   // 新增的学校
   addSchool = {
-    school: ''
+    school: '' as string,
   } as School;
   constructor(private schoolService: SchoolService,
               private router: Router) { }

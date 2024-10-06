@@ -12,14 +12,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import {RouterModule} from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { UserComponent } from './user/user.component';
+import {UserModule} from './user/user.module';
+import {SchoolModule} from './school/school.module';
+import {TermModule} from './term/term.module';
+import {ClazzModule} from './clazz/clazz.module';
 
 registerLocaleData(en);
 
 @NgModule({
   declarations: [
-    AppComponent,
-    UserComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +31,11 @@ registerLocaleData(en);
     BrowserAnimationsModule,
     NzDatePickerModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    UserModule,
+    SchoolModule,
+    TermModule,
+    ClazzModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]

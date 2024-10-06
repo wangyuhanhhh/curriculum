@@ -35,7 +35,7 @@ export class TermComponent implements OnInit {
   }
 
   getAll(): void {
-    this.termService.getAllTerms().subscribe(terms => {
+    this.termService.getAll().subscribe(terms => {
       this.terms = terms;
     });
   }
@@ -48,7 +48,7 @@ export class TermComponent implements OnInit {
 
   onActive(id: number): void {
     this.commonService.showConfirmAlert(() => {
-      this.termService.activeTerm(id).subscribe((responseBody) => {
+      this.termService.active(id).subscribe((responseBody) => {
         if (responseBody.success) {
           this.commonService.showSuccessAlert(responseBody.message);
           this.getAll();
