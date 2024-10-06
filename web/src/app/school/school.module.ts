@@ -22,7 +22,11 @@ const routes: Routes = [
   }
 ];
 @NgModule({
-  declarations: [EditComponent],
+  declarations: [
+    SchoolComponent,
+    AddComponent,
+    EditComponent
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes), // 不是根模块，使用forChild
