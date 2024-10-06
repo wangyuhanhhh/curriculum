@@ -23,9 +23,9 @@ const routes: Routes = [
 ];
 @NgModule({
   declarations: [
-    EditComponent,
-    AddComponent,
     SchoolComponent,
+    AddComponent,
+    EditComponent
   ],
   imports: [
     CommonModule,
