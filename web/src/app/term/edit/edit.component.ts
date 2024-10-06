@@ -41,7 +41,7 @@ export class EditComponent implements OnInit {
       });
 
     const id = this.activeRoute.snapshot.params.id;
-    this.termSeries.editTerm(id).subscribe((term) => {
+    this.termSeries.edit(id).subscribe((term) => {
       this.formGroup.patchValue({
         // 填充信息（编辑前的学期信息）
         term: term.term,
@@ -76,7 +76,7 @@ export class EditComponent implements OnInit {
       term.start_time = term.start_time.getTime();
     }
 
-    this.termSeries.updateTerm(id, term).subscribe(
+    this.termSeries.update(id, term).subscribe(
       responseBody => {
         console.log(responseBody.success);
         // 根据服务器返回的响应来显示成功或失败的弹窗

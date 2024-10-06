@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {ResponseBody} from '../app/entity/response-body';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,16 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   // 获取所有用户
-  getAllUsers(): Observable<any> {
+  getAll(): Observable<any> {
     return this.http.get(this.baseUrl);
+  }
+
+  // 新增
+  add(userData: {username: string; student_no: string; clazz_id: number; }): Observable<ResponseBody> {
+    // 构建完整的URL
+    const addUrl = `${this.baseUrl}/add`;
+
+    // 发送POST请求到后端
+    return this.http.post<ResponseBody>(addUrl, userData);
   }
 }

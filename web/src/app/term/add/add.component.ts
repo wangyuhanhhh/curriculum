@@ -47,7 +47,7 @@ export class AddComponent implements OnInit {
     const term = this.formGroup.value;
     term.end_time = term.end_time.getTime();
     term.start_time = term.start_time.getTime();
-    this.termService.addTerm(term).subscribe(
+    this.termService.add(term).subscribe(
       responseBody => {
         console.log(responseBody.message);
         // 根据服务器返回的响应来显示成功或失败的弹窗

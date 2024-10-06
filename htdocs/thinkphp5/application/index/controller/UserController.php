@@ -25,5 +25,12 @@ class UserController extends Controller
         $user->setPassword($password);
         return json($user->toArray());
     }
+
+    public function add() {
+      // 查重
+      // 给默认密码（学号）
+      // 校验
+      // 插入
+    }
 }
 

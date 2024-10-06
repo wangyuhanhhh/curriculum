@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {AddComponent} from './add/add.component';
 import {RouterModule, Routes} from '@angular/router';
 import {TermComponent} from './term.component';
-import { EditComponent } from './edit/edit.component';
+import {EditComponent} from './edit/edit.component';
 import {NzDatePickerModule} from 'ng-zorro-antd/date-picker';
 import {ReactiveFormsModule} from '@angular/forms';
 
@@ -23,7 +23,11 @@ const routes: Routes = [
   }
 ];
 @NgModule({
-  declarations: [EditComponent],
+  declarations: [
+    TermComponent,
+    AddComponent,
+    EditComponent
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
