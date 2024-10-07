@@ -5,6 +5,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {School} from '../../entity/school';
 import {SchoolService} from '../../../service/school.service';
 import Swal from 'sweetalert2';
+import {CommonService} from '../../../service/common.service';
 
 @Component({
   selector: 'app-add',
@@ -17,6 +18,7 @@ export class AddComponent implements OnInit {
     school: '' as string,
   } as School;
   constructor(private schoolService: SchoolService,
+              private commonService: CommonService,
               private router: Router) { }
 
   ngOnInit(): void {
@@ -26,30 +28,12 @@ export class AddComponent implements OnInit {
     this.schoolService.add(this.addSchool)
       .subscribe(data => {
         if (data.success) {
-          this.showSuccessAlert(data.message);
+          this.commonService.showSuccessAlert(data.message);
           this.router.navigateByUrl('/school');
         } else {
-          this.showErrorAlert(data.message);
+          this.commonService.showErrorAlert(data.message);
         }
       },
       error => console.log('保存失败', error));
-  }
-  // 显示成功弹窗
-  private showSuccessAlert(message: string): void {
-    Swal.fire({
-      icon: 'success',
-      title: '新增成功',
-      text: message,
-      showConfirmButton: false,
-      timer: 1500
-    });
-  }
-  // 显示失败弹窗
-  private showErrorAlert(message: string): void {
-    Swal.fire({
-      icon: 'error',
-      title: '错误',
-      text: message
-    });
   }
 }
