@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {UserComponent} from './user/user.component';
+import {StudentComponent} from './student/student.component';
 
 const routes: Routes = [
   {
@@ -13,8 +13,8 @@ const routes: Routes = [
     loadChildren: () => import('./school/school.module').then(m => m.SchoolModule)
   },
   {
-    path: 'user',
-    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
+    path: 'student',
+    loadChildren: () => import('./student/student.module').then(m => m.StudentModule)
   },
   {
     path: 'clazz',

@@ -2,7 +2,7 @@
 namespace app\common\model;
 use think\Model;
 
-class User extends Model
+class Student extends Model
 {
     // // 用户名
     // private $username;

@@ -6,8 +6,8 @@ import {ResponseBody} from '../app/entity/response-body';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
-  private baseUrl = '/api/user';
+export class StudentService {
+  private baseUrl = '/api/student';
 
   constructor(private http: HttpClient) { }
 
@@ -17,11 +17,11 @@ export class UserService {
   }
 
   // 新增
-  add(userData: {username: string; student_no: string; clazz_id: number; }): Observable<ResponseBody> {
+  add(studentData: {username: string; student_no: string; clazz_id: number; }): Observable<ResponseBody> {
     // 构建完整的URL
     const addUrl = `${this.baseUrl}/add`;
 
     // 发送POST请求到后端
-    return this.http.post<ResponseBody>(addUrl, userData);
+    return this.http.post<ResponseBody>(addUrl, studentData);
   }
 }

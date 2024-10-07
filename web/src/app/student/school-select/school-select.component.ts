@@ -38,6 +38,5 @@ export class SchoolSelectComponent implements OnInit, ControlValueAccessor {
   }
 
   registerOnTouched(fn: any): void {
-    throw new Error('Method not implemented.');
   }
 }
