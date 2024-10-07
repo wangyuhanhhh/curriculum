@@ -7,6 +7,7 @@ import {NzCascaderModule} from 'ng-zorro-antd/cascader';
 import {ReactiveFormsModule} from '@angular/forms';
 import { SchoolSelectComponent } from './school-select/school-select.component';
 import {NzSelectModule} from 'ng-zorro-antd/select';
+import {SchoolSelectModule} from './school-select/school-select.module';
 
 const routes: Routes = [
   {
@@ -24,14 +25,12 @@ const routes: Routes = [
   declarations: [
     UserComponent,
     AddComponent,
-    SchoolSelectComponent
   ],
     imports: [
         CommonModule,
-        NzCascaderModule,
         ReactiveFormsModule,
         RouterModule.forChild(routes),
-        NzSelectModule
+        SchoolSelectModule
     ]
 })
 export class UserModule { }
