@@ -19,4 +19,9 @@ export class ClazzService {
   getAll(): Observable<Clazz[]> {
     return this.httpClient.get<Clazz[]>(this.baseUrl);
   }
+
+  // 根据schoolId获取班级
+  getClazzBySchoolId(schoolId: number): Observable<Clazz[]> {
+    return this.httpClient.get<Clazz[]>(`${this.baseUrl}/getClazzBySchoolId/${schoolId}`);
+  }
 }

@@ -12,7 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import {RouterModule} from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import {UserModule} from './user/user.module';
+import {StudentModule} from './student/student.module';
 import {SchoolModule} from './school/school.module';
 import {TermModule} from './term/term.module';
 import {ClazzModule} from './clazz/clazz.module';
@@ -32,7 +32,7 @@ registerLocaleData(en);
     NzDatePickerModule,
     RouterModule,
     ReactiveFormsModule,
-    UserModule,
+    StudentModule,
     SchoolModule,
     TermModule,
     ClazzModule

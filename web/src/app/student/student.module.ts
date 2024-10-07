@@ -1,18 +1,17 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {UserComponent} from './user.component';
+import {StudentComponent} from './student.component';
 import {AddComponent} from './add/add.component';
 import {RouterModule, Routes} from '@angular/router';
-import {NzCascaderModule} from 'ng-zorro-antd/cascader';
 import {ReactiveFormsModule} from '@angular/forms';
-import { SchoolSelectComponent } from './school-select/school-select.component';
-import {NzSelectModule} from 'ng-zorro-antd/select';
+import { ClazzSelectComponent } from './clazz-select/clazz-select.component';
 import {SchoolSelectModule} from './school-select/school-select.module';
+
 
 const routes: Routes = [
   {
     path: '',
-    component: UserComponent
+    component: StudentComponent
   },
   {
     path: 'add',
@@ -23,8 +22,9 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    UserComponent,
+    StudentComponent,
     AddComponent,
+    ClazzSelectComponent
   ],
     imports: [
         CommonModule,
@@ -33,4 +33,4 @@ const routes: Routes = [
         SchoolSelectModule
     ]
 })
-export class UserModule { }
+export class StudentModule { }
