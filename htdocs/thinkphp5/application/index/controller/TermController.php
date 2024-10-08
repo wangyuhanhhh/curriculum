@@ -93,7 +93,7 @@ class TermController extends IndexController
         $request = Request::instance();
         $id = IndexController::getParamId($request);
         if(!$id) {
-            return (['success' => true, 'message' => '该学期不存在']);
+            return (['success' => false, 'message' => '该学期不存在']);
         }
         $term = Term::get($id);
         return json($term);

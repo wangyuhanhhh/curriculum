@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {ClazzComponent} from './clazz.component';
 import {RouterModule, Routes} from '@angular/router';
 import { AddComponent } from './add/add.component';
-import {SchoolSelectModule} from '../user/school-select/school-select.module';
+import {SchoolSelectModule} from '../student/school-select/school-select.module';
 import {ReactiveFormsModule} from '@angular/forms';
 
 const routes: Routes = [

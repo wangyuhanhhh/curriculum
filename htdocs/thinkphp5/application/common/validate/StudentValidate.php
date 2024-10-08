@@ -18,11 +18,12 @@ class StudentValidate extends Validate
         'password' => '密码默认设置失败',
         'status' => '状态默认激活失败',
         'student_on' => '学号不能为空',
-        'clazz_no' => '该学生必须有所属班级',
+        'clazz_id' => '该学生必须有所属班级',
     ];
 
     // 定义场景
     protected $scene = [
-        'add' => ['name', 'password', 'status', 'student_no', 'clazz_no'],
+        'add' => ['name', 'password', 'status', 'student_no', 'clazz_id'],
+        'update' => ['name', 'student_no', 'clazz_id'],
     ];
 }

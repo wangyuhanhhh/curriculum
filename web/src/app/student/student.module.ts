@@ -6,6 +6,8 @@ import {RouterModule, Routes} from '@angular/router';
 import {ReactiveFormsModule} from '@angular/forms';
 import { ClazzSelectComponent } from './clazz-select/clazz-select.component';
 import {SchoolSelectModule} from './school-select/school-select.module';
+import {NzSelectModule} from 'ng-zorro-antd/select';
+import { EditComponent } from './edit/edit.component';
 
 
 const routes: Routes = [
@@ -16,6 +18,10 @@ const routes: Routes = [
   {
     path: 'add',
     component: AddComponent
+  },
+  {
+    path: 'edit/:id',
+    component: EditComponent
   }
 ];
 
@@ -24,13 +30,15 @@ const routes: Routes = [
   declarations: [
     StudentComponent,
     AddComponent,
-    ClazzSelectComponent
+    ClazzSelectComponent,
+    EditComponent
   ],
     imports: [
         CommonModule,
         ReactiveFormsModule,
         RouterModule.forChild(routes),
-        SchoolSelectModule
+        SchoolSelectModule,
+        NzSelectModule
     ]
 })
 export class StudentModule { }

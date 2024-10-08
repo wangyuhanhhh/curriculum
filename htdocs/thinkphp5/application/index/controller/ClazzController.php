@@ -1,9 +1,7 @@
 <?php
 namespace app\index\controller;
-use app\index\controller\IndexController;
 use think\Request;
 use app\common\model\Clazz;
-use think\Request;
 use app\common\validate\ClazzValidate;
 
 class ClazzController extends IndexController {
@@ -35,7 +33,7 @@ class ClazzController extends IndexController {
                         return json(['success' => $success, 'message' => $message]);
                     } else {
                         $success = false;
-                        $message = '新增失败111111';
+                        $message = '新增失败';
                         return json(['success' => $success, 'message' => $message]);
                     }
                 } else {
