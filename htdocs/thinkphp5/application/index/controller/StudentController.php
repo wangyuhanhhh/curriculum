@@ -20,7 +20,7 @@ class StudentController extends IndexController
           // 从解析后的数据中获取 username 和 password
         $username = isset($parsedData['username']) ? $parsedData['username'] : null;
         $password = isset($parsedData['password']) ? $parsedData['password'] : null;
-        $user = new User();
+        $user = new Student();
 
         $user->setUsername($username);
         $user->setPassword($password);
@@ -61,6 +61,80 @@ class StudentController extends IndexController
       } else {
           return json(['success' => false, 'message' => '新增失败']);
       }
+    }
+
+    // 根据id获取对应学生信息
+    public function edit() {
+        $request = Request::instance();
+        $id = IndexController::getParamId($request);
+        if(!$id) {
+            return (['success' => false, 'message' => '该学生不存在']);
+        }
+        $studentData = Student::with('clazz')->find($id);
+        $schoolId = $studentData->clazz->school_id;
+        $studentData->school_id = $schoolId;
+        // 重新整合为一个新的数组
+        // 因为不需要全部的字段，只需要 name, student_no, clazz_id, school_id
+        $student['name'] = $studentData->name;
+        $student['student_no'] = $studentData->student_no;
+        $student['clazz_id'] = $studentData->clazz_id;
+        $student['school_id'] = $schoolId;
+        return json($student);
+    }
+
+    //跟新学生信息
+    public function update() {
+        $request = Request::instance();
+        $id = IndexController::getParamId($request);
+        // 当前被修改的学生信息
+        $student = Student::get($id);
+        $data = Request::instance()->getContent();
+        $studentData = json_decode($data, true);
+
+        // 获取前台传过来的 student_no
+        // 如果修改了学生的student_no（学号），则判断是否重复，学号不允许重复
+        $studentNo = $studentData['student_no'];
+
+        if($student->student_no !== $studentNo){
+            $students = Student::where('student_no', $studentNo)->find();
+            if($students){
+                return json(['success' => false, 'message' => '该学号已被使用，编辑失败']);
+            }
+        }
+
+        // 比较各字段是否有改动
+        $noChange = true;
+        if ($student->name !== $studentData['name']) {
+            $noChange = false;
+        }
+        if ($student->student_no !== $studentData['student_no']) {
+            $noChange = false;
+        }
+        if ($student->clazz_id !== $studentData['clazz_id']) {
+            $noChange = false;
+        }
+
+        // 如果没有任何改动，返回 false
+        if ($noChange) {
+            return json(['success' => false, 'message' => '没有任何改动，更新失败']);
+        }
+
+        $student->name = isset($studentData['name']) ? $studentData['name'] : $student->name;
+        $student->student_no = isset($studentData['student_no']) ? $studentData['student_no'] : $student->student_no;
+        $student->clazz_id = isset($studentData['clazz_id']) ? $studentData['clazz_id'] : $student->clazz_id;
+
+        $validate = new StudentValidate;
+        if(!$validate->scene('update')->check($studentData)){
+            return json(['success' => false, 'message' => $validate->getError()]);
+        }
+        // 验证通过，处理数据
+        $result = $student->save();
+        if($result) {
+            return json(['success' => true, 'message' => '编辑成功']);
+        } else {
+            return json(['success' => false, 'message' => '编辑失败']);
+        }
+
     }
 }
 

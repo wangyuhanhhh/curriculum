@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ResponseBody} from '../app/entity/response-body';
+import {Student} from '../app/entity/student';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,16 @@ export class StudentService {
 
     // 发送POST请求到后端
     return this.http.post<ResponseBody>(addUrl, studentData);
+  }
+
+  // 修改
+  edit(id: number): Observable<any> {
+    const editUrl = `${this.baseUrl}/edit/${id}`;
+    return this.http.get<any>(editUrl);
+  }
+
+  update(id: number, studentData: Student): Observable<any> {
+    const updateUrl = `${this.baseUrl}/update/${id}`;
+    return this.http.post(updateUrl, studentData);
   }
 }

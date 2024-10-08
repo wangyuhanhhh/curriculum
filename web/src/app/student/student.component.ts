@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {StudentService} from '../../service/student.service';
-import {User} from '../entity/user';
+import {Student} from '../entity/student';
 import {ClazzService} from '../../service/clazz.service';
 import {Clazz} from '../entity/clazz';
 
@@ -10,14 +10,14 @@ import {Clazz} from '../entity/clazz';
   styleUrls: ['./student.component.css']
 })
 export class StudentComponent implements OnInit {
-  users: User[] = [];
+  users: Student[] = [];
   clazzes: Clazz[] = [];
 
-  constructor(private userService: StudentService,
+  constructor(private studentService: StudentService,
               private clazzService: ClazzService) { }
 
   ngOnInit(): void {
-    this.userService.getAll().subscribe(
+    this.studentService.getAll().subscribe(
       users => this.users = users
     );
 

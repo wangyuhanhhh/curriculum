@@ -42,7 +42,7 @@ class ClazzController extends IndexController {
                         return json(['success' => $success, 'message' => $message]);
                     } else {
                         $success = false;
-                        $message = '新增失败111111';
+                        $message = '新增失败';
                         return json(['success' => $success, 'message' => $message]);
                     }
                 } else {

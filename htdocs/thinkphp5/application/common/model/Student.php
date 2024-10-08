@@ -42,4 +42,8 @@ class Student extends Model
     //         'password' => $this->password,
     //     ];
     // }
+
+    public function clazz() {
+        return $this->belongsTo('clazz', 'clazz_id', 'id');
+    }
 }
