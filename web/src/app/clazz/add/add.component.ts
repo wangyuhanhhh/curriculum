@@ -31,7 +31,7 @@ export class AddComponent implements OnInit {
     this.clazzService.add(this.addClazz).subscribe(data => {
       if (data.success) {
         this.commonService.showSuccessAlert(data.message);
-        this.router.navigateByUrl('/clazz');
+        this.router.navigate(['/clazz']);
       } else {
         this.commonService.showErrorAlert(data.message);
       }

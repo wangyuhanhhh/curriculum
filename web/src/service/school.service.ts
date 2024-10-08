@@ -24,7 +24,7 @@ export class SchoolService {
     return this.httpClient.get<School[]>(this.baseUrl);
   }
   // 根据id获取对应的学校
-  getSchoolById(id: number): Observable<any> {
+  getSchoolById(id: number): Observable<School> {
     return this.httpClient.get<School>(`${this.baseUrl}/edit/${id}`);
   }
   // 更新学校

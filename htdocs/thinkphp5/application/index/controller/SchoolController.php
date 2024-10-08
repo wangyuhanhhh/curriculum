@@ -9,7 +9,7 @@ class SchoolController extends IndexController {
         $request = Request::instance();
         $id = IndexController::getParamId($request);
         if (!$id) {
-            return json(['success' => true, 'message' => 'id不存在']);
+            return json(['success' => false, 'message' => 'id不存在']);
         }
         $school = School::get($id);
         return $school;
@@ -101,28 +101,32 @@ class SchoolController extends IndexController {
         // 获取数据
         $content = Request::instance()->getContent();
         $parsedData = json_decode($content, true);
-        // 前台传过来的要进行更新的学校名
-        $updateSchool = $parsedData['school'];
-        // 检查数据是否已经存在，存在返回true，不存在返回false
-        $isExist = School::where('school', $updateSchool) -> find();
-        // 若已存在，提示前台数据已经存在
-        if ($isExist) {
-            return json(['success' => false, 'message' => '学校已存在']);
-        } else {
-        // 数据库中不存在，更新数据
-            $school = SchoolController::getSchool();
-            $school->school = $updateSchool;
-            $result = $school->save();
-            if ($result) {
-                $success = true;
-                $message = '编辑成功';
-                return json(['success' => $success, 'message' => $message]);
+        $validate = new SchoolValidate();
+        if ($validate -> check($parsedData)) {
+            // 前台传过来的要进行更新的学校名
+            $updateSchool = $parsedData['school'];
+            // 检查数据是否已经存在，存在返回true，不存在返回false
+            $isExist = School::where('school', $updateSchool) -> find();
+            // 若已存在，提示前台数据已经存在
+            if ($isExist) {
+                return json(['success' => false, 'message' => '学校已存在']);
             } else {
-                $success = false;
-                $message = '编辑失败请重试';
-                return json(['success' => $success, 'message' => $message]);
+                // 数据库中不存在，更新数据
+                $school = SchoolController::getSchool();
+                $school->school = $updateSchool;
+                $result = $school->save();
+                if ($result) {
+                    $success = true;
+                    $message = '编辑成功';
+                    return json(['success' => $success, 'message' => $message]);
+                } else {
+                    $success = false;
+                    $message = '编辑失败请重试';
+                    return json(['success' => $success, 'message' => $message]);
+                }
             }
+        } else {
+            return json(['success' => false, 'message' => $validate->getError()]);
         }
-        
     }
 }
