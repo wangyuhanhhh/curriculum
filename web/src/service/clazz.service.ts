@@ -24,4 +24,12 @@ export class ClazzService {
   getClazzBySchoolId(schoolId: number): Observable<Clazz[]> {
     return this.httpClient.get<Clazz[]>(`${this.baseUrl}/getClazzBySchoolId/${schoolId}`);
   }
+  // 根据id获取对应的班级信息
+  getClazzById(id: number): Observable<Clazz> {
+    return this.httpClient.get<Clazz>(`${this.baseUrl}/edit/${id}`);
+  }
+  // 更新班级信息
+  update(id: number, clazz: Clazz): Observable<ResponseBody> {
+    return this.httpClient.put<ResponseBody>(`${this.baseUrl}/update/${id}`, clazz);
+  }
 }

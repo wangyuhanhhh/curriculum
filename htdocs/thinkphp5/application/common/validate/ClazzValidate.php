@@ -15,8 +15,4 @@ class ClazzValidate extends Validate {
         'school_id.integer' => '学校ID必须是整数',
         'school_id.gt' => '学校ID必须大于0'
     ];
-    // 定义验证场景
-    protected $scene = [
-        'add' => ['clazz', 'school_id']
-    ];
 }

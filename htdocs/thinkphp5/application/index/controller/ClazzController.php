@@ -1,13 +1,20 @@
 <?php
 namespace app\index\controller;
-use app\index\controller\IndexController;
 use think\Request;
 use app\common\model\Clazz;
-use think\Request;
 use app\common\validate\ClazzValidate;
 
 class ClazzController extends IndexController {
-    /**
+    public static function getClazz() {
+        $request = Request::instance();
+        $id = IndexController::getParamId($request);
+        if (!$id) {
+            return json(['success' => false, 'message' => 'id不存在']);
+        }
+        $clazz = Clazz::get($id);
+        return $clazz;
+    }
+     /**
      * 新增
      */
     public function add() {
@@ -21,7 +28,7 @@ class ClazzController extends IndexController {
             return json(['success' => $success, 'message' => $message]);
         }
         $validate = new ClazzValidate();
-        if ($validate->scene('add')->check($data)) {
+        if ($validate->check($data)) {
             $clazz = new Clazz();
             $clazz->clazz = $data['clazz'];
             $clazz->school_id = $data['school_id'];
@@ -74,6 +81,14 @@ class ClazzController extends IndexController {
     }
 
     /**
+     * 根据id获取对应的班级信息
+     */
+    public function edit() {
+        $clazz = ClazzController::getClazz();
+        $clazzJson = json_encode($clazz, JSON_UNESCAPED_UNICODE);
+        return $clazzJson;
+    }
+    /**
      * 检查班级名称是否以“班”为结尾，班级名称必须是“大数据2301班”这种形式
      * @return boolean
      */
@@ -104,5 +119,40 @@ class ClazzController extends IndexController {
 
         // 按json格式返回查询到的班级信息
         return json($clazzes);
+    }
+
+    /**
+     * 更新班级信息
+     */
+    public function update() {
+        // 获取数据
+        $content = Request::instance()->getContent();
+        $data = json_decode($content, true);
+        // 验证（validate， endChar checkRepeat)
+        $validate = new ClazzValidate();
+        if ($validate->check($data)){
+            // 获取原班级信息
+            $clazz = ClazzController::getClazz();
+            $clazz->clazz = $data['clazz'];
+            $clazz->school_id = $data['school_id'];
+            // 检查班级名称是否合法
+            if ($this->endChar($data['clazz'])) {
+                // 查重
+                if ($this->checkRepeat($clazz, $data['clazz'], $data['school_id'])) {
+                    if ($clazz->save()) {
+                        return json(['success' => true, 'message' => '编辑成功']);
+                    } else {
+                        return json(['success' => false, 'message' => '编辑失败']);
+                    }
+                } else {
+                    return json(['success' => false, 'message' => '该班级已存在']);
+                }
+            } else {
+                return json(['success' => false, 'message' => '班级名称必须以“班”为结尾']);
+            }
+        } else {
+            return json(['success' => false, 'message' => $validate->getError()]);
+        }
+        // 保存
     }
 }
