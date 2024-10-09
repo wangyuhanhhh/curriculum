@@ -11,11 +11,6 @@ import {CommonService} from '../../../service/common.service';
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent implements OnInit {
-  editClazz = {
-    id: 0,
-    clazz: '',
-    school_id: 0
-  } as Clazz;
   formGroup = new FormGroup({
     clazz: new FormControl('', Validators.required),
     school_id: new FormControl(null, Validators.required)
@@ -38,8 +33,8 @@ export class EditComponent implements OnInit {
   }
   onSubmit(): void {
     const id = this.activeRoute.snapshot.params.id;
-    this.editClazz = this.formGroup.value;
-    this.clazzService.update(id, this.editClazz).subscribe(data => {
+    const editClazz = this.formGroup.value;
+    this.clazzService.update(id, editClazz).subscribe(data => {
       if (data.success) {
         this.commonService.showSuccessAlert(data.message);
         this.router.navigate(['/clazz']);

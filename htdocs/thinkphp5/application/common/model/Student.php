@@ -42,8 +42,8 @@ class Student extends Model
     //         'password' => $this->password,
     //     ];
     // }
-
+    // 一对一关联Clazz
     public function clazz() {
-        return $this->belongsTo('clazz', 'clazz_id', 'id');
+        return $this->belongsTo('Clazz', 'clazz_id', 'id');
     }
 }

@@ -3,6 +3,7 @@ namespace app\common\model;
 use think\Model;
 
 class Clazz extends Model {
+
     public function students() {
         return $this->hasMany('Student', 'clazz_id', 'id');
     }
