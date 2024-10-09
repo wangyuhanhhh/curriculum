@@ -27,11 +27,11 @@
         <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + student.id">
           <i class="fa fa-pen"></i>编辑
         </a>
-        <span *ngIf="student.status === 0; else freezeButton" class="btn btn-sm btn-outline-success">
-          <i class="fa fa-refresh" aria-hidden="true"></i>激活
-        </span>
         <span class="btn btn-outline-danger btn-sm" (click)="onDelete(i, student.id)">
           <i class="far fa-trash-alt"></i>删除
+        </span>
+        <span *ngIf="student.status === 1" class="btn btn-sm btn-outline-danger"  (click)="onActive(student.id)">
+          <i class="fa fa-asterisk"></i>冻结
         </span>
       </td>
     </tr>
@@ -42,11 +42,6 @@
     <td>
       <span class="badge badge-pill badge-danger">冻结</span>
     </td>
-  </ng-template>
-  <ng-template #freezeButton>
-    <span class="btn btn-sm btn-outline-danger">
-       <i class="fa fa-asterisk"></i>冻结
-    </span>
   </ng-template>
   <ng-template #noDelete>
   </ng-template>
