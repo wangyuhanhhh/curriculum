@@ -99,6 +99,26 @@ class StudentController extends IndexController
         return $student;
     }
 
+    public function freeze() {
+        $request = Request::instance();
+        // 获取对应数据的id
+        $id = IndexController::getParamId($request);
+        $student = Student::get($id);
+        // 判断被操作的学生是激活状态
+        if ($student->status) {
+            // 是激活状态，则冻结（置0）
+            $student->status = 0;
+        } else {
+            return json(['success' => false, 'message' => '冻结失败！']);
+        }
+
+        if ($student->save()) {
+            return json(['success' => true, 'message' => '冻结成功']);
+        } else {
+            return json(['success' => false, 'message' => '冻结失败']);
+        }
+    }
+
     public function index() {
         $Student = new Student;
         $totalStudent = Student::select();

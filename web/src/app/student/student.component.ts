@@ -19,14 +19,17 @@ export class StudentComponent implements OnInit {
               private commonService: CommonService) { }
 
   ngOnInit(): void {
-    this.studentService.getAll().subscribe(
-      users => this.students = users
-    );
-
+    this.getAll();
     // 获取所有班级
     this.clazzService.getAll().subscribe(clazzes => {
       this.clazzes = clazzes;
     });
+  }
+
+  getAll(): void {
+    this.studentService.getAll().subscribe(
+      users => this.students = users
+    );
   }
 
   // 根据clazz_id找到对应班级名称
@@ -47,5 +50,19 @@ export class StudentComponent implements OnInit {
           }
         }, error => this.commonService.showErrorAlert('请求错误，请稍后'));
     }, '是否删除，此操作不可逆');
+  }
+
+  onActive(id: number): void {
+    console.log('点击冻结按钮');
+    this.commonService.showConfirmAlert(() => {
+      this.studentService.freeze(id).subscribe((responseBody) => {
+        if (responseBody.success) {
+          this.commonService.showSuccessAlert(responseBody.message);
+          this.getAll();
+        } else {
+          this.commonService.showErrorAlert(responseBody.message);
+        }
+      });
+    }, '是否冻结, 此操作不可逆');
   }
 }

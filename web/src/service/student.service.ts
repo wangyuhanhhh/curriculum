@@ -42,4 +42,10 @@ export class StudentService {
     const updateUrl = `${this.baseUrl}/update/${id}`;
     return this.http.post(updateUrl, studentData);
   }
+
+  // 冻结学生
+  freeze(id: number): Observable<any> {
+    const freezeUrl = `${this.baseUrl}/freeze/${id}`;
+    return this.http.get<any>(freezeUrl);
+  }
 }
