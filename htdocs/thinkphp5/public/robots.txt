@@ -1,2 +1,2 @@
-Student-agent: *
+User-agent: *
 Disallow:

@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import {StudentService} from '../../service/student.service';
-import {Student} from '../entity/student';
+import {UserService} from '../../service/user.service';
+import {User} from '../entity/user';
 import {ClazzService} from '../../service/clazz.service';
 import {Clazz} from '../entity/clazz';
 import {CommonService} from '../../service/common.service';
 
 @Component({
-  selector: 'app-student',
-  templateUrl: './student.component.html',
-  styleUrls: ['./student.component.css']
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.css']
 })
-export class StudentComponent implements OnInit {
-  students: Student[] = [];
+export class UserComponent implements OnInit {
+  users: User[] = [];
   clazzes: Clazz[] = [];
 
-  constructor(private studentService: StudentService,
+  constructor(private userService: UserService,
               private clazzService: ClazzService,
               private commonService: CommonService) { }
 
@@ -27,8 +27,8 @@ export class StudentComponent implements OnInit {
   }
 
   getAll(): void {
-    this.studentService.getAll().subscribe(
-      users => this.students = users
+    this.userService.getAll().subscribe(
+      users => this.users = users
     );
   }
 
@@ -40,10 +40,10 @@ export class StudentComponent implements OnInit {
 
   onDelete(index: number, id: number): void {
     this.commonService.showConfirmAlert(() => {
-      this.studentService.delete(id)
+      this.userService.delete(id)
         .subscribe((responseBody) => {
           if (responseBody.success) {
-            this.students.splice(index, 1);
+            this.users.splice(index, 1);
             this.commonService.showSuccessAlert(responseBody.message);
           } else {
             this.commonService.showErrorAlert(responseBody.message);
@@ -55,7 +55,7 @@ export class StudentComponent implements OnInit {
   onActive(id: number): void {
     console.log('点击冻结按钮');
     this.commonService.showConfirmAlert(() => {
-      this.studentService.freeze(id).subscribe((responseBody) => {
+      this.userService.freeze(id).subscribe((responseBody) => {
         if (responseBody.success) {
           this.commonService.showSuccessAlert(responseBody.message);
           this.getAll();
