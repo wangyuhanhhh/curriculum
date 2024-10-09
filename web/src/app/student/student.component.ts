@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {StudentService} from '../../service/student.service';
-import {User} from '../entity/user';
+import {Student} from '../entity/student';
 import {ClazzService} from '../../service/clazz.service';
 import {Clazz} from '../entity/clazz';
+import {CommonService} from '../../service/common.service';
 
 @Component({
   selector: 'app-student',
@@ -10,15 +11,16 @@ import {Clazz} from '../entity/clazz';
   styleUrls: ['./student.component.css']
 })
 export class StudentComponent implements OnInit {
-  users: User[] = [];
+  students: Student[] = [];
   clazzes: Clazz[] = [];
 
-  constructor(private userService: StudentService,
-              private clazzService: ClazzService) { }
+  constructor(private studentService: StudentService,
+              private clazzService: ClazzService,
+              private commonService: CommonService) { }
 
   ngOnInit(): void {
-    this.userService.getAll().subscribe(
-      users => this.users = users
+    this.studentService.getAll().subscribe(
+      users => this.students = users
     );
 
     // 获取所有班级
@@ -31,5 +33,19 @@ export class StudentComponent implements OnInit {
   getClazzName(clazzId: number): string {
     const clazz = this.clazzes.find(c => c.id === clazzId);
     return clazz ? clazz.clazz : '-';
+  }
+
+  onDelete(index: number, id: number): void {
+    this.commonService.showConfirmAlert(() => {
+      this.studentService.delete(id)
+        .subscribe((responseBody) => {
+          if (responseBody.success) {
+            this.students.splice(index, 1);
+            this.commonService.showSuccessAlert(responseBody.message);
+          } else {
+            this.commonService.showErrorAlert(responseBody.message);
+          }
+        }, error => this.commonService.showErrorAlert('请求错误，请稍后'));
+    }, '是否删除，此操作不可逆');
   }
 }

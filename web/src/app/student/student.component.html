@@ -15,22 +15,22 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let user of users; index as i">
+    <tr *ngFor="let student of students; index as i">
       <td>{{ i + 1 }}</td>
-      <td>{{ user.name }}</td>
-      <td>{{ user.student_no}}</td>
-      <td>{{ getClazzName(user.clazz_id) }}</td>
-      <td *ngIf="user.status; else userIsFreeze">
+      <td>{{ student.name }}</td>
+      <td>{{ student.student_no}}</td>
+      <td>{{ getClazzName(student.clazz_id) }}</td>
+      <td *ngIf="student.status; else userIsFreeze">
         <span class="badge badge-pill badge-success">激活</span>
       </td>
       <td>
-        <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + user.id">
+        <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + student.id">
           <i class="fa fa-pen"></i>编辑
         </a>
-        <span *ngIf="user.status === 0; else freezeButton" class="btn btn-sm btn-outline-success">
+        <span *ngIf="student.status === 0; else freezeButton" class="btn btn-sm btn-outline-success">
           <i class="fa fa-refresh" aria-hidden="true"></i>激活
         </span>
-        <span class="btn btn-outline-danger btn-sm">
+        <span class="btn btn-outline-danger btn-sm" (click)="onDelete(i, student.id)">
           <i class="far fa-trash-alt"></i>删除
         </span>
       </td>
