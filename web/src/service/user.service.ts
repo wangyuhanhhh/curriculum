@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ResponseBody} from '../app/entity/response-body';
-import {Student} from '../app/entity/student';
+import {User} from '../app/entity/user';
 
 @Injectable({
   providedIn: 'root'
 })
-export class StudentService {
+export class UserService {
   private baseUrl = '/api/student';
 
   constructor(private http: HttpClient) { }
@@ -34,11 +34,11 @@ export class StudentService {
   }
 
   // 获取所有用户
-  getAll(): Observable<Student[]> {
-    return this.http.get<Student[]>(this.baseUrl);
+  getAll(): Observable<User[]> {
+    return this.http.get<User[]>(this.baseUrl);
   }
 
-  update(id: number, studentData: Student): Observable<any> {
+  update(id: number, studentData: User): Observable<any> {
     const updateUrl = `${this.baseUrl}/update/${id}`;
     return this.http.post(updateUrl, studentData);
   }

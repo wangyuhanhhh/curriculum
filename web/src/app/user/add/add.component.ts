@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {StudentService} from '../../../service/student.service';
+import {UserService} from '../../../service/user.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CommonService} from '../../../service/common.service';
 import {Router} from '@angular/router';
@@ -17,7 +17,7 @@ export class AddComponent implements OnInit {
     school_id: new FormControl(null, Validators.required),
     clazz_id: new FormControl(null, Validators.required),
   });
-  constructor(private studentService: StudentService,
+  constructor(private studentService: UserService,
               private commonService: CommonService,
               private router: Router) { }
 
@@ -31,8 +31,8 @@ export class AddComponent implements OnInit {
         console.log(responseBody.message);
         if (responseBody.success) {
           this.commonService.showSuccessAlert(responseBody.message);
-          // 重定向到 student.component.html 页面
-          this.router.navigate(['/student']);
+          // 重定向到 user.component.html 页面
+          this.router.navigate(['/user']);
         } else {
           this.commonService.showErrorAlert(responseBody.message);
         }

@@ -1,7 +1,7 @@
 /**
  * 用户
  */
-export class Student {
+export class User {
   id: number;
   name: string;
   // 学号

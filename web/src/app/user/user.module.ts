@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {StudentComponent} from './student.component';
+import {UserComponent} from './user.component';
 import {AddComponent} from './add/add.component';
 import {RouterModule, Routes} from '@angular/router';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -13,7 +13,7 @@ import { EditComponent } from './edit/edit.component';
 const routes: Routes = [
   {
     path: '',
-    component: StudentComponent
+    component: UserComponent
   },
   {
     path: 'add',
@@ -28,7 +28,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    StudentComponent,
+    UserComponent,
     AddComponent,
     ClazzSelectComponent,
     EditComponent
@@ -41,4 +41,4 @@ const routes: Routes = [
         NzSelectModule
     ]
 })
-export class StudentModule { }
+export class UserModule { }
