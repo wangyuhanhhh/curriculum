@@ -15,6 +15,10 @@ export class ClazzService {
   add(clazz: Clazz): Observable<ResponseBody> {
     return this.httpClient.post<ResponseBody>(`${this.baseUrl}/add`, clazz);
   }
+  // 删除班级
+  delete(clazzId: number): Observable<ResponseBody> {
+    return this.httpClient.delete<any>(`${this.baseUrl}/delete/${clazzId}`);
+  }
   // 获取所有的班级
   getAll(): Observable<Clazz[]> {
     return this.httpClient.get<Clazz[]>(this.baseUrl);

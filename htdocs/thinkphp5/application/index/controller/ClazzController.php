@@ -81,6 +81,31 @@ class ClazzController extends IndexController {
     }
 
     /**
+     * 删除
+     * 如果班级下有用户（学生）/班级下有课程安排，不可删除
+     */
+    public function delete() {
+        $request = Request::instance();
+        $id = IndexController::getParamId($request);
+        // 查询该id对应的班级信息，同时查询该班级对应的学生信息
+        $clazz = Clazz::with('students')->find($id);
+        // id是否对应有班级信息
+        if (!$clazz) {
+            return json(['success' => false, 'message' => '班级不存在']);
+        }
+        // 该班级下是否有用户（学生）
+        if (!empty($clazz->students)) {
+            return json(['success' => false, 'message' => '该班级有用户，无法删除']);
+        }
+        // 删除班级
+        if ($clazz->delete()) {
+            return json(['success' => true, 'message' => '删除成功']);
+        } else {
+            return json(['success' => false, 'message' => '删除失败']);
+        }
+    }
+
+    /**
      * 根据id获取对应的班级信息
      */
     public function edit() {
