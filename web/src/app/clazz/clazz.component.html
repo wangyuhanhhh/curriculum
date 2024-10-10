@@ -15,7 +15,7 @@
   <tbody>
     <tr *ngFor="let clazz of clazzes; index as i">
       <td>{{ i + 1 }}</td>
-      <td>{{ getSchoolName(clazz.school_id) }}</td>
+      <td>{{ clazz.school.school }}</td>
       <td>{{ clazz.clazz}}</td>
       <td>
         <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + clazz.id">

@@ -27,7 +27,7 @@ export class EditComponent implements OnInit {
       // 填充编辑前的信息
       this.formGroup.patchValue({
         clazz: data.clazz,
-        school_id: data.school_id,
+        school_id: data.school.id,
       });
     }, error => console.log(error));
   }
