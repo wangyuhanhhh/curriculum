@@ -89,7 +89,7 @@ class ClazzController extends IndexController {
         $id = IndexController::getParamId($request);
         // 查询该id对应的班级信息，同时查询该班级对应的学生信息
         $clazz = Clazz::with('students')->find($id);
-        // id是否对应有班级信息
+        // 班级不存在
         if (!$clazz) {
             return json(['success' => false, 'message' => '班级不存在']);
         }
@@ -109,7 +109,10 @@ class ClazzController extends IndexController {
      * 根据id获取对应的班级信息
      */
     public function edit() {
-        $clazz = ClazzController::getClazz();
+        $request = Request::instance();
+        $id = IndexController::getParamId($request);
+        // 班级详细信息，包括对应的学校 clazz
+        $clazz = Clazz::with('school')->find($id);
         $clazzJson = json_encode($clazz, JSON_UNESCAPED_UNICODE);
         return $clazzJson;
     }
@@ -124,11 +127,22 @@ class ClazzController extends IndexController {
     }
 
     public function index() {
-        $clazzModel = new Clazz();
-        // 获取所有班级
-        $clazz = $clazzModel->select();
+        // 获取所有班级和学校信息
+        $clazzes = Clazz::with('school')->select();
+        // 班级详细信息，包括对应的学校 clazzDetail
+        $clazzDet = [];
+        foreach ($clazzes as $clazz) {
+            $clazzDet[] = [
+                'id' => $clazz->id,
+                'clazz' => $clazz->clazz,
+                'school' => [
+                    'id' => $clazz->school->id,
+                    'school' => $clazz->school->school
+                ]
+            ];
+        }
         // 转成json字符串
-        $classJson = json_encode($clazz, JSON_UNESCAPED_UNICODE);
+        $classJson = json_encode($clazzDet, JSON_UNESCAPED_UNICODE);
         return $classJson;
     }
 

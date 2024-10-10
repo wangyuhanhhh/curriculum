@@ -62,13 +62,20 @@ class SchoolController extends IndexController {
     }
 
     public function delete() {
-        $school = SchoolController::getSchool();
+        $request = Request::instance();
+        $id = IndexController::getParamId($request);
+        // 查询id对应的学校信息，同时查询该学校对应的班级信息
+        $school = School::with('clazzes')->find($id);
+        // id没有学校信息
         if (!$school) {
             $success = false;
             $message = '学校不存在';
             return json(['success' => $success, 'message' => $message]);
         }
-
+        // 学校下存在班级
+        if (!empty($school->clazzes)) {
+            return json(['success' => false, 'message' => '该学校有班级，无法删除']);
+        }
         // 删除
         if ($school->delete()) {
             $success = true;
