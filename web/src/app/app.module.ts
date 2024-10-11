@@ -16,6 +16,7 @@ import {UserModule} from './user/user.module';
 import {SchoolModule} from './school/school.module';
 import {TermModule} from './term/term.module';
 import {ClazzModule} from './clazz/clazz.module';
+import { TeacherModule } from './teacher/teacher.module';
 
 registerLocaleData(en);
 
@@ -35,7 +36,8 @@ registerLocaleData(en);
     UserModule,
     SchoolModule,
     TermModule,
-    ClazzModule
+    ClazzModule,
+    TeacherModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]
