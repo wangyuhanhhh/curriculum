@@ -1,5 +1,5 @@
 .color {
-  background-color:  #b9a8e1ec;
+  background-color: rgba(33, 166, 75, 0.7);
 }
 /*头部背景条显示高度*/
 .height {
@@ -15,7 +15,7 @@
 }
 /*导航栏被点亮是变颜色*/
 .nav-link.active {
-  background-color:  #b9a8e1ec;
+  background-color: rgba(42, 122, 69, 0.93);
 }
 /*防止屏幕放大时导航栏的内容换行*/
 .nav-pills .nav-item {
@@ -31,9 +31,9 @@
   max-width: 200px
 }
 /*内容区域自适应剩余空间*/
-.col {
-  flex: 1;
-}
-.bold-text {
-  font-weight: 600
+.content {
+  flex-grow: 1; /* 右侧内容区域扩展，占据剩余空间 */
+  padding: 20px; /* 内容区域内边距 */
+  background-color: #ffffff; /* 内容区域背景色 */
+  overflow-y: auto; /* 如果内容超出页面，启用垂直滚动 */
 }
