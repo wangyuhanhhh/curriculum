@@ -1,0 +1,29 @@
+<form class="container-sm" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <div class="mb-3 row">
+    <label for="name" class="col-sm-2 col-form-label">姓名</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" name="name" formControlName="name" id="name">
+      <div *ngIf="formGroup.get('name')?.invalid" class="text-danger mt-1">姓名不能为空</div>
+    </div>
+  </div>
+  <div class="mb-3 row">
+  <label for="username" class="col-sm-2 col-form-label">用户名</label>
+  <div class="col-sm-10">
+    <input type="text" class="form-control" name="username" formControlName="username" id="username">
+    <div *ngIf="formGroup.get('username')?.invalid" class="text-danger mt-1">用户名不能为空</div>
+  </div>
+  </div>
+  <div class="mb-3 row">
+    <label for="teacher_no" class="col-sm-2 col-form-label">工号</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" name="teacher_no" formControlName="teacher_no" id="teacher_no">
+      <div *ngIf="formGroup.get('teacher_no')?.invalid" class="text-danger mt-1">工号不能为空</div>
+    </div>
+  </div>
+  <div class="mb-3 row">
+    <div class="col-sm-10 offset-2">
+      <button class="btn btn-primary" [disabled]="formGroup.invalid">保存</button>
+    </div>
+  </div>
+</form>
+
