@@ -13,6 +13,7 @@ import {Router} from '@angular/router';
 export class AddComponent implements OnInit {
   formGroup = new FormGroup({
     name: new FormControl('', Validators.required),
+    username: new FormControl('', Validators.required),
     student_no: new FormControl(null, Validators.required),
     school_id: new FormControl(null, Validators.required),
     clazz_id: new FormControl(null, Validators.required),

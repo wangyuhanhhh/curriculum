@@ -13,7 +13,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   // 新增
-  add(studentData: {username: string; student_no: string; clazz_id: number; }): Observable<ResponseBody> {
+  add(studentData: User): Observable<ResponseBody> {
     // 构建完整的URL
     const addUrl = `${this.baseUrl}/add`;
 
@@ -28,9 +28,9 @@ export class UserService {
   }
 
   // 修改
-  edit(id: number): Observable<any> {
+  edit(id: number): Observable<User> {
     const editUrl = `${this.baseUrl}/edit/${id}`;
-    return this.http.get<any>(editUrl);
+    return this.http.get<User>(editUrl);
   }
 
   // 获取所有用户
@@ -38,14 +38,14 @@ export class UserService {
     return this.http.get<User[]>(this.baseUrl);
   }
 
-  update(id: number, studentData: User): Observable<any> {
+  update(id: number, studentData: User): Observable<ResponseBody> {
     const updateUrl = `${this.baseUrl}/update/${id}`;
-    return this.http.post(updateUrl, studentData);
+    return this.http.post<ResponseBody>(updateUrl, studentData);
   }
 
   // 冻结学生
-  freeze(id: number): Observable<any> {
+  freeze(id: number): Observable<ResponseBody> {
     const freezeUrl = `${this.baseUrl}/freeze/${id}`;
-    return this.http.get<any>(freezeUrl);
+    return this.http.get<ResponseBody>(freezeUrl);
   }
 }
