@@ -13,6 +13,11 @@ export class TeacherService {
 
   constructor(private http: HttpClient) { }
 
+  // 新增
+  add(teacherData: Teacher): Observable<ResponseBody> {
+    const addUrl = `${this.baseUrl}/add`;
+    return this.http.post<ResponseBody>(addUrl, teacherData);
+  }
   // 获取所有教师
   getAll(): Observable<Teacher[]> {
     return this.http.get<Teacher[]>(this.baseUrl);
