@@ -1,6 +1,7 @@
 <?php
 namespace app\index\controller;
 use app\common\model\Student;
+use app\common\model\User;
 use app\common\validate\StudentValidate;
 use think\Request;
 use think\Db;
@@ -33,27 +34,51 @@ class StudentController extends IndexController
           return json(['success' => false, 'message' => '该学号学生已存在，新增失败']);
       }
 
-      // 给默认密码（学号）
-      $student = new Student;
-      $student->name = $data['name'];
-      $student->password = $studentNo;
-      $student->status = 1;
-      $student->student_no = $studentNo;
-      $student->clazz_id = $data['clazz_id'];
+      // 开启事务
+      Db::startTrans();
+      try {
+          // 第一步，先新增 user 数据
+          $user = new User();
+          $user->username = $data['username'];
+          // 给默认密码（学号）
+          $user->password = $studentNo;
+          $user->role = 3;
 
-      // 数据校验
-      $validate = new StudentValidate;
-      // 验证成功，$validate = new StudentValidate 值为false
-      if($validate->scene('add')->check($data)){
-          // 验证失败，返回错误信息
-          return json(['success' => false, 'message' => $validate->getError()]);
-      }
-      // 验证通过，处理数据
-      $result = $student->save();
-      if($result) {
-          return json(['success' => true, 'message' => '新增成功']);
-      } else {
-          return json(['success' => false, 'message' => '新增失败']);
+          // 数据校验
+          $validate = new StudentValidate();
+          if ($validate->scene('addUser')->check((array)$user)) {
+              // 验证失败，返回错误信息
+              return json(['success' => false, 'message' => $validate->getError()]);
+          }
+
+          if (!$user->save()) {
+              throw new \Exception('用户创建失败');
+          }
+
+          // 第二步，新增 student 数据，并将 user 的 id 作为 user_id 储存
+          $student = new Student();
+          $student->name = $data['name'];
+          $student->status = 1;
+          $student->student_no = $studentNo;
+          $student->clazz_id = $data['clazz_id'];
+          $student->user_id = $user->id;
+
+          // 数据验证
+          if ($validate->scene('addStudent')->check((array)$student)) {
+              // 验证失败，返回错误信息
+              return json(['success' => false, 'message' => $validate->getError()]);
+          }
+
+          if (!$student->save()) {
+              throw new \Exception('学生创建失败');
+          }
+
+          // 提交事务
+          Db::commit();
+          return json(['success' => true, 'message' => '学生用户创建成功']);
+      } catch (\Exception $e) {
+          // 回滚事务
+          return json(['success' => false, 'message' => $e->getMessage()]);
       }
     }
 
