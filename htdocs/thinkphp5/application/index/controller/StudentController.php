@@ -102,12 +102,13 @@ class StudentController extends IndexController
         if(!$id) {
             return (['success' => false, 'message' => '该学生不存在']);
         }
-        $studentData = Student::with('clazz')->find($id);
+        $studentData = Student::with('clazz', 'user')->find($id);
         $schoolId = $studentData->clazz->school_id;
         $studentData->school_id = $schoolId;
         // 重新整合为一个新的数组
-        // 因为不需要全部的字段，只需要 name, student_no, clazz_id, school_id
+        // 因为不需要全部的字段，只需要 name, username, student_no, clazz_id, school_id
         $student['name'] = $studentData->name;
+        $student['username'] = $studentData->user->username;
         $student['student_no'] = $studentData->student_no;
         $student['clazz_id'] = $studentData->clazz_id;
         $student['school_id'] = $schoolId;
@@ -123,7 +124,7 @@ class StudentController extends IndexController
         $student = Student::get($id);
         return $student;
     }
-
+    
     public function freeze() {
         $request = Request::instance();
         // 获取对应数据的id
@@ -156,7 +157,7 @@ class StudentController extends IndexController
         $request = Request::instance();
         $id = IndexController::getParamId($request);
         // 当前被修改的学生信息
-        $student = Student::get($id);
+        $student = Student::with('user')->find($id);
         $data = Request::instance()->getContent();
         $studentData = json_decode($data, true);
 
@@ -188,22 +189,32 @@ class StudentController extends IndexController
             return json(['success' => false, 'message' => '没有任何改动，更新失败']);
         }
 
-        $student->name = isset($studentData['name']) ? $studentData['name'] : $student->name;
-        $student->student_no = isset($studentData['student_no']) ? $studentData['student_no'] : $student->student_no;
-        $student->clazz_id = isset($studentData['clazz_id']) ? $studentData['clazz_id'] : $student->clazz_id;
+        // 开启事务
+        Db::startTrans();
+        try {
+            // 更新 student 表
+            Db::name('student')
+                ->where('id', $id)
+                ->update([
+                    'name' => $studentData['name'],
+                    'student_no' => $studentData['student_no'],
+                    'clazz_id' => $studentData['clazz_id'],
+                ]);
 
-        $validate = new StudentValidate;
-        if (!$validate->scene('update')->check($student)){
-            return json(['success' => false, 'message' => $validate->getError()]);
-        }
-        // 验证通过，处理数据
-        $result = $student->save();
-        if($result) {
-            return json(['success' => true, 'message' => '编辑成功']);
-        } else {
-            return json(['success' => false, 'message' => '编辑失败']);
-        }
+            // 更新 user 表
+            Db::name('user')
+                ->where('id', $student->user_id)
+                ->update([
+                    'username' => $studentData['username'],
+                ]);
 
+            // 提交事务
+            Db::commit();
+            return json(['success' => true, 'message' => '学生信息更新成功']);
+        } catch (\Exception $e) {
+            Db::rollback();
+            return json(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 }
 
