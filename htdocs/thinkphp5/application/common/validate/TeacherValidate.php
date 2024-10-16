@@ -25,5 +25,6 @@ class TeacherValidate extends Validate {
     protected $scene = [
         'addUser' => ['username', 'password', 'role'],
         'addTeacher' => ['name', 'teacher_no', 'user_id'],
+        'update' => ['name', 'teacher_no', 'username'],
     ];
 }

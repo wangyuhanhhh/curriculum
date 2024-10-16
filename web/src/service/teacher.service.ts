@@ -18,8 +18,20 @@ export class TeacherService {
     const addUrl = `${this.baseUrl}/add`;
     return this.http.post<ResponseBody>(addUrl, teacherData);
   }
+
+  // 编辑
+  update(id: number, teacher: Teacher): Observable<ResponseBody> {
+    const editUrl = `${this.baseUrl}/update/${id}`;
+    return this.http.put<ResponseBody>(editUrl, teacher);
+  }
+
   // 获取所有教师
   getAll(): Observable<Teacher[]> {
     return this.http.get<Teacher[]>(this.baseUrl);
+  }
+
+  // 根据id获取对应教师
+  getById(id: number): Observable<Teacher> {
+    return this.http.get<Teacher>(`${this.baseUrl}/getByID/${id}`);
   }
 }
