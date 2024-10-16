@@ -4,6 +4,6 @@ use think\Model;
 
 class Teacher extends Model {
     public function user() {
-        return $this->hasOne('user', 'user_id', 'id');
+        return $this->belongsTo('User', 'user_id', 'id');
     }
 }
