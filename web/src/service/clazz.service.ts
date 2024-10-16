@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Clazz} from '../app/entity/clazz';
 import {ResponseBody} from '../app/entity/response-body';
+import { Page } from 'src/app/entity/page';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,10 @@ export class ClazzService {
   // 根据id获取对应的班级信息
   getClazzById(id: number): Observable<Clazz> {
     return this.httpClient.get<Clazz>(`${this.baseUrl}/edit/${id}`);
+  }
+  // 分页
+  loadByPage(params: HttpParams): Observable<Page<Clazz>> {
+    return this.httpClient.get<Page<Clazz>>(`${this.baseUrl}/page`, { params });
   }
   // 更新班级信息
   update(id: number, clazz: Clazz): Observable<ResponseBody> {

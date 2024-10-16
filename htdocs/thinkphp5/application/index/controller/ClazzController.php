@@ -161,6 +161,43 @@ class ClazzController extends IndexController {
     }
 
     /**
+     * 分页
+     */
+    public function page() {
+        // 获取请求参数中的currentPage 如果不存在，默认为1
+        $currentPage = Request::instance()->get('currentPage', 1);
+        // 每页多少条数据，如果没有，默认为10
+        $size = Request::instance()->get('size', 10);
+        // 计算偏移量 从哪一条开始检索数据
+        $offset = ($currentPage - 1) * $size;
+        // 数据总条数
+        $total = Clazz::count();
+        // 计算总页数
+        $totalPages = ceil($total / $size);
+        $clazzes = Clazz::with('school')->limit($offset, $size)->select();
+        // 班级详细信息
+        $clazzDet = [];
+        foreach ($clazzes as $clazz) {
+            $clazzDet[] = [
+                'id' => $clazz->id,
+                'clazz' => $clazz->clazz,
+                'school' => [
+                    'id' => $clazz->school->id,
+                    'school' => $clazz->school->school
+                ]
+            ];
+        }
+        $pageData = [
+            'content' => $clazzDet,
+            'number' => $totalPages,
+            'size' => $size,
+            'numberOfElements' => $total,
+            'totalPages' => $totalPages
+        ];
+        $pageDataJson = json_encode($pageData, JSON_UNESCAPED_UNICODE);
+        return $pageDataJson;
+    }
+    /**
      * 更新班级信息
      */
     public function update() {

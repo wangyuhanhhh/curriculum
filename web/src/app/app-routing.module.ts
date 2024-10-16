@@ -4,7 +4,6 @@ import {UserComponent} from './user/user.component';
 
 const routes: Routes = [
   {
-
     path: 'term',
     loadChildren: () => import('./term/term.module').then(m => m.TermModule)
   },
