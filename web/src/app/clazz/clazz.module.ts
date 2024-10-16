@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, registerLocaleData} from '@angular/common';
 import {ClazzComponent} from './clazz.component';
 import {RouterModule, Routes} from '@angular/router';
 import { AddComponent } from './add/add.component';
 import {SchoolSelectModule} from '../user/school-select/school-select.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import { EditComponent } from './edit/edit.component';
+import {PageModule} from './page/page.module';
 
 const routes: Routes = [
   {
@@ -32,7 +33,8 @@ const routes: Routes = [
     RouterModule,
     RouterModule.forChild(routes),
     SchoolSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PageModule
   ]
 })
 export class ClazzModule {}

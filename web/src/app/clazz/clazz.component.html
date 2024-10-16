@@ -13,7 +13,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let clazz of clazzes; index as i">
+    <tr *ngFor="let clazz of pageData.content; index as i">
       <td>{{ i + 1 }}</td>
       <td>{{ clazz.school.school }}</td>
       <td>{{ clazz.clazz}}</td>
@@ -28,3 +28,7 @@
     </tr>
   </tbody>
 </table>
+<!--$event是angular的一个关键字，表示子组件弹出的内容-->
+<div class="text-right mr-2">
+  <app-page [page]="pageData" (beCurrentPageChange)="onPage($event)" (beSizeChange)="onSize($event)"></app-page>
+</div>
