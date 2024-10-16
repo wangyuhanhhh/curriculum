@@ -23,7 +23,7 @@ export class ClazzSelectComponent implements OnInit, ControlValueAccessor {
   @Input() set setSchoolId(schoolId: number) {
     console.log('setSchoolId:', schoolId);
     // 重新选择学校时，清空 initialClazzId 并且清空选择框
-    this.initialClazzId = null; // 清空初始值
+    // this.initialClazzId = null; // 清空初始值
     this.clazzIdControl.setValue(null); // 清空班级选择框的值
     this.getAllClazzBySchoolId(schoolId);
   }
@@ -61,6 +61,7 @@ export class ClazzSelectComponent implements OnInit, ControlValueAccessor {
   writeValue(clazzId: number): void {
     // 保存传入的初始值
     this.initialClazzId = clazzId;
+    console.log('初始clazzID：', clazzId);
 
     // 当父组件的 formControl 值发生变化时调用，更新本地的 FormControl
     console.log('set clazzId:', clazzId);
