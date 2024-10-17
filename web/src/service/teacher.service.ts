@@ -19,6 +19,12 @@ export class TeacherService {
     return this.http.post<ResponseBody>(addUrl, teacherData);
   }
 
+  // 删除
+  delete(teacherId: number): Observable<ResponseBody> {
+    const deleteUrl = `${this.baseUrl}/delete/${teacherId}`;
+    return this.http.delete<any>(deleteUrl);
+  }
+
   // 编辑
   update(id: number, teacher: Teacher): Observable<ResponseBody> {
     const editUrl = `${this.baseUrl}/update/${id}`;
