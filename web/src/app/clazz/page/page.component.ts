@@ -10,12 +10,12 @@ export class PageComponent implements OnInit {
   pageData: Page<any> = new Page({
     content: [],
     number: 1,
-    size: 10,
+    size: 5,
     numberOfElements: 0,
     totalPages: 0
   });
   currentPage = 1;
-  size = 10;
+  size = 5;
   constructor() { }
   // 父组件想要的输出：某个被点击的页码
   @Output()

@@ -102,12 +102,13 @@ class StudentController extends IndexController
         if(!$id) {
             return (['success' => false, 'message' => '该学生不存在']);
         }
-        $studentData = Student::with('clazz')->find($id);
+        $studentData = Student::with('clazz', 'user')->find($id);
         $schoolId = $studentData->clazz->school_id;
         $studentData->school_id = $schoolId;
         // 重新整合为一个新的数组
-        // 因为不需要全部的字段，只需要 name, student_no, clazz_id, school_id
+        // 因为不需要全部的字段，只需要 name, username, student_no, clazz_id, school_id
         $student['name'] = $studentData->name;
+        $student['username'] = $studentData->user->username;
         $student['student_no'] = $studentData->student_no;
         $student['clazz_id'] = $studentData->clazz_id;
         $student['school_id'] = $schoolId;
@@ -123,7 +124,7 @@ class StudentController extends IndexController
         $student = Student::get($id);
         return $student;
     }
-
+    
     public function freeze() {
         $request = Request::instance();
         // 获取对应数据的id
@@ -150,13 +151,48 @@ class StudentController extends IndexController
         return json($totalStudent);
         // return '<style type="text/css">*{ padding: 0; margin: 0; } .think_default_text{ padding: 4px 48px;} a{color:#2E5CD5;cursor: pointer;text-decoration: none} a:hover{text-decoration:underline; } body{ background: #fff; font-family: "Century Gothic","Microsoft yahei"; color: #333;font-size:18px} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.6em; font-size: 42px }</style><div style="padding: 24px 48px;"> <h1>:)</h1><p> ThinkPHP V5<br/><span style="font-size:30px">十年磨一剑 - 为API开发设计的高性能框架</span></p><span style="font-size:22px;">[ V5.0 版本由 <a href="http://www.qiniu.com" target="qiniu">七牛云</a> 独家赞助发布 ]</span></div><script type="text/javascript" src="http://tajs.qq.com/stats?sId=9347272" charset="UTF-8"></script><script type="text/javascript" src="http://ad.topthink.com/Public/static/client.js"></script><thinkad id="ad_bd568ce7058a1091"></thinkad>';
     }
-
+    public function page() {
+        // 获取请求参数中的currentPage 如果不存在，默认为1
+        $currentPage = Request::instance()->get('currentPage', 1);
+        // 每页多少条数据，如果没有，默认为10
+        $size = Request::instance()->get('size', 10);
+        // 计算偏移量 从哪一条开始检索数据
+        $offset = ($currentPage - 1) * $size;
+        // 数据总条数
+        $total = Student::count();
+        // 计算总页数
+        $totalPages = ceil($total / $size);
+        $students = Student::with('clazz')->limit($offset, $size)->select();
+        // 班级详细信息
+        $studentDet = [];
+        foreach ($students as $student) {
+            $studentDet[] = [
+                'id' => $student->id,
+                'name' => $student->name,
+                'student_no' => $student->student_no,
+                'status' => $student->status,
+                'clazz' => [
+                    'id' => $student->clazz->id,
+                    'clazz' => $student->clazz->clazz
+                ]
+            ];
+        }
+        $pageData = [
+            'content' => $studentDet,
+            'number' => $totalPages,
+            'size' => $size,
+            'numberOfElements' => $total,
+            'totalPages' => $totalPages
+        ];
+        $pageDataJson = json_encode($pageData, JSON_UNESCAPED_UNICODE);
+        return $pageDataJson;
+    }
     // 更新学生信息
     public function update() {
         $request = Request::instance();
         $id = IndexController::getParamId($request);
         // 当前被修改的学生信息
-        $student = Student::get($id);
+        $student = Student::with('user')->find($id);
         $data = Request::instance()->getContent();
         $studentData = json_decode($data, true);
 
@@ -188,22 +224,32 @@ class StudentController extends IndexController
             return json(['success' => false, 'message' => '没有任何改动，更新失败']);
         }
 
-        $student->name = isset($studentData['name']) ? $studentData['name'] : $student->name;
-        $student->student_no = isset($studentData['student_no']) ? $studentData['student_no'] : $student->student_no;
-        $student->clazz_id = isset($studentData['clazz_id']) ? $studentData['clazz_id'] : $student->clazz_id;
+        // 开启事务
+        Db::startTrans();
+        try {
+            // 更新 student 表
+            Db::name('student')
+                ->where('id', $id)
+                ->update([
+                    'name' => $studentData['name'],
+                    'student_no' => $studentData['student_no'],
+                    'clazz_id' => $studentData['clazz_id'],
+                ]);
 
-        $validate = new StudentValidate;
-        if (!$validate->scene('update')->check($student)){
-            return json(['success' => false, 'message' => $validate->getError()]);
-        }
-        // 验证通过，处理数据
-        $result = $student->save();
-        if($result) {
-            return json(['success' => true, 'message' => '编辑成功']);
-        } else {
-            return json(['success' => false, 'message' => '编辑失败']);
-        }
+            // 更新 user 表
+            Db::name('user')
+                ->where('id', $student->user_id)
+                ->update([
+                    'username' => $studentData['username'],
+                ]);
 
+            // 提交事务
+            Db::commit();
+            return json(['success' => true, 'message' => '学生信息更新成功']);
+        } catch (\Exception $e) {
+            Db::rollback();
+            return json(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 }
 
