@@ -15,9 +15,10 @@ export class User {
   // tslint:disable-next-line:variable-name
   school_id: number;
   // tslint:disable-next-line:variable-name
-  clazz_id: number;
+  clazz_id: number
+  clazz: Clazz;
   // tslint:disable-next-line:variable-name max-line-length
-  constructor(id?: number, name?: string, username?: string, password?: string, student_no?: string, status?: number, school_id?: number, clazz_id?: number) {
+  constructor(id?: number, name?: string, username?: string, password?: string, student_no?: string, status?: number, school_id?: number, clazz?: Clazz, clazz_id?: number) {
     this.id = id as number;
     this.name = name as string;
     this.username = username as string;
@@ -26,5 +27,6 @@ export class User {
     this.status = status as number;
     this.school_id = school_id as number;
     this.clazz_id = clazz_id as number;
+    this.clazz = clazz as Clazz;
   }
 }

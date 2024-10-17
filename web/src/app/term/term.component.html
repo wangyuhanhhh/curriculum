@@ -16,9 +16,9 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let term of terms; index as i">
+    <tr *ngFor="let term of pageData.content; index as i">
       <td>{{ i + 1 }}</td>
-      <td>{{ getSchoolName(term.school_id) }}</td>
+      <td>{{ term.school.school }}</td>
       <td>{{ term.term }}</td>
       <td>{{ term.start_time }}</td>
       <td>{{ term.end_time }}</td>
@@ -36,10 +36,13 @@
     </tr>
     </tbody>
   </table>
-
   <ng-template #termIsFreeze>
     <td>
       <span class="badge badge-pill badge-danger">冻结</span>
     </td>
   </ng-template>
+</div>
+<!--$event是angular的一个关键字，表示子组件弹出的内容-->
+<div class="text-right mr-2">
+  <app-page [page]="pageData" (beCurrentPageChange)="onPage($event)" (beSizeChange)="onSize($event)"></app-page>
 </div>

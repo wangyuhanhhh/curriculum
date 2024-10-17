@@ -15,11 +15,11 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let user of users; index as i">
+    <tr *ngFor="let user of pageData.content; index as i">
       <td>{{ i + 1 }}</td>
       <td>{{ user.name }}</td>
       <td>{{ user.student_no}}</td>
-      <td>{{ getClazzName(user.clazz_id) }}</td>
+      <td>{{ user.clazz.clazz }}</td>
       <td *ngIf="user.status; else userIsFreeze">
         <span class="badge badge-pill badge-success">激活</span>
       </td>
@@ -45,4 +45,7 @@
   </ng-template>
   <ng-template #noDelete>
   </ng-template>
+</div>
+<div class="text-right mr-2">
+  <app-page [page]="pageData" (beCurrentPageChange)="onPage($event)" (beSizeChange)="onSize($event)"></app-page>
 </div>

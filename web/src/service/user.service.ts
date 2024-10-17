@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ResponseBody} from '../app/entity/response-body';
 import {User} from '../app/entity/user';
+import {Page} from '../app/entity/page';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,10 @@ export class UserService {
   getAll(): Observable<User[]> {
     return this.http.get<User[]>(this.baseUrl);
   }
-
+  // 分页
+  loadByPage(params: HttpParams): Observable<Page<User>> {
+    return this.http.get<Page<User>>(`${this.baseUrl}/page`, { params });
+  }
   update(id: number, studentData: User): Observable<ResponseBody> {
     const updateUrl = `${this.baseUrl}/update/${id}`;
     return this.http.post<ResponseBody>(updateUrl, studentData);

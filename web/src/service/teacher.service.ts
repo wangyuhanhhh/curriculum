@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {ResponseBody} from '../app/entity/response-body';
 import {Observable} from 'rxjs';
 import {Teacher} from '../app/entity/teacher';
+import {Page} from '../app/entity/page';
 
 
 @Injectable({
@@ -39,5 +40,9 @@ export class TeacherService {
   // 根据id获取对应教师
   getById(id: number): Observable<Teacher> {
     return this.http.get<Teacher>(`${this.baseUrl}/getByID/${id}`);
+  }
+  // 分页
+  loadByPage(params: HttpParams): Observable<Page<Teacher>> {
+    return this.http.get<Page<Teacher>>(`${this.baseUrl}/page`, { params });
   }
 }

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Term} from '../app/entity/term';
 import {ResponseBody} from '../app/entity/response-body';
+import {Page} from '../app/entity/page';
+import {Clazz} from '../app/entity/clazz';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +32,10 @@ export class TermService {
     const updateUrl = `${this.baseUrl}/edit/${id}`;
     return this.http.get<any>(updateUrl);
   }
-
+  // 分页
+  loadByPage(params: HttpParams): Observable<Page<Term>> {
+    return this.http.get<Page<Term>>(`${this.baseUrl}/page`, { params });
+  }
   update(id: number, termData: Term): Observable<any> {
     const updateUrl = `${this.baseUrl}/update/${id}`;
     return this.http.post(updateUrl, termData);
