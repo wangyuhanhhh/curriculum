@@ -25,7 +25,7 @@ export class UserService {
   // 删除
   delete(studentId: number): Observable<ResponseBody> {
     const deleteUrl = `${this.baseUrl}/delete/${studentId}`;
-    return this.http.delete<any>(deleteUrl);
+    return this.http.delete<ResponseBody>(deleteUrl);
   }
 
   // 修改

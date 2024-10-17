@@ -4,6 +4,7 @@ import {UserService} from '../../../service/user.service';
 import {CommonService} from '../../../service/common.service';
 import {User} from '../../entity/user';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {SchoolService} from '../../../service/school.service';
 
 @Component({
   selector: 'app-edit',
@@ -11,9 +12,11 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent implements OnInit {
+  schoolName: '';
   user: User = {} as User;
   formGroup = new FormGroup({
     name: new FormControl('', Validators.required),
+    username: new FormControl('', Validators.required),
     student_no: new FormControl(null, Validators.required),
     school_id: new FormControl(null, Validators.required),
     clazz_id: new FormControl(null, Validators.required),
@@ -21,6 +24,7 @@ export class EditComponent implements OnInit {
 
   constructor(private activeRoute: ActivatedRoute,
               private userService: UserService,
+              private schoolService: SchoolService,
               private commonService: CommonService,
               private router: Router) { }
 
@@ -30,10 +34,15 @@ export class EditComponent implements OnInit {
       this.formGroup.patchValue({
         // 填充信息
         name: user.name,
+        username: user.username,
         student_no: user.student_no,
         clazz_id: user.clazz_id,
         school_id: user.school_id,
       });
+      // 调用 getSchoolBySchoolId 方法获取学校名称填充表单
+      if (user.school_id) {
+        this.getSchoolBySchoolId(user.school_id);
+      }
     }, error => {
       console.log(error);
     });
@@ -53,6 +62,20 @@ export class EditComponent implements OnInit {
         }
     }, error => {
         this.commonService.showErrorAlert('请求失败，请稍后');
+      }
+    );
+  }
+
+  // 通过 school_id 获取 school 名称
+  getSchoolBySchoolId(schoolId: number): void {
+    this.schoolService.getSchoolById(schoolId).subscribe(
+      (Data: any) => {
+        const schoolName = Data.school;
+        if (schoolName) {
+          this.schoolName = schoolName || '-';
+        }
+      }, error => {
+        console.log(error);
       }
     );
   }

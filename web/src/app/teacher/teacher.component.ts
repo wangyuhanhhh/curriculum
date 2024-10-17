@@ -3,6 +3,7 @@ import {Teacher} from '../entity/teacher';
 import {TeacherService} from '../../service/teacher.service';
 import {HttpParams} from '@angular/common/http';
 import {Page} from '../entity/page';
+import {CommonService} from '../../service/common.service';
 
 @Component({
   selector: 'app-teacher',
@@ -22,7 +23,9 @@ export class TeacherComponent implements OnInit {
     numberOfElements: 0,
     totalPages: 0
   });
-  constructor(private teacherService: TeacherService) { }
+
+  constructor(private teacherService: TeacherService,
+              private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.getAll();
@@ -43,6 +46,7 @@ export class TeacherComponent implements OnInit {
       teachers => this.teachers = teachers
     );
   }
+
   /**
    * loadByPage方法接受两个参数，这里调用loadByPage方法也应该传递两个参数
    */
@@ -51,5 +55,20 @@ export class TeacherComponent implements OnInit {
   }
   onSize(size: number): void {
     this.loadByPage(this.currentPage, size);
+  }
+
+
+  onDelete(teacherId: number): void {
+    this.commonService.showConfirmAlert(() => {
+      this.teacherService.delete(teacherId)
+        .subscribe((responseBody) => {
+          if (responseBody.success) {
+            this.commonService.showSuccessAlert(responseBody.message);
+            this.getAll();
+          } else {
+            this.commonService.showErrorAlert(responseBody.message);
+          }
+        }, error => this.commonService.showErrorAlert('请求失败，请稍后'));
+    }, '是否删除，此操作不可逆');
   }
 }

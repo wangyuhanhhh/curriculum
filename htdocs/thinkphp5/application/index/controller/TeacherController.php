@@ -66,6 +66,36 @@ class TeacherController extends IndexController {
         }
     }
 
+    // 删除
+    public function delete() {
+        $request = Request::instance();
+        $id = IndexController::getParamId($request);
+        $teacher = Teacher::get($id);
+        if (!$teacher) {
+            return json(['success' => false, 'message' => '该教师不存在，删除失败']);
+        }
+
+        // 开启事务
+        Db::startTrans();
+        try {
+            // 第一步，先删除 teacher 中的数据
+            Db::name('teacher')
+                ->where('id', $id)
+                ->delete();
+
+            // 第二步，删除 user 中的数据
+            Db::name('user')
+                ->where('id', $teacher->user_id)
+                ->delete();
+
+            Db::commit();
+            return json(['success' => true, 'message' => '教师用户删除成功']);
+        } catch (\Exception $e) {
+            Db::rollback();
+            return json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
     // 根据id获取数据
     public function getById() {
         $request = Request::instance();

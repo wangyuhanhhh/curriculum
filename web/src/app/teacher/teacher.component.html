@@ -21,7 +21,7 @@
         <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + teacher.id">
           <i class="fa fa-pen"></i>编辑
         </a>
-        <span class="btn btn-outline-danger btn-sm">
+        <span class="btn btn-outline-danger btn-sm" (click)="onDelete(teacher.id)">
           <i class="far fa-trash-alt"></i>删除
         </span>
       </td>

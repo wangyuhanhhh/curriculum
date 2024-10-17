@@ -27,7 +27,7 @@
         <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + user.id">
           <i class="fa fa-pen"></i>编辑
         </a>
-        <span class="btn btn-outline-danger btn-sm" (click)="onDelete(i, user.id)">
+        <span class="btn btn-outline-danger btn-sm" (click)="onDelete(user.id)">
           <i class="far fa-trash-alt"></i>删除
         </span>
         <span *ngIf="user.status === 1" class="btn btn-sm btn-outline-danger"  (click)="onActive(user.id)">
