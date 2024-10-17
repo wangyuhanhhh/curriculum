@@ -38,13 +38,13 @@ export class UserComponent implements OnInit {
     return clazz ? clazz.clazz : '-';
   }
 
-  onDelete(index: number, id: number): void {
+  onDelete(id: number): void {
     this.commonService.showConfirmAlert(() => {
       this.userService.delete(id)
         .subscribe((responseBody) => {
           if (responseBody.success) {
-            this.users.splice(index, 1);
             this.commonService.showSuccessAlert(responseBody.message);
+            this.getAll();
           } else {
             this.commonService.showErrorAlert(responseBody.message);
           }

@@ -83,15 +83,32 @@ class StudentController extends IndexController
     }
 
     public function delete() {
-        $student = StudentController::getStudent();
+        $request = Request::instance();
+        $id = IndexController::getParamId($request);
+        $student = Student::get($id);
+
         if (!$student) {
-            return json(['success' => false, 'message' => '该学生不存在']);
+            return json(['success' => false, 'message' => '该学生不存在，删除失败']);
         }
 
-        if ($student->delete()) {
-            return json(['success' => true, 'message' => '删除成功']);
-        } else {
-            return json(['success' => false, 'message' => '删除失败']);
+        // 开启事务
+        Db::startTrans();
+        try {
+            // 第一步，先删除 teacher 中的数据
+            Db::name('student')
+                ->where('id', $id)
+                ->delete();
+
+            // 第二步，删除 user 中的数据
+            Db::name('user')
+                ->where('id', $student->user_id)
+                ->delete();
+
+            Db::commit();
+            return json(['success' => true, 'message' => '学生用户删除成功']);
+        } catch (\Exception $e) {
+            Db::rollback();
+            return json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 
