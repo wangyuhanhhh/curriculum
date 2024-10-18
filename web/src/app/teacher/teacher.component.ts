@@ -30,7 +30,6 @@ export class TeacherComponent implements OnInit {
               private commonService: CommonService) { }
 
   ngOnInit(): void {
-    this.getAll();
     this.loadByPage();
   }
   loadByPage(currentPage = 1, size = 5): void {
@@ -45,7 +44,7 @@ export class TeacherComponent implements OnInit {
   // 获取所有教师
   getAll(): void {
     this.teacherService.getAll().subscribe(
-      teachers => this.teachers = teachers
+      teachers => this.pageData.content = teachers
     );
   }
 
@@ -78,7 +77,7 @@ export class TeacherComponent implements OnInit {
   onSearch(): void {
     this.teacherService.search(this.searchName, this.searchTeacherNo).subscribe(
       (data: any) => {
-        this.teachers = data;
+        this.pageData.content = data;
     },
       error => {
         console.log('查询失败', error);

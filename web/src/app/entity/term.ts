@@ -10,7 +10,7 @@ export class Term {
   start_time: Date;
   // tslint:disable-next-line:variable-name
   end_time: Date;
-  status: boolean;
+  status: number;
   // tslint:disable-next-line:variable-name
   school: School;
 
@@ -20,7 +20,7 @@ export class Term {
       term = '',
       start_time = new Date(0),
       end_time = new Date(0),
-      status = false,
+      status = 0,
       school = {
         id: 0,
         school: ''
@@ -30,7 +30,7 @@ export class Term {
       term?: string;
       start_time?: Date;
       end_time?: Date;
-      status?: boolean;
+      status?: number;
       school?: School;
     } = {}
   ) {

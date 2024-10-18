@@ -51,8 +51,8 @@ export class TeacherService {
     if (teacherNo) {
       params = params.set('teacher_no', teacherNo);
     }
-    return this.http.get<Teacher[]>(`${this.baseUrl}/search`, { params });
-
+    return this.http.get<Teacher[]>(`${this.baseUrl}/search`, {params});
+  }
   // 分页
   loadByPage(params: HttpParams): Observable<Page<Teacher>> {
     return this.http.get<Page<Teacher>>(`${this.baseUrl}/page`, { params });
