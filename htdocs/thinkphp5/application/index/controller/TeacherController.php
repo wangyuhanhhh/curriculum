@@ -117,6 +117,30 @@ class TeacherController extends IndexController {
         $totalTeacher = Teacher::select();
         return json($totalTeacher);
     }
+
+    // 搜索
+    public function search() {
+        // 获取前端传递的查询参数
+        $name = input('name', '', 'trim');
+        $teacherNo = input('teacher_no', '', 'trim');
+
+        //构建查询条件
+        $query = Db::name('teacher');
+
+        if (!empty($name)) {
+            $query->where('name', 'like', '%' . $name . '%');
+        }
+
+        if (!empty($teacherNo)) {
+            $query->where('teacher_no', 'like', '%' . $teacherNo . '%');
+        }
+
+        // 执行查询并返回结果
+        $result = $query->select();
+        return json($result);
+
+    }
+
     // 分页
     public function page() {
         // 获取请求参数中的currentPage 如果不存在，默认为1
@@ -140,6 +164,7 @@ class TeacherController extends IndexController {
         $pageDataJson = json_encode($pageData, JSON_UNESCAPED_UNICODE);
         return $pageDataJson;
     }
+
     // 更新教师信息
     public function update() {
         $request = Request::instance();
