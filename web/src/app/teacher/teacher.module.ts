@@ -5,6 +5,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TeacherComponent} from './teacher.component';
 import { AddComponent } from './add/add.component';
 import { EditComponent } from './edit/edit.component';
+import {PageModule} from '../clazz/page/page.module';
 
 
 const routes: Routes = [
@@ -33,7 +34,11 @@ const routes: Routes = [
         CommonModule,
         ReactiveFormsModule,
         RouterModule.forChild(routes),
+<<<<<<< HEAD
         FormsModule
+=======
+        PageModule
+>>>>>>> origin
     ]
 })
 export class TeacherModule { }

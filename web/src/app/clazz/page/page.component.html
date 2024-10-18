@@ -1,4 +1,10 @@
 <div class="text-right mr-2">
-    <nz-pagination [nzPageIndex]="currentPage" [nzTotal]="pageData.numberOfElements"  nzShowSizeChanger [nzPageSize]="pageData.size" (nzPageIndexChange)="onPage($event)" (nzPageSizeChange)="onSize($event)"></nz-pagination>
-  </div>
-  
+  <nz-pagination
+    [nzPageIndex]="currentPage"
+    [nzTotal]="pageData.numberOfElements"
+    nzShowSizeChanger
+    [nzPageSize]="pageData.size"
+    [nzPageSizeOptions]="[5,10,15,20]"
+    (nzPageIndexChange)="onPage($event)"
+    (nzPageSizeChange)="onSize($event)"></nz-pagination>
+</div>

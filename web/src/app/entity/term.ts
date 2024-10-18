@@ -1,3 +1,5 @@
+import {School} from './school';
+
 /**
  * 学期
  */
@@ -10,7 +12,7 @@ export class Term {
   end_time: Date;
   status: boolean;
   // tslint:disable-next-line:variable-name
-  school_id: number;
+  school: School;
 
   constructor(
     {
@@ -19,14 +21,17 @@ export class Term {
       start_time = new Date(0),
       end_time = new Date(0),
       status = false,
-      school_id = 1,
+      school = {
+        id: 0,
+        school: ''
+      },
     }: {
       id?: number;
       term?: string;
       start_time?: Date;
       end_time?: Date;
       status?: boolean;
-      school_id?: number;
+      school?: School;
     } = {}
   ) {
     this.id = id;
@@ -34,7 +39,7 @@ export class Term {
     this.start_time = start_time;
     this.end_time = end_time;
     this.status = status;
-    this.school_id = school_id;
+    this.school = school as School;
   }
 }
 

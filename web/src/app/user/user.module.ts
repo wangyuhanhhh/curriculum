@@ -8,6 +8,7 @@ import { ClazzSelectComponent } from './clazz-select/clazz-select.component';
 import {SchoolSelectModule} from './school-select/school-select.module';
 import {NzSelectModule} from 'ng-zorro-antd/select';
 import { EditComponent } from './edit/edit.component';
+import {PageModule} from '../clazz/page/page.module';
 
 
 const routes: Routes = [
@@ -38,7 +39,8 @@ const routes: Routes = [
         ReactiveFormsModule,
         RouterModule.forChild(routes),
         SchoolSelectModule,
-        NzSelectModule
+        NzSelectModule,
+        PageModule
     ]
 })
 export class UserModule { }

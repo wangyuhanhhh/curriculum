@@ -6,6 +6,7 @@ import {TermComponent} from './term.component';
 import {EditComponent} from './edit/edit.component';
 import {NzDatePickerModule} from 'ng-zorro-antd/date-picker';
 import {ReactiveFormsModule} from '@angular/forms';
+import {PageModule} from '../clazz/page/page.module';
 
 // routes是常量，它的类型是Routes
 const routes: Routes = [
@@ -28,12 +29,13 @@ const routes: Routes = [
     AddComponent,
     EditComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    NzDatePickerModule,
-    ReactiveFormsModule,
-    // 不是根模块，使用forChild
-  ]
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        NzDatePickerModule,
+        ReactiveFormsModule,
+        PageModule,
+        // 不是根模块，使用forChild
+    ]
 })
 export class TermModule { }

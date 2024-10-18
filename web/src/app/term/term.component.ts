@@ -4,6 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import {CommonService} from '../../service/common.service';
 import {School} from '../entity/school';
 import { SchoolService } from '../../service/school.service';
+import {HttpParams} from '@angular/common/http';
+import {Page} from '../entity/page';
+import {Clazz} from '../entity/clazz';
+import {Term} from '../entity/term';
 
 @Component({
   selector: 'app-term',
@@ -15,35 +19,38 @@ export class TermComponent implements OnInit {
   terms: any[] = [];
   id: number;
   schools = new Array<School>();
-
+  // 默认显示第一页
+  currentPage = 1;
+  // 每页默认10条
+  size = 5;
+  pageData = new Page<Term> ({
+    content: [],
+    number: 1,
+    size: 5,
+    numberOfElements: 0,
+    totalPages: 0
+  });
   constructor(private termService: TermService,
               private schoolService: SchoolService,
               private activeRoute: ActivatedRoute,
               private commonService: CommonService) {
   }
-
   ngOnInit(): void {
-    this.getAll();
-    // 获取学校
-    this.schoolService.getAll()
-      .subscribe(schoolJson => {
-        this.schools = schoolJson;
-        console.log(this.schools);
-      }, error => {
-        console.log(error);
-      });
+   this.loadByPage();
   }
-
+  loadByPage(currentPage = 1, size = 5): void {
+    // 后台请求
+    const httpParams = new HttpParams().append('currentPage', currentPage.toString())
+      .append('size', size.toString());
+    this.termService.loadByPage(httpParams).subscribe(data => {
+      this.pageData = data;
+      this.currentPage = currentPage;
+    }, error => console.log(error));
+  }
   getAll(): void {
     this.termService.getAll().subscribe(terms => {
       this.terms = terms;
     });
-  }
-
-  // 根据school_id找到对应学校名称
-  getSchoolName(schoolId: number): string {
-    const school = this.schools.find(s => s.id === schoolId);
-    return school ? school.school : '-';
   }
 
   onActive(id: number): void {
@@ -57,5 +64,14 @@ export class TermComponent implements OnInit {
         }
       });
     }, '是否激活, 此操作不可逆');
+  }
+  /**
+   * loadByPage方法接受两个参数，这里调用loadByPage方法也应该传递两个参数
+   */
+  onPage(currentPage: number): void {
+    this.loadByPage(currentPage, this.size);
+  }
+  onSize(size: number): void {
+    this.loadByPage(this.currentPage, size);
   }
 }

@@ -3,6 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {ResponseBody} from '../app/entity/response-body';
 import {Observable} from 'rxjs';
 import {Teacher} from '../app/entity/teacher';
+import {Page} from '../app/entity/page';
 
 
 @Injectable({
@@ -51,5 +52,9 @@ export class TeacherService {
       params = params.set('teacher_no', teacherNo);
     }
     return this.http.get<Teacher[]>(`${this.baseUrl}/search`, { params });
+
+  // 分页
+  loadByPage(params: HttpParams): Observable<Page<Teacher>> {
+    return this.http.get<Page<Teacher>>(`${this.baseUrl}/page`, { params });
   }
 }

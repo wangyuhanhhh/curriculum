@@ -21,7 +21,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let teacher of teachers; index as i">
+    <tr *ngFor="let teacher of pageData.content; index as i">
       <td>{{ i + 1 }}</td>
       <td>{{ teacher.name }}</td>
       <td>{{ teacher.teacher_no}}</td>
@@ -38,4 +38,8 @@
   </table>
   <ng-template #noDelete>
   </ng-template>
+</div>
+<!--$event是angular的一个关键字，表示子组件弹出的内容-->
+<div class="text-right mr-2">
+  <app-page [page]="pageData" (beCurrentPageChange)="onPage($event)" (beSizeChange)="onSize($event)"></app-page>
 </div>

@@ -12,24 +12,24 @@ import {HttpParams} from '@angular/common/http';
 })
 export class ClazzComponent implements OnInit {
   clazzes = [] as Clazz[];
-  constructor(private clazzService: ClazzService,
-              private commonService: CommonService) {
-  }
   // 默认显示第一页
   currentPage = 1;
   // 每页默认10条
-  size = 10;
+  size = 5;
   pageData = new Page<Clazz> ({
     content: [],
     number: 1,
-    size: 10,
+    size: 5,
     numberOfElements: 0,
     totalPages: 0
   });
+  constructor(private clazzService: ClazzService,
+              private commonService: CommonService) {
+  }
   ngOnInit(): void {
      this.loadByPage();
   }
-  loadByPage(currentPage = 1, size = 10): void {
+  loadByPage(currentPage = 1, size = 5): void {
     // 后台请求
     const httpParams = new HttpParams().append('currentPage', currentPage.toString())
       .append('size', size.toString());
