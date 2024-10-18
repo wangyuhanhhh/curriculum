@@ -34,11 +34,8 @@ const routes: Routes = [
         CommonModule,
         ReactiveFormsModule,
         RouterModule.forChild(routes),
-<<<<<<< HEAD
-        FormsModule
-=======
+        FormsModule,
         PageModule
->>>>>>> origin
     ]
 })
 export class TeacherModule { }
