@@ -10,6 +10,8 @@ import {CommonService} from '../../service/common.service';
 })
 export class TeacherComponent implements OnInit {
   teachers = [] as Teacher[];
+  searchName = '';
+  searchTeacherNo = '';
 
   constructor(private teacherService: TeacherService,
               private commonService: CommonService) { }
@@ -37,6 +39,18 @@ export class TeacherComponent implements OnInit {
           }
         }, error => this.commonService.showErrorAlert('请求失败，请稍后'));
     }, '是否删除，此操作不可逆');
+  }
+
+  // 查询方法
+  onSearch(): void {
+    this.teacherService.search(this.searchName, this.searchTeacherNo).subscribe(
+      (data: any) => {
+        this.teachers = data;
+    },
+      error => {
+        console.log('查询失败', error);
+      }
+    );
   }
 
 }
