@@ -118,11 +118,13 @@ class TeacherController extends IndexController {
         return json($totalTeacher);
     }
 
-    // 搜索
+    // 搜索（同时包含分页所需要的数据）
     public function search() {
         // 获取前端传递的查询参数
         $name = input('name', '', 'trim');
         $teacherNo = input('teacher_no', '', 'trim');
+        $size = Request::instance()->get('size', 5);
+        $currentPage = Request::instance()->get('currentPage', 1);
 
         //构建查询条件
         $query = Db::name('teacher');
@@ -135,34 +137,28 @@ class TeacherController extends IndexController {
             $query->where('teacher_no', 'like', '%' . $teacherNo . '%');
         }
 
-        // 执行查询并返回结果
-        $result = $query->select();
-        return json($result);
+        // 克隆查询对象，用于计算总记录数
+        $countQuery = clone $query;
 
-    }
+        // 查询总记录数
+        $total = $countQuery->count();
 
-    // 分页
-    public function page() {
-        // 获取请求参数中的currentPage 如果不存在，默认为1
-        $currentPage = Request::instance()->get('currentPage', 1);
-        // 每页多少条数据，如果没有，默认为10
-        $size = Request::instance()->get('size', 10);
-        // 计算偏移量 从哪一条开始检索数据
+        // 计算偏移量
         $offset = ($currentPage - 1) * $size;
-        // 数据总条数
-        $total = Teacher::count();
-        // 计算总页数
-        $totalPages = ceil($total / $size);
-        $teachers = Teacher::limit($offset, $size)->select();
-        $pageData = [
-            'content' => $teachers,
-            'number' => $totalPages,
+
+        // 查询当前页的数据
+        $data = $query->limit($offset, $size)->select();
+
+        // 构造分页结果
+        $result = [
+            'content' => $data,
+            'number' => $currentPage,
             'size' => $size,
             'numberOfElements' => $total,
-            'totalPages' => $totalPages
+            'totalPages' => ceil($total / $size),
         ];
-        $pageDataJson = json_encode($pageData, JSON_UNESCAPED_UNICODE);
-        return $pageDataJson;
+
+        return json($result);
     }
 
     // 更新教师信息
