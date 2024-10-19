@@ -65,8 +65,6 @@ export class TeacherComponent implements OnInit {
       (data: Page<Teacher>) => {
         this.pageData = data;
         this.currentPage = currentPage;
-        console.log('pageData', this.pageData);
-        console.log('currentPage', this.currentPage);
       },
       error => console.error(error)
     );

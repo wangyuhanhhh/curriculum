@@ -4,6 +4,7 @@ import {CommonService} from '../../service/common.service';
 import { Clazz } from '../entity/clazz';
 import {Page} from '../entity/page';
 import {HttpParams} from '@angular/common/http';
+import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-clazz',
@@ -11,7 +12,11 @@ import {HttpParams} from '@angular/common/http';
   styleUrls: ['./clazz.component.css']
 })
 export class ClazzComponent implements OnInit {
+  formGroup = new FormGroup({
+    school_id: new FormControl(''),
+  });
   clazzes = [] as Clazz[];
+  searchClazz = '';
   // 默认显示第一页
   currentPage = 1;
   // 每页默认10条
@@ -29,15 +34,26 @@ export class ClazzComponent implements OnInit {
   ngOnInit(): void {
      this.loadByPage();
   }
+
+  // 通用分页加载方法，支持搜索和分页
   loadByPage(currentPage = 1, size = 5): void {
-    // 后台请求
-    const httpParams = new HttpParams().append('currentPage', currentPage.toString())
+    // 保证用户在搜索框无内容时，点击搜索查询到的结果是所有数据
+    const searchSchoolId = this.formGroup.get('school_id')?.value || '';
+    const httpParams = new HttpParams()
+      .append('clazz', this.searchClazz)
+      .append('school_id', searchSchoolId)
+      .append('currentPage', currentPage.toString())
       .append('size', size.toString());
-    this.clazzService.loadByPage(httpParams).subscribe(data => {
-      this.pageData = data;
-      this.currentPage = currentPage;
-      }, error => console.log(error));
+
+    this.clazzService.search(httpParams).subscribe(
+      (data: Page<Clazz>) => {
+        this.pageData = data;
+        this.currentPage = currentPage;
+      },
+      error => console.error(error)
+    );
   }
+
   onDelete(index: number, id: number): void {
     this.commonService.showConfirmAlert(() => {
       this.clazzService.delete(id).subscribe(data => {
@@ -54,10 +70,18 @@ export class ClazzComponent implements OnInit {
   /**
    * loadByPage方法接受两个参数，这里调用loadByPage方法也应该传递两个参数
    */
+  // 当分页组件页码变化时调用
   onPage(currentPage: number): void {
     this.loadByPage(currentPage, this.size);
   }
+
+  // 当分页组件的分页大小变化时调用
   onSize(size: number): void {
+    this.size = size;
     this.loadByPage(this.currentPage, size);
+  }
+
+  onSearch(): void {
+  this.loadByPage(1, this.size);
   }
 }
