@@ -33,9 +33,9 @@ export class ClazzService {
   getClazzById(id: number): Observable<Clazz> {
     return this.httpClient.get<Clazz>(`${this.baseUrl}/edit/${id}`);
   }
-  // 分页
-  loadByPage(params: HttpParams): Observable<Page<Clazz>> {
-    return this.httpClient.get<Page<Clazz>>(`${this.baseUrl}/page`, { params });
+  // 查询
+  search(params: HttpParams): Observable<Page<Clazz>> {
+    return this.httpClient.get<Page<Clazz>>(`${this.baseUrl}/search`, { params });
   }
   // 更新班级信息
   update(id: number, clazz: Clazz): Observable<ResponseBody> {
