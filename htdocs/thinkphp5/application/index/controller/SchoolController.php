@@ -2,6 +2,7 @@
 namespace app\index\controller;
 use app\common\model\School;
 use think\Request;
+use think\Db;
 use app\common\validate\SchoolValidate;
 
 class SchoolController extends IndexController {
@@ -104,30 +105,43 @@ class SchoolController extends IndexController {
     }
 
     /**
-     * 分页
+     * 分页搜索
      */
-    public function page() {
-        // 获取请求参数中的currentPage 如果不存在，默认为1
+    public function search() {
+        // 获取前端的查询参数
+        $name = input('name', '', 'trim');
+        $size = Request::instance()->get('size', 5);
         $currentPage = Request::instance()->get('currentPage', 1);
-        // 每页多少条数据，如果没有，默认为10
-        $size = Request::instance()->get('size', 10);
-        // 计算偏移量 从哪一条开始检索数据
+
+        // 构建查询条件
+        $query = Db::name('school');
+
+        if (!empty($name)) {
+            $query->where('school', 'like', '%' . $name . '%');
+        }
+
+        // 克隆查询对象，计算查询总记录数
+        $countQuery = clone $query;
+        $total = $countQuery->count();
+
+        // 计算偏移量
         $offset = ($currentPage - 1) * $size;
-        // 数据总条数
-        $total = School::count();
-        // 计算总页数
-        $totalPages = ceil($total / $size);
-        $schools = School::limit($offset, $size)->select();
-        $postData = [
-            'content' => $schools,
-            'number' => $totalPages,
+
+        // 查询当前页的数据
+        $data = $query->limit($offset, $size)->select();
+
+        // 构造分页结果
+        $result = [
+            'content' => $data,
+            'number' => $currentPage,
             'size' => $size,
             'numberOfElements' => $total,
-            'totalPages' => $totalPages,
+            'totalPages' => ceil($total / $size),
         ];
-        $postDataJson = json_encode($postData, JSON_UNESCAPED_UNICODE);
-        return $postDataJson;
+
+        return json($result);
     }
+    
     // 更新数据
     public function update() {
         // 获取数据
