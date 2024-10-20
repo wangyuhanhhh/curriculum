@@ -3,6 +3,7 @@ namespace app\index\controller;
 use app\common\model\Teacher;
 use think\Db;
 use think\Request;
+use think\Db;
 use app\common\model\Clazz;
 use app\common\validate\ClazzValidate;
 
@@ -163,20 +164,34 @@ class ClazzController extends IndexController {
     }
 
     /**
-     * 分页
+     * 搜索，同时包含分页所需要的数据
      */
-    public function page() {
-        // 获取请求参数中的currentPage 如果不存在，默认为1
+    public function search() {
+        // 获取前端传递的查询参数
+        $name = input('clazz', '', 'trim');
+        $schoolId = input('school_id', '', 'trim');
+        $size = Request::instance()->get('size', 5);
         $currentPage = Request::instance()->get('currentPage', 1);
-        // 每页多少条数据，如果没有，默认为10
-        $size = Request::instance()->get('size', 10);
-        // 计算偏移量 从哪一条开始检索数据
+
+        // 构建查询条件
+        $query = Clazz::with('school'); // 加载关联的 school 数据
+
+        if (!empty($name)) {
+            $query->where('clazz', 'like', '%' . $name . '%');
+        }
+        if (!empty($schoolId)) {
+            $query->where('school_id', $schoolId);
+        }
+        // 克隆查询对象，用于计算总记录条数
+        $countQuery = clone $query;
+        $total = $countQuery->count();
+
+        // 计算偏移量
         $offset = ($currentPage - 1) * $size;
-        // 数据总条数
-        $total = Clazz::count();
-        // 计算总页数
-        $totalPages = ceil($total / $size);
-        $clazzes = Clazz::with('school')->limit($offset, $size)->select();
+
+        // 查询当前页的数据
+        $clazzes = $query->limit($offset, $size)->select();
+
         // 班级详细信息
         $clazzDet = [];
         foreach ($clazzes as $clazz) {
@@ -195,16 +210,19 @@ class ClazzController extends IndexController {
                 ]
             ];
         }
-        $pageData = [
+
+        // 构造分页结果
+        $result = [
             'content' => $clazzDet,
-            'number' => $totalPages,
+            'number' => $currentPage,
             'size' => $size,
             'numberOfElements' => $total,
-            'totalPages' => $totalPages
+            'totalPages' => ceil($total / $size),
         ];
-        $pageDataJson = json_encode($pageData, JSON_UNESCAPED_UNICODE);
-        return $pageDataJson;
+
+        return json($result);
     }
+
     /**
      * 保存班主任
      */

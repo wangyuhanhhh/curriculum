@@ -28,9 +28,9 @@ export class SchoolService {
   getSchoolById(id: number): Observable<School> {
     return this.httpClient.get<School>(`${this.baseUrl}/edit/${id}`);
   }
-  // 分页
-  loadByPage(params: HttpParams): Observable<Page<School>> {
-    return this.httpClient.get<Page<School>>(`${this.baseUrl}/page`, {params});
+  // 分页查询
+  search(params: HttpParams): Observable<Page<School>> {
+    return this.httpClient.get<Page<School>>(`${this.baseUrl}/search`, {params});
   }
   // 更新学校
   update(id: number, school: School): Observable<ResponseBody> {

@@ -25,39 +25,19 @@ export class TeacherComponent implements OnInit {
     numberOfElements: 0,
     totalPages: 0
   });
-
   constructor(private teacherService: TeacherService,
               private commonService: CommonService) { }
 
   ngOnInit(): void {
     this.loadByPage();
   }
-  loadByPage(currentPage = 1, size = 5): void {
-    // 后台请求
-    const httpParams = new HttpParams().append('currentPage', currentPage.toString())
-      .append('size', size.toString());
-    this.teacherService.loadByPage(httpParams).subscribe(data => {
-      this.pageData = data;
-      this.currentPage = currentPage;
-    }, error => console.log(error));
-  }
+
   // 获取所有教师
   getAll(): void {
     this.teacherService.getAll().subscribe(
       teachers => this.pageData.content = teachers
     );
   }
-
-  /**
-   * loadByPage方法接受两个参数，这里调用loadByPage方法也应该传递两个参数
-   */
-  onPage(currentPage: number): void {
-    this.loadByPage(currentPage, this.size);
-  }
-  onSize(size: number): void {
-    this.loadByPage(this.currentPage, size);
-  }
-
 
   onDelete(teacherId: number): void {
     this.commonService.showConfirmAlert(() => {
@@ -73,15 +53,36 @@ export class TeacherComponent implements OnInit {
     }, '是否删除，此操作不可逆');
   }
 
-  // 查询方法
-  onSearch(): void {
-    this.teacherService.search(this.searchName, this.searchTeacherNo).subscribe(
-      (data: any) => {
-        this.pageData.content = data;
-    },
-      error => {
-        console.log('查询失败', error);
-      }
+  // 通用分页加载方法，支持搜索和分页
+  loadByPage(currentPage = 1, size = 5): void {
+    const httpParams = new HttpParams()
+      .append('name', this.searchName)
+      .append('teacher_no', this.searchTeacherNo)
+      .append('currentPage', currentPage.toString())
+      .append('size', size.toString());
+
+    this.teacherService.search(httpParams).subscribe(
+      (data: Page<Teacher>) => {
+        this.pageData = data;
+        this.currentPage = currentPage;
+      },
+      error => console.error(error)
     );
+  }
+
+  // 当分页组件页码变化时调用
+  onPage(currentPage: number): void {
+    this.loadByPage(currentPage, this.size);
+  }
+
+  // 当分页组件的分页大小变化时调用
+  onSize(size: number): void {
+    this.size = size;
+    this.loadByPage(this.currentPage, size);
+  }
+
+  // 触发搜索
+  onSearch(): void {
+    this.loadByPage(1, this.size); // 重新从第一页开始搜索
   }
 }

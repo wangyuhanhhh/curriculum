@@ -33,9 +33,9 @@ export class ClazzService {
   getClazzById(id: number): Observable<Clazz> {
     return this.httpClient.get<Clazz>(`${this.baseUrl}/getClazzById/${id}`);
   }
-  // 分页
-  loadByPage(params: HttpParams): Observable<Page<Clazz>> {
-    return this.httpClient.get<Page<Clazz>>(`${this.baseUrl}/page`, { params });
+  // 查询
+  search(params: HttpParams): Observable<Page<Clazz>> {
+    return this.httpClient.get<Page<Clazz>>(`${this.baseUrl}/search`, { params });
   }
   // 保存教师
   saveTeacher(id: number, teacherId: number): Observable<ResponseBody> {

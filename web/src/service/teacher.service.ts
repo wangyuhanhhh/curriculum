@@ -46,18 +46,7 @@ export class TeacherService {
     return this.http.get<Teacher[]>(`${this.baseUrl}/getTeacher/${schoolId}`);
   }
   // 查询
-  search(name: string, teacherNo: string): Observable<Teacher[]> {
-    let params = new HttpParams();
-    if (name) {
-      params = params.set('name', name);
-    }
-    if (teacherNo) {
-      params = params.set('teacher_no', teacherNo);
-    }
-    return this.http.get<Teacher[]>(`${this.baseUrl}/search`, {params});
-  }
-  // 分页
-  loadByPage(params: HttpParams): Observable<Page<Teacher>> {
-    return this.http.get<Page<Teacher>>(`${this.baseUrl}/page`, { params });
+  search(params: HttpParams): Observable<Page<Teacher>> {
+    return this.http.get<Page<Teacher>>(`${this.baseUrl}/search`, { params });
   }
 }

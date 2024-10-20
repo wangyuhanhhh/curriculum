@@ -35,15 +35,15 @@ const routes: Routes = [
     EditComponent,
     HeadTeacherComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule,
-    RouterModule.forChild(routes),
-    SchoolSelectModule,
-    ReactiveFormsModule,
-    FormsModule,
-    PageModule,
-    TeacherSelectModule
-  ]
+    imports: [
+        CommonModule,
+        RouterModule,
+        RouterModule.forChild(routes),
+        SchoolSelectModule,
+        ReactiveFormsModule,
+        PageModule,
+        FormsModule,
+        TeacherSelectModule
+    ]
 })
 export class ClazzModule {}

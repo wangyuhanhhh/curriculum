@@ -33,8 +33,8 @@ export class TermService {
     return this.http.get<any>(updateUrl);
   }
   // 分页
-  loadByPage(params: HttpParams): Observable<Page<Term>> {
-    return this.http.get<Page<Term>>(`${this.baseUrl}/page`, { params });
+  search(params: HttpParams): Observable<Page<Term>> {
+    return this.http.get<Page<Term>>(`${this.baseUrl}/search`, { params });
   }
   update(id: number, termData: Term): Observable<any> {
     const updateUrl = `${this.baseUrl}/update/${id}`;
