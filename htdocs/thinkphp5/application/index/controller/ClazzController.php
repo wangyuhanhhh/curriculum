@@ -1,5 +1,7 @@
 <?php
 namespace app\index\controller;
+use app\common\model\Teacher;
+use think\Db;
 use think\Request;
 use think\Db;
 use app\common\model\Clazz;
@@ -29,7 +31,7 @@ class ClazzController extends IndexController {
             return json(['success' => $success, 'message' => $message]);
         }
         $validate = new ClazzValidate();
-        if ($validate->check($data)) {
+        if ($validate->scene('add')->check($data)) {
             $clazz = new Clazz();
             $clazz->clazz = $data['clazz'];
             $clazz->school_id = $data['school_id'];
@@ -109,7 +111,7 @@ class ClazzController extends IndexController {
     /**
      * 根据id获取对应的班级信息
      */
-    public function edit() {
+    public function getClazzById() {
         $request = Request::instance();
         $id = IndexController::getParamId($request);
         // 班级详细信息，包括对应的学校 clazz
@@ -193,12 +195,18 @@ class ClazzController extends IndexController {
         // 班级详细信息
         $clazzDet = [];
         foreach ($clazzes as $clazz) {
+            $teacher = isset($clazz->teacher_id) && $clazz->teacher_id !== null
+                ? $clazz->teacher : (object) ['id' => '*', 'name' => '*'];
             $clazzDet[] = [
                 'id' => $clazz->id,
                 'clazz' => $clazz->clazz,
                 'school' => [
                     'id' => $clazz->school->id,
                     'school' => $clazz->school->school
+                ],
+                'teacher' => [
+                    'id' => $teacher->id,
+                    'name' => $teacher->name
                 ]
             ];
         }
@@ -216,6 +224,60 @@ class ClazzController extends IndexController {
     }
 
     /**
+     * 保存班主任
+     */
+    public function saveTeacher() {
+        // 班级Id
+        $request = Request::instance();
+        $id = IndexController::getParamId($request);
+        // 获取要更新的班级信息
+        $content = Request::instance()->getContent();
+        $data = json_decode($content, true);
+        // 验证数据是否合法
+        $teacher_id = (int)$data['teacherId'];
+        // 查询教师
+        $teacher = Teacher::find($teacher_id);
+        if ($teacher && $teacher->user) {
+            // 该教师对应user表中的id
+            $userId = $teacher->user->id;
+        }
+        $validate = new ClazzValidate();
+        if (!$validate->scene('saveTeacher')->check(['teacher_id' => $data['teacherId']])) {
+            return json(['success' => false, 'message' => $validate->getError()]);
+        }
+        // 如果更改了班主任且原教师不是其他班的班主任，将status改为0
+
+        // 开启事务，更新clazz表,teacher表,user表
+        Db::startTrans();
+        try {
+            // 更新clazz表
+            Db::name('clazz')
+                ->where('id', $id)
+                ->update([
+                    'teacher_id' => $teacher_id
+                ]);
+
+            // 更新teacher表
+            Db::name('teacher')
+                ->where('id', $teacher_id)
+                ->update([
+                    'status' => 1
+                ]);
+
+            // 更新user表
+            Db::name('user')
+                ->where('id', $userId)
+                ->update([
+                    'role' => 4
+                ]);
+            Db::commit();
+            return json(['success' => true, 'message' => '班主任设置成功']);
+        } catch (\Exception $e) {
+            Db::rollback();
+            return json(['success' => false, 'message' => '设置失败请重试']);
+        }
+    }
+    /**
      * 更新班级信息
      */
     public function update() {
@@ -224,7 +286,7 @@ class ClazzController extends IndexController {
         $data = json_decode($content, true);
         // 验证（validate， endChar checkRepeat)
         $validate = new ClazzValidate();
-        if ($validate->check($data)){
+        if ($validate->scene('edit')->check($data)){
             // 获取原班级信息
             $clazz = ClazzController::getClazz();
             $clazz->clazz = $data['clazz'];

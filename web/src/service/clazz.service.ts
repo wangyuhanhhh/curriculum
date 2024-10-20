@@ -31,11 +31,15 @@ export class ClazzService {
   }
   // 根据id获取对应的班级信息
   getClazzById(id: number): Observable<Clazz> {
-    return this.httpClient.get<Clazz>(`${this.baseUrl}/edit/${id}`);
+    return this.httpClient.get<Clazz>(`${this.baseUrl}/getClazzById/${id}`);
   }
   // 查询
   search(params: HttpParams): Observable<Page<Clazz>> {
     return this.httpClient.get<Page<Clazz>>(`${this.baseUrl}/search`, { params });
+  }
+  // 保存教师
+  saveTeacher(id: number, teacherId: number): Observable<ResponseBody> {
+    return this.httpClient.put<ResponseBody>(`${this.baseUrl}/saveTeacher/${id}`, teacherId);
   }
   // 更新班级信息
   update(id: number, clazz: Clazz): Observable<ResponseBody> {

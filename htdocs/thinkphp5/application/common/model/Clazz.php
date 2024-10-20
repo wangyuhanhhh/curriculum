@@ -11,4 +11,7 @@ class Clazz extends Model {
     public function school() {
         return $this->belongsTo('School', 'school_id', 'id');
     }
+    public function teacher() {
+        return $this->belongsTo('Teacher', 'teacher_id', 'id');
+    }
 }

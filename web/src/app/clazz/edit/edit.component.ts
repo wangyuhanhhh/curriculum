@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {Clazz} from '../../entity/clazz';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ClazzService} from '../../../service/clazz.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';

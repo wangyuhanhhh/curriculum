@@ -7,6 +7,8 @@ import {SchoolSelectModule} from '../user/school-select/school-select.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { EditComponent } from './edit/edit.component';
 import {PageModule} from './page/page.module';
+import {TeacherSelectModule} from './teacher-select/teacher-select.module';
+import { HeadTeacherComponent } from './head-teacher/head-teacher.component';
 
 const routes: Routes = [
   {
@@ -20,13 +22,18 @@ const routes: Routes = [
   {
     path: 'edit/:id',
     component: EditComponent
+  },
+  {
+    path: 'setHeadTeacher/:id',
+    component: HeadTeacherComponent
   }
 ];
 @NgModule({
   declarations: [
     ClazzComponent,
     AddComponent,
-    EditComponent
+    EditComponent,
+    HeadTeacherComponent
   ],
     imports: [
         CommonModule,
@@ -35,7 +42,8 @@ const routes: Routes = [
         SchoolSelectModule,
         ReactiveFormsModule,
         PageModule,
-        FormsModule
+        FormsModule,
+        TeacherSelectModule
     ]
 })
 export class ClazzModule {}

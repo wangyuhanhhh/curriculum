@@ -32,7 +32,7 @@ export class ClazzComponent implements OnInit {
               private commonService: CommonService) {
   }
   ngOnInit(): void {
-     this.loadByPage();
+    this.loadByPage();
   }
 
   // 通用分页加载方法，支持搜索和分页
