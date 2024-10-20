@@ -1,0 +1,7 @@
+<nz-select nzShowSearch nzAllowClear  nzPlaceHolder="选择班主任"
+           [formControl]="teacherIdControl" >
+  <nz-option nzCustomContent *ngFor="let teacher of teachers" [nzLabel]="teacher.name"
+             [nzValue]="teacher.id">
+    {{teacher.name}}
+  </nz-option>
+</nz-select>

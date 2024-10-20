@@ -4,9 +4,11 @@ import {ClazzComponent} from './clazz.component';
 import {RouterModule, Routes} from '@angular/router';
 import { AddComponent } from './add/add.component';
 import {SchoolSelectModule} from '../user/school-select/school-select.module';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { EditComponent } from './edit/edit.component';
 import {PageModule} from './page/page.module';
+import {TeacherSelectModule} from './teacher-select/teacher-select.module';
+import { HeadTeacherComponent } from './head-teacher/head-teacher.component';
 
 const routes: Routes = [
   {
@@ -20,13 +22,18 @@ const routes: Routes = [
   {
     path: 'edit/:id',
     component: EditComponent
+  },
+  {
+    path: 'setHeadTeacher/:id',
+    component: HeadTeacherComponent
   }
 ];
 @NgModule({
   declarations: [
     ClazzComponent,
     AddComponent,
-    EditComponent
+    EditComponent,
+    HeadTeacherComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +41,9 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SchoolSelectModule,
     ReactiveFormsModule,
-    PageModule
+    FormsModule,
+    PageModule,
+    TeacherSelectModule
   ]
 })
 export class ClazzModule {}

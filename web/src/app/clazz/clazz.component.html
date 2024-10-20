@@ -9,6 +9,7 @@
       <th>序号</th>
       <th>学校</th>
       <th>班级</th>
+      <th>班主任</th>
       <th>操作</th>
     </tr>
   </thead>
@@ -17,7 +18,11 @@
       <td>{{ i + 1 }}</td>
       <td>{{ clazz.school.school }}</td>
       <td>{{ clazz.clazz}}</td>
+      <td>{{ clazz.teacher.name }}</td>
       <td>
+        <a class="btn btn-outline-success btn-sm" [routerLink]="'setHeadTeacher/' + clazz.id">
+          <i class="fa fa-cogs" aria-hidden="true"></i>设置班主任
+        </a>
         <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + clazz.id">
           <i class="fa fa-pen"></i>编辑
         </a>

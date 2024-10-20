@@ -27,7 +27,7 @@ export class ClazzComponent implements OnInit {
               private commonService: CommonService) {
   }
   ngOnInit(): void {
-     this.loadByPage();
+    this.loadByPage();
   }
   loadByPage(currentPage = 1, size = 5): void {
     // 后台请求
@@ -36,7 +36,7 @@ export class ClazzComponent implements OnInit {
     this.clazzService.loadByPage(httpParams).subscribe(data => {
       this.pageData = data;
       this.currentPage = currentPage;
-      }, error => console.log(error));
+    }, error => console.log(error));
   }
   onDelete(index: number, id: number): void {
     this.commonService.showConfirmAlert(() => {
