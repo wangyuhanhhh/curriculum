@@ -168,18 +168,35 @@ class StudentController extends IndexController
         return json($totalStudent);
         // return '<style type="text/css">*{ padding: 0; margin: 0; } .think_default_text{ padding: 4px 48px;} a{color:#2E5CD5;cursor: pointer;text-decoration: none} a:hover{text-decoration:underline; } body{ background: #fff; font-family: "Century Gothic","Microsoft yahei"; color: #333;font-size:18px} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.6em; font-size: 42px }</style><div style="padding: 24px 48px;"> <h1>:)</h1><p> ThinkPHP V5<br/><span style="font-size:30px">十年磨一剑 - 为API开发设计的高性能框架</span></p><span style="font-size:22px;">[ V5.0 版本由 <a href="http://www.qiniu.com" target="qiniu">七牛云</a> 独家赞助发布 ]</span></div><script type="text/javascript" src="http://tajs.qq.com/stats?sId=9347272" charset="UTF-8"></script><script type="text/javascript" src="http://ad.topthink.com/Public/static/client.js"></script><thinkad id="ad_bd568ce7058a1091"></thinkad>';
     }
-    public function page() {
-        // 获取请求参数中的currentPage 如果不存在，默认为1
-        $currentPage = Request::instance()->get('currentPage', 1);
-        // 每页多少条数据，如果没有，默认为10
-        $size = Request::instance()->get('size', 10);
-        // 计算偏移量 从哪一条开始检索数据
+
+    // 分页查询
+    public function search() {
+        // 获取前台查询条件
+        $name = input('name', '', 'trim');
+        $studentNo = input('student_no', '', 'trim');
+        $currentPage = Request::instance()->param('page', 1);
+        $size = Request::instance()->param('size', 5);
+
+        // 构建查询条件
+        $query = Student::with('clazz');
+
+        if (!empty($name)) {
+            $query->where('name', 'like', '%' . $name . '%');
+        }
+        if (!empty($studentNo)) {
+            $query->where('student_no', 'like', '%' . $studentNo . '%');
+        }
+
+        // 克隆查询对象，计算总记录条数
+        $countQuery = clone $query;
+        $total = $countQuery->count();
+
+        // 计算偏移量
         $offset = ($currentPage - 1) * $size;
-        // 数据总条数
-        $total = Student::count();
-        // 计算总页数
-        $totalPages = ceil($total / $size);
-        $students = Student::with('clazz')->limit($offset, $size)->select();
+
+        // 查询当前页的数据
+        $students = $query->limit($offset, $size)->select();
+
         // 班级详细信息
         $studentDet = [];
         foreach ($students as $student) {
@@ -196,14 +213,16 @@ class StudentController extends IndexController
         }
         $pageData = [
             'content' => $studentDet,
-            'number' => $totalPages,
+            'number' => $currentPage,
             'size' => $size,
             'numberOfElements' => $total,
-            'totalPages' => $totalPages
+            'totalPages' => ceil($total / $size),
         ];
-        $pageDataJson = json_encode($pageData, JSON_UNESCAPED_UNICODE);
-        return $pageDataJson;
+
+        return json($pageData);
+
     }
+
     // 更新学生信息
     public function update() {
         $request = Request::instance();
