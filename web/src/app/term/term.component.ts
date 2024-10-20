@@ -8,6 +8,7 @@ import {HttpParams} from '@angular/common/http';
 import {Page} from '../entity/page';
 import {Clazz} from '../entity/clazz';
 import {Term} from '../entity/term';
+import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-term',
@@ -15,6 +16,10 @@ import {Term} from '../entity/term';
   styleUrls: ['./term.component.css']
 })
 export class TermComponent implements OnInit {
+  formGroup = new FormGroup({
+    school_id: new FormControl(''),
+  });
+  searchTerm = '';
   // 用于存储从后端获取的数据
   terms: any[] = [];
   id: number;
@@ -35,18 +40,25 @@ export class TermComponent implements OnInit {
               private activeRoute: ActivatedRoute,
               private commonService: CommonService) {
   }
+
   ngOnInit(): void {
    this.loadByPage();
   }
+
   loadByPage(currentPage = 1, size = 5): void {
-    // 后台请求
-    const httpParams = new HttpParams().append('currentPage', currentPage.toString())
+    const searchSchoolId = this.formGroup.get('school_id')?.value || '';
+    const httpParams = new HttpParams()
+      .append('school_id', searchSchoolId)
+      .append('term', this.searchTerm)
+      .append('currentPage', currentPage.toString())
       .append('size', size.toString());
-    this.termService.loadByPage(httpParams).subscribe(data => {
+
+    this.termService.search(httpParams).subscribe(data => {
       this.pageData = data;
       this.currentPage = currentPage;
     }, error => console.log(error));
   }
+
   getAll(): void {
     this.termService.getAll().subscribe(terms => {
       this.terms = terms;
@@ -65,13 +77,20 @@ export class TermComponent implements OnInit {
       });
     }, '是否激活, 此操作不可逆');
   }
+
   /**
    * loadByPage方法接受两个参数，这里调用loadByPage方法也应该传递两个参数
    */
   onPage(currentPage: number): void {
     this.loadByPage(currentPage, this.size);
   }
+
   onSize(size: number): void {
+    this.size = size;
     this.loadByPage(this.currentPage, size);
+  }
+
+  onSearch(): void {
+    this.loadByPage(1, this.size);
   }
 }
