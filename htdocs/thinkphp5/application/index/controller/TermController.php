@@ -106,20 +106,37 @@ class TermController extends IndexController
         $totalTerm = Term::select();
         return json($totalTerm);
     }
-    // 分页
-    public function page() {
-        // 获取请求参数中的currentPage 如果不存在，默认为1
+
+    /**
+     * 搜索，同时包含分页所需要的数据
+     */
+    public function search() {
+        // 获取前端传递的查询参数
+        $name = input('term', '', 'trim');
+        $schoolId = input('school_id', '', 'trim');
+        $size = Request::instance()->get('size', 5);
         $currentPage = Request::instance()->get('currentPage', 1);
-        // 每页多少条数据，如果没有，默认为10
-        $size = Request::instance()->get('size', 10);
-        // 计算偏移量 从哪一条开始检索数据
+
+        // 构建查询条件
+        $query = Term::with('school'); // 加载关联的 school 数据
+
+        if (!empty($name)) {
+            $query->where('term', 'like', '%' . $name . '%');
+        }
+        if (!empty($schoolId)) {
+            $query->where('school_id', $schoolId);
+        }
+        // 克隆查询对象，用于计算总记录条数
+        $countQuery = clone $query;
+        $total = $countQuery->count();
+
+        // 计算偏移量
         $offset = ($currentPage - 1) * $size;
-        // 数据总条数
-        $total = Term::count();
-        // 计算总页数
-        $totalPages = ceil($total / $size);
-        $terms = Term::with('school')->limit($offset, $size)->select();
-        // 学期详细信息
+
+        // 查询当前页的数据
+        $terms = $query->limit($offset, $size)->select();
+
+        // 班级详细信息
         $schoolDet = [];
         foreach ($terms as $term) {
             $schoolDet[] = [
@@ -134,15 +151,17 @@ class TermController extends IndexController
                 ]
             ];
         }
-        $pageData = [
+
+        // 构造分页结果
+        $result = [
             'content' => $schoolDet,
-            'number' => $totalPages,
+            'number' => $currentPage,
             'size' => $size,
             'numberOfElements' => $total,
-            'totalPages' => $totalPages
+            'totalPages' => ceil($total / $size),
         ];
-        $pageDataJson = json_encode($pageData, JSON_UNESCAPED_UNICODE);
-        return $pageDataJson;
+
+        return json($result);
     }
 
     // 更新学期
