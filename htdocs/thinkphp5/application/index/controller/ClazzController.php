@@ -3,7 +3,6 @@ namespace app\index\controller;
 use app\common\model\Teacher;
 use think\Db;
 use think\Request;
-use think\Db;
 use app\common\model\Clazz;
 use app\common\validate\ClazzValidate;
 
@@ -109,6 +108,16 @@ class ClazzController extends IndexController {
     }
 
     /**
+     * 检查班级名称是否以“班”为结尾，班级名称必须是“大数据2301班”这种形式
+     * @return boolean
+     */
+    public function endChar($string) {
+        $lastChar = mb_substr($string, -1);
+        // 是“班”则返回true
+        return $lastChar === '班';
+    }
+
+    /**
      * 根据id获取对应的班级信息
      */
     public function getClazzById() {
@@ -119,14 +128,54 @@ class ClazzController extends IndexController {
         $clazzJson = json_encode($clazz, JSON_UNESCAPED_UNICODE);
         return $clazzJson;
     }
+
     /**
-     * 检查班级名称是否以“班”为结尾，班级名称必须是“大数据2301班”这种形式
-     * @return boolean
+     * 根据id获取对应的班级信息
+     * 获取没有关联班级的教师
+     * 获取同学校的已经关联班级的教师
      */
-    public function endChar($string) {
-        $lastChar = mb_substr($string, -1);
-        // 是“班”则返回true
-        return $lastChar === '班';
+    public function getMessage() {
+        // 获取school id
+        $schoolId = (int)Request::instance()->get('schoolId');
+        $id = Request::instance()->get('id');
+        // 班级详细信息，包括对应的学校 clazz
+        $clazz = Clazz::with('school')->find($id);
+        // 没有关联班级的教师
+        $teachersWithoutClass = Teacher::where('status', 0)->select();
+        // 查询出已经关联班级的教师
+        $teachersWithClass = Teacher::alias('t')
+            ->join('yunzhi_clazz c', 't.id = c.teacher_id')
+            ->field('t.id, t.name, c.school_id')
+            ->select();
+        // specialTeacher 同学校的教师（教师对应的school_id和前台传过来的学校id相同）
+        $speTeacher = [];
+        foreach ($teachersWithClass as $teacher) {
+            if ($teacher['school_id'] === $schoolId) {
+                $speTeacher[] = $teacher;
+            }
+        }
+        $teachers = array_merge($speTeacher, $teachersWithoutClass);
+        $teacherDet = [];
+        // 构建班级信息
+        foreach ($teachers as $teacher) {
+            $teacherDet[] = [
+                'id' => $teacher->id,
+                'name' => $teacher->name
+            ];
+        }
+        // 数组保存班级，教师信息
+        $data = [
+            'id' => $clazz->id,
+            'clazz' => $clazz->clazz,
+            'school' => [
+                'id' => $clazz->school->id,
+                'school' => $clazz->school->school
+            ],
+            'teacher_id' => $clazz->teacher_id,
+            'teachers' => $teacherDet
+        ];
+        $dataJson = json_encode($data, JSON_UNESCAPED_UNICODE);
+        return $dataJson;
     }
 
     public function index() {
@@ -232,21 +281,56 @@ class ClazzController extends IndexController {
         $id = IndexController::getParamId($request);
         // 获取要更新的班级信息
         $content = Request::instance()->getContent();
-        $data = json_decode($content, true);
-        // 验证数据是否合法
-        $teacher_id = (int)$data['teacherId'];
-        // 查询教师
+        // 新教师的id
+        $teacher_id = json_decode($content, true);
+        $validate = new ClazzValidate();
+        if (!$validate->scene('saveTeacher')->check(['teacher_id' => $teacher_id])) {
+            return json(['success' => false, 'message' => $validate->getError()]);
+        }
+        // 获取该班级原教师的id
+        $clazz = ClazzController::getClazz();
+        $oldTeacherId = $clazz->teacher_id;
+        if ($oldTeacherId === $teacher_id) {
+            // 如果原教师id与现教师id相同，提示用户教师信息没有更改
+            return json(['success' => false, 'message' => '班主任信息未更新']);
+        }
+        // 查询原教师对应的userId
+        $oldTeacher = Teacher::find($oldTeacherId);
+        if ($oldTeacher && $oldTeacher->user) {
+            $oldUserId = $oldTeacher->user->id;
+        }
+        // 如果不相同，查询原教师是否还有其他班级
+        $ifTeacherWithClazz = Clazz::where('teacher_id', $oldTeacherId)->select();
+        // 如果没有，将教师对应的user表中的role改称2,并且将teacher表中的status改成0
+        // 原班主任至少关联了一个班级（原班主任关联的原班级
+        // 如果等于1,说明原教师只是原班级这一个班级的班主任
+        $count = count($ifTeacherWithClazz);
+        if ($count === 1) {
+            Db::startTrans();
+            try {
+                // 更新teacher表
+                Db::name('teacher')
+                    ->where('id', $oldTeacherId)
+                    ->update([
+                        'status' => 0
+                    ]);
+                Db::name('user')
+                    ->where('id', $oldUserId)
+                    ->update([
+                        'role' => 2
+                    ]);
+                Db::commit();
+            } catch (\Exception $e) {
+                Db::rollback();
+                return json(['success' => false, 'message' => 1]);
+            }
+        }
+        // 查询新教师对应的userId
         $teacher = Teacher::find($teacher_id);
         if ($teacher && $teacher->user) {
             // 该教师对应user表中的id
             $userId = $teacher->user->id;
         }
-        $validate = new ClazzValidate();
-        if (!$validate->scene('saveTeacher')->check(['teacher_id' => $data['teacherId']])) {
-            return json(['success' => false, 'message' => $validate->getError()]);
-        }
-        // 如果更改了班主任且原教师不是其他班的班主任，将status改为0
-
         // 开启事务，更新clazz表,teacher表,user表
         Db::startTrans();
         try {

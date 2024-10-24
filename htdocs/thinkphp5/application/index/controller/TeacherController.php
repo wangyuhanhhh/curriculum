@@ -113,34 +113,6 @@ class TeacherController extends IndexController {
         return json($teacher);
     }
 
-    /**
-     * 获取还没有关联班级的教师
-     * 如果教师已经关联班级，获取
-     */
-    public function getTeacher() {
-        $path = Request::instance()->path();
-        // 用/作为分割符，分割字符串
-        $parts = explode('/', $path);
-        // 获取数组中的最后一个元素
-        $schoolId = (int)end($parts);
-        $allTeacher = Teacher::select();
-        // 查询出已经关联班级的教师
-        $teachersWithClass = Teacher::alias('t')->join('yunzhi_clazz c', 't.id = c.teacher_id')->select();
-
-        // 没有关联班级的教师
-        $teachersWithoutClass = Teacher::where('status', 0)->select();
-        $speTeacher = [];
-        // specialTeacher 该教师的学校和前台传过来的学校id相同
-        foreach ($teachersWithClass as $teacher) {
-            if ($teacher['school_id'] === $schoolId) {
-                $speTeacher[] = $teacher;
-            }
-        }
-        $data = array_merge($teachersWithoutClass, $speTeacher);
-        return json($data);
-        // 查询没有关联班级的教师信息
-        // 将查询结果整理成数组格式
-    }
     public function index() {
         $totalTeacher = Teacher::select();
         return json($totalTeacher);

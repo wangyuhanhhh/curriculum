@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import {CommonModule, registerLocaleData} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {ClazzComponent} from './clazz.component';
 import {RouterModule, Routes} from '@angular/router';
 import { AddComponent } from './add/add.component';
@@ -7,8 +7,8 @@ import {SchoolSelectModule} from '../user/school-select/school-select.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { EditComponent } from './edit/edit.component';
 import {PageModule} from './page/page.module';
-import {TeacherSelectModule} from './teacher-select/teacher-select.module';
 import { HeadTeacherComponent } from './head-teacher/head-teacher.component';
+import {NzSelectModule} from "ng-zorro-antd/select";
 
 const routes: Routes = [
   {
@@ -24,7 +24,7 @@ const routes: Routes = [
     component: EditComponent
   },
   {
-    path: 'setHeadTeacher/:id',
+    path: 'setHeadTeacher/:id/:schoolId',
     component: HeadTeacherComponent
   }
 ];
@@ -43,7 +43,7 @@ const routes: Routes = [
         ReactiveFormsModule,
         PageModule,
         FormsModule,
-        TeacherSelectModule
+        NzSelectModule
     ]
 })
 export class ClazzModule {}
