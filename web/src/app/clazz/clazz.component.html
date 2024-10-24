@@ -32,7 +32,7 @@
       <td>{{ clazz.clazz}}</td>
       <td>{{ clazz.teacher.name }}</td>
       <td>
-        <a class="btn btn-outline-success btn-sm" [routerLink]="'setHeadTeacher/' + clazz.id">
+        <a class="btn btn-outline-success btn-sm" [routerLink]="['setHeadTeacher/', clazz.id, clazz.school.id]">
           <i class="fa fa-cogs" aria-hidden="true"></i>设置班主任
         </a>
         <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + clazz.id">
