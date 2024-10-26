@@ -1,28 +1,49 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {UserComponent} from './user/user.component';
+import { LoginComponent } from './login/login.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { LayoutComponent } from './layout/layout.component';
 
 const routes: Routes = [
   {
-    path: 'term',
-    loadChildren: () => import('./term/term.module').then(m => m.TermModule)
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
   },
   {
-    path: 'school',
-    loadChildren: () => import('./school/school.module').then(m => m.SchoolModule)
+    path: '',
+    component: LayoutComponent,
+    children: [
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+      },
+      {
+        path: 'term',
+        loadChildren: () => import('./term/term.module').then(m => m.TermModule)
+      },
+      {
+        path: 'school',
+        loadChildren: () => import('./school/school.module').then(m => m.SchoolModule)
+      },
+      {
+        path: 'user',
+        loadChildren: () => import('./user/user.module').then(m => m.UserModule)
+      },
+      {
+        path: 'clazz',
+        loadChildren: () => import('./clazz/clazz.module').then(m => m.ClazzModule)
+      },
+      {
+        path: 'teacher',
+        loadChildren: () => import('./teacher/teacher.module').then(m => m.TeacherModule)
+      },
+    ]
   },
   {
-    path: 'user',
-    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
+    path: 'login',
+    component: LoginComponent
   },
-  {
-    path: 'clazz',
-    loadChildren: () => import('./clazz/clazz.module').then(m => m.ClazzModule)
-  },
-  {
-    path: 'teacher',
-    loadChildren: () => import('./teacher/teacher.module').then(m => m.TeacherModule)
-  }
 ];
 
 @NgModule({

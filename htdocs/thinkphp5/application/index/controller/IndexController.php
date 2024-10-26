@@ -1,8 +1,41 @@
 <?php
 namespace app\index\controller;
 use think\Controller;
+use think\Request;
 
 class IndexController extends Controller {
+
+    // 配置前置方法
+    protected $beforeActionList = [
+        'checkAuth' => ['except' => 'login'],   // 除了 login 登录方法，对其他所有方法都生效
+    ];
+
+    // 前置方法，用于身份验证
+    public function checkAuth() {
+        $request = Request::instance();
+        $xAuthToken = $request->header('X-Auth-Token');
+
+        if (empty($xAuthToken) || !session($xAuthToken)) {
+            // 返回 401 未授权响应
+            exit(json_encode(['success' => false, 'message' => '未授权'], 401));
+        }
+    }
+
+    // 定义后置方法
+    protected $afterActionList = [
+        'addTokenToResponse' => ['*'],  // 对所有方法生效
+    ];
+
+    public function addTokenToResponse() {
+        $request = Request::instance();
+        $xAuthToken = $request->header('X-Auth-Token');
+
+        // 如果存在 x-auth-token ， 则将它添加到响应头中
+        if (empty($xAuthToken)) {
+            header('x-auth-token:' . $xAuthToken);
+        }
+    }
+
     public static function getParamId($request) {
         $path = $request->path();
         // 用/作为分割符，分割字符串
