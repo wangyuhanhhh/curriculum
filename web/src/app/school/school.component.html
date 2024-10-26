@@ -15,6 +15,7 @@
     <tr class="table-primary">
       <th>序号</th>
       <th>学校</th>
+      <th>管理员</th>
       <th>操作</th>
     </tr>
     </thead>
@@ -23,6 +24,15 @@
       <td>{{ i + 1 }}</td>
       <td>{{school.school}}</td>
       <td>
+        <!-- 使用*ngFor遍历teacher数组并拼接姓名-->
+        <div *ngFor="let teacher of school.teacher">
+          {{teacher.name}}
+        </div>
+      </td>
+      <td>
+        <a class="btn btn-outline-success btn-sm" (click)="checkBeforeSetAdmin(school.id)">
+          <i class="fa fa-cogs" aria-hidden="true"></i>设置管理员
+        </a>
         <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + school.id">
           <i class="fa fa-pen"></i>编辑
         </a>

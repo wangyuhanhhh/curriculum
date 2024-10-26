@@ -146,6 +146,7 @@ class ClazzController extends IndexController {
         $teachersWithClass = Teacher::alias('t')
             ->join('yunzhi_clazz c', 't.id = c.teacher_id')
             ->field('t.id, t.name, c.school_id')
+            ->group('t.id, t.name, c.school_id') // 去重
             ->select();
         // specialTeacher 同学校的教师（教师对应的school_id和前台传过来的学校id相同）
         $speTeacher = [];
@@ -292,7 +293,7 @@ class ClazzController extends IndexController {
         $oldTeacherId = $clazz->teacher_id;
         if ($oldTeacherId === $teacher_id) {
             // 如果原教师id与现教师id相同，提示用户教师信息没有更改
-            return json(['success' => false, 'message' => '班主任信息未更新']);
+            return json(['success' => false, 'message' => '没有任何改动，更新失败']);
         }
         // 查询原教师对应的userId
         $oldTeacher = Teacher::find($oldTeacherId);
@@ -302,7 +303,7 @@ class ClazzController extends IndexController {
         // 如果不相同，查询原教师是否还有其他班级
         $ifTeacherWithClazz = Clazz::where('teacher_id', $oldTeacherId)->select();
         // 如果没有，将教师对应的user表中的role改称2,并且将teacher表中的status改成0
-        // 原班主任至少关联了一个班级（原班主任关联的原班级
+        // 原班主任至少关联了一个班级（原班主任关联的原班级)
         // 如果等于1,说明原教师只是原班级这一个班级的班主任
         $count = count($ifTeacherWithClazz);
         if ($count === 1) {
@@ -322,7 +323,7 @@ class ClazzController extends IndexController {
                 Db::commit();
             } catch (\Exception $e) {
                 Db::rollback();
-                return json(['success' => false, 'message' => 1]);
+                return json(['success' => false, 'message' => $e->getMessage()]);
             }
         }
         // 查询新教师对应的userId

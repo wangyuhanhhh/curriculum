@@ -6,6 +6,8 @@ import {SchoolComponent} from './school.component';
 import { EditComponent } from './edit/edit.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PageModule} from '../clazz/page/page.module';
+import { AdminComponent } from './admin/admin.component';
+import {NzSelectModule} from "ng-zorro-antd/select";
 
 // routes是常量，它的类型是Routes
 const routes: Routes = [
@@ -20,13 +22,18 @@ const routes: Routes = [
   {
     path: 'edit/:id',
     component: EditComponent
+  },
+  {
+    path: 'setAdmin/:id',
+    component: AdminComponent
   }
 ];
 @NgModule({
   declarations: [
     SchoolComponent,
     AddComponent,
-    EditComponent
+    EditComponent,
+    AdminComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +41,8 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    PageModule
+    PageModule,
+    NzSelectModule
   ]
 })
 export class SchoolModule {}

@@ -1,4 +1,5 @@
 import {School} from './school';
+import {Teacher} from "./teacher";
 
 /**
  * 学期
@@ -23,7 +24,8 @@ export class Term {
       status = 0,
       school = {
         id: 0,
-        school: ''
+        school: '',
+        teacher: []
       },
     }: {
       id?: number;

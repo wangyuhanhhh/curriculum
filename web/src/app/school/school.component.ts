@@ -4,7 +4,7 @@ import {SchoolService} from '../../service/school.service';
 import {CommonService} from '../../service/common.service';
 import {HttpParams} from '@angular/common/http';
 import {Page} from '../entity/page';
-import {Clazz} from '../entity/clazz';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-school',
@@ -13,9 +13,6 @@ import {Clazz} from '../entity/clazz';
 })
 export class SchoolComponent implements OnInit {
   schools = [] as School[];
-  constructor(private schoolService: SchoolService,
-              private commonService: CommonService) {
-  }
   searchName = '';
   // 默认显示第一页
   currentPage = 1;
@@ -28,6 +25,12 @@ export class SchoolComponent implements OnInit {
     numberOfElements: 0,
     totalPages: 0
   });
+
+  constructor(private schoolService: SchoolService,
+              private commonService: CommonService,
+              private router: Router) {
+  }
+
   ngOnInit(): void {
     this.loadByPage();
   }
@@ -74,5 +77,16 @@ export class SchoolComponent implements OnInit {
 
   onSearch(): void {
     this.loadByPage(1, this.size);
+  }
+
+  // 如果该学校下没有班级或该学校下的班级没有设置班主任，不进行页面跳转并提示用户
+  checkBeforeSetAdmin(id: number): void {
+    this.schoolService.checkSchool(id).subscribe( data => {
+      if (data.success) {
+        this.router.navigate(['/setAdmin', id]);
+      } else {
+        this.commonService.showErrorAlert(data.message);
+      }
+    }, error => console.log(error));
   }
 }
