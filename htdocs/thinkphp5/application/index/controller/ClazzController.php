@@ -3,7 +3,6 @@ namespace app\index\controller;
 use app\common\model\Teacher;
 use think\Db;
 use think\Request;
-use think\Db;
 use app\common\model\Clazz;
 use app\common\validate\ClazzValidate;
 
