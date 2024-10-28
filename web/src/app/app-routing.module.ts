@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutComponent } from './layout/layout.component';
+import { PersonalCenterComponent } from './personal-center/personal-center.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,10 @@ const routes: Routes = [
         path: 'teacher',
         loadChildren: () => import('./teacher/teacher.module').then(m => m.TeacherModule)
       },
+      {
+        path: 'personal-center',
+        component: PersonalCenterComponent
+      }
     ]
   },
   {
