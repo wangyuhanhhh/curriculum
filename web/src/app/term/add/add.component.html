@@ -34,7 +34,8 @@
       <nz-date-picker id="end_time"
                       [nzDisabledDate]="disableEndDate"
                       formControlName="end_time"
-                      class="form-control"></nz-date-picker>
+                      class="form-control">
+      </nz-date-picker>
       <div *ngIf="formGroup.get('end_time')?.invalid"  class="text-danger mt-1">必须选择结束日期</div>
     </div>
   </div>
