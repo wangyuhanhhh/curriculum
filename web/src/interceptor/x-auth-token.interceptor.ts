@@ -10,10 +10,6 @@ import {tap} from 'rxjs/operators';
 
 @Injectable()
 export class XAuthTokenInterceptor implements HttpInterceptor {
-  /**
-   * 从缓存中获取 x-auth-token，防止刷新后失效
-   */
-  private token = window.sessionStorage.getItem('x-auth-token');
 
   public static setToken(xAuthToken: string): void {
     if (xAuthToken) {
@@ -25,11 +21,14 @@ export class XAuthTokenInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    // 每次从 sessionStorage 获取最新的 token
+    const token = sessionStorage.getItem('x-auth-token');
+    console.log(token);
     let authReq = request;
     // 如果 token 存在，克隆请求并将其添加到请求头中
-    if (this.token !== null) {
+    if (token !== null) {
       authReq = request.clone({
-        setHeaders: {'x-auth-token': this.token}
+        setHeaders: {'x-auth-token': token}
       });
     }
 
