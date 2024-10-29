@@ -20,10 +20,10 @@ export class PersonalCenterComponent implements OnInit {
               private commonService: CommonService) { }
 
   ngOnInit(): void {
-    this.loginService.getCurrentUser().subscribe();
-    this.loginService.currentLoginUser().subscribe(user => {
+    this.loginService.getCurrentUser().subscribe(user => {
       if (user) {
-        const jsonString = user.data;
+        const jsonString = user;
+        // @ts-ignore
         const userdata = JSON.parse(jsonString);
         this.person.name = userdata.name;
         this.person.username = userdata.username;

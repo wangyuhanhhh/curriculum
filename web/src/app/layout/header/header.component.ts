@@ -16,10 +16,10 @@ export class HeaderComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
-    this.loginService.getCurrentUser().subscribe();
-    this.loginService.currentLoginUser().subscribe(user => {
+    this.loginService.getCurrentUser().subscribe(user => {
       if (user) {
-        const jsonString = user.data;
+        const jsonString = user;
+        // @ts-ignore
         const userdata = JSON.parse(jsonString);
         this.username = userdata.username;
       }
