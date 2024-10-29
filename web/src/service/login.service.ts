@@ -55,4 +55,14 @@ export class LoginService {
       this.setCurrentUser(user);
     }));
   }
+
+  // 登出
+  logout(): Observable<ResponseBody> {
+    return this.http.post<ResponseBody>(`${this.baseUrl}/logout`, {}).pipe(
+      tap(() => {
+        // 成功后，清除本地的 sessionStorage 中的 x-auth-token
+        sessionStorage.removeItem('x-auth-token');
+      })
+    );
+  }
 }

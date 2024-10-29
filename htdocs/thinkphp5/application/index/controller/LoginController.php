@@ -8,6 +8,14 @@ use think\Request;
 
 class LoginController extends IndexController {
 
+    protected $beforeActionList = [
+        'checkAuth' => ['except' => 'login'],   // 除了 login 登录方法，对其他所有方法都生效
+    ];
+
+    protected $afterActionList = [
+        'addTokenToResponse' => ['except' => 'logout'],  // 除了 logout 方法，对其他的所有方法生效
+    ];
+
     /**
      * 处理用户提交的登录数据
      */
@@ -35,16 +43,21 @@ class LoginController extends IndexController {
         if ($user->role == 3) {
             // 角色为 3 ，即该登录用户为学生
             $query = Student::where('user_id', $user->id)->find();
+            // 学号或者工号
+            $no = $query->student_no;
+
         } else {
             $query = Teacher::where('user_id', $user->id)->find();
+            $no = $query->teacher_no;
         }
 
         // 将登录用户的信息返回给前台
         $loginUser = [
+            'id' => $user->id,  // 注意，这里返回的是 user 表的 id
             'username' => $user->username,
             'role'  => $user->role,
-            'password' => $user->password,
-            'name' => $query->name
+            'name' => $query->name,
+            'no' => $no,
         ];
         $jsonObject = json_encode($loginUser, JSON_UNESCAPED_UNICODE);
 
@@ -64,5 +77,21 @@ class LoginController extends IndexController {
         // 从会话中，获取到与该 x-auth-token 关联的用户信息（当前登录用户）
         $user = session($xAuthToken);
         return json(['success' => true, 'message' => '登录成功', 'data' => $user]);
+    }
+
+    public function logout() {
+        // 获取请求头中的 x-auth-token
+        $request = Request::instance();
+        $xAuthToken = $request->header('x-auth-token');
+
+        // 检查 token 是否存在
+        if (empty($xAuthToken) || !session($xAuthToken)) {
+            return json(['success' => false, 'message' => '未找到有效会话']);
+        }
+
+        // 删除 session 中的 token
+        session(null);
+
+        return json(['success' => true, 'message' => '登出成功']);
     }
 }
