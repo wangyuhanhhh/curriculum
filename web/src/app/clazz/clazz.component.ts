@@ -19,7 +19,7 @@ export class ClazzComponent implements OnInit {
   searchClazz = '';
   // 默认显示第一页
   currentPage = 1;
-  // 每页默认10条
+  // 每页默认5条
   size = 5;
   pageData = new Page<Clazz> ({
     content: [],

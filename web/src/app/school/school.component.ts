@@ -83,7 +83,7 @@ export class SchoolComponent implements OnInit {
   checkBeforeSetAdmin(id: number): void {
     this.schoolService.checkSchool(id).subscribe( data => {
       if (data.success) {
-        this.router.navigate(['/setAdmin', id]);
+        this.router.navigate(['/school/setAdmin', id]);
       } else {
         this.commonService.showErrorAlert(data.message);
       }
