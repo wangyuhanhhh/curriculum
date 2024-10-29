@@ -21,15 +21,20 @@
     <label for="start_time" class="col-sm-2 col-form-label">开学日期</label>
     <div class="col-sm-10">
       <nz-date-picker id="start_time"
-                       formControlName="start_time" class="form-control"></nz-date-picker>
+                       formControlName="start_time"
+                      class="form-control"
+                      [nzDisabledDate]="disableNotMonday">
+      </nz-date-picker>
       <div *ngIf="formGroup.get('start_time')?.invalid" class="text-danger mt-1">必须选择开学日期</div>
     </div>
   </div>
   <div class="mb-3 row">
     <label for="end_time" class="col-sm-2 col-form-label">结束日期</label>
     <div class="col-sm-10">
-      <nz-date-picker id="end_time" [nzDisabledDate]="disableEndDate"
-                      formControlName="end_time" class="form-control"></nz-date-picker>
+      <nz-date-picker id="end_time"
+                      [nzDisabledDate]="disableEndDate"
+                      formControlName="end_time"
+                      class="form-control"></nz-date-picker>
       <div *ngIf="formGroup.get('end_time')?.invalid"  class="text-danger mt-1">必须选择结束日期</div>
     </div>
   </div>
