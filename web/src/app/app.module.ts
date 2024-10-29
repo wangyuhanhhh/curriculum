@@ -22,6 +22,8 @@ import { XAuthTokenInterceptor } from '../interceptor/x-auth-token.interceptor';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutComponent } from './layout/layout.component';
 import { NavComponent } from './layout/nav/nav.component';
+import { PersonalCenterComponent } from './personal-center/personal-center.component';
+import { HeaderComponent } from './layout/header/header.component';
 
 registerLocaleData(en);
 
@@ -31,7 +33,9 @@ registerLocaleData(en);
     LoginComponent,
     DashboardComponent,
     LayoutComponent,
-    NavComponent
+    NavComponent,
+    PersonalCenterComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
