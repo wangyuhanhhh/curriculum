@@ -51,6 +51,10 @@ export class LoginService {
       headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
       observe: 'response' // 设置 observe 为 response 以获取完整的响应对象
     }).pipe(tap( response => {
+      const token = response.headers.get('x-auth-token'); // 假设后端返回 `x-auth-token` 头
+      if (token) {
+        sessionStorage.setItem('x-auth-token', token); // 存储 token
+      }
       const user = JSON.parse(response.body.data) as User;
       this.setCurrentUser(user);
     }));
