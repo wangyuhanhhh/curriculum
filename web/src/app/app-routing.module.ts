@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutComponent } from './layout/layout.component';
 import { PersonalCenterComponent } from './personal-center/personal-center.component';
+import {CourseTableComponent} from './course-table/course-table.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,10 @@ const routes: Routes = [
       {
         path: 'personal-center',
         component: PersonalCenterComponent
+      },
+      {
+        path: 'course-table',
+        component: CourseTableComponent
       }
     ]
   },
