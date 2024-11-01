@@ -4,6 +4,8 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Page} from "../entity/page";
 import {HttpParams} from "@angular/common/http";
 import {CourseService} from "../../service/course.service";
+import {Router} from "@angular/router";
+import {CommonService} from "../../service/common.service";
 
 @Component({
   selector: 'app-course',
@@ -28,7 +30,10 @@ export class CourseComponent implements OnInit {
     totalPages: 0
   })
   constructor(
-    private courseService: CourseService) { }
+    private courseService: CourseService,
+    private router: Router,
+    private commonService: CommonService) {
+  }
 
   ngOnInit(): void {
     this.loadByPage();
@@ -71,5 +76,17 @@ export class CourseComponent implements OnInit {
   onSize(size: number): void {
     this.size = size;
     this.loadByPage(this.currentPage, size);
+  }
+
+  // 如果该用户下没有激活的学期，不进行页面跳转并提示用户
+  checkBeforeAdd(): void {
+    this.courseService.checkTerm().subscribe( data => {
+      console.log(data);
+      if (data.success) {
+        this.router.navigate(['/course/add']);
+      } else {
+        this.commonService.showErrorAlert(data.message);
+      }
+    })
   }
 }
