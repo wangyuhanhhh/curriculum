@@ -22,7 +22,8 @@ export class HeadTeacherComponent implements OnInit {
   constructor(private activateRoute: ActivatedRoute,
               private clazzService: ClazzService,
               private commonService: CommonService,
-              private router: Router) { }
+              private router: Router) {
+              }
 
   ngOnInit(): void {
     // 获取班级id 后台查询出班级对应的学校 填充表单
@@ -44,6 +45,7 @@ export class HeadTeacherComponent implements OnInit {
       }
     }, error => console.log(error));
   }
+
   // 保存 要传id（确保是哪个班级的班主任） 传teachrId作为要更新的内容
   onSubmit(): void {
     const id = this.activateRoute.snapshot.params.id;

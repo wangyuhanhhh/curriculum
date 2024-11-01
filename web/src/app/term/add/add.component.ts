@@ -40,7 +40,11 @@ export class AddComponent implements OnInit {
 
   disableEndDate = (endDate: Date): boolean => {
     const time = endDate.getTime();
-    return this.formGroup.get('start_time')?.value.getTime() > time;
+    return this.formGroup.get('start_time')?.value.getTime() > time || this.disableNotMonday(endDate);
+  }
+
+  disableNotMonday = (current: Date): boolean => {
+    return current.getDay() !== 1; // 1 表示星期一
   }
 
   onSubmit(): void {
