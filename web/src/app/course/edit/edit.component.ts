@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {ActivatedRoute, Router} from "@angular/router";
 import {CourseService} from "../../../service/course.service";
+import {HttpParams} from "@angular/common/http";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CommonService} from "../../../service/common.service";
-import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-add',
-  templateUrl: './add.component.html',
-  styleUrls: ['./add.component.css']
+  selector: 'app-edit',
+  templateUrl: './edit.component.html',
+  styleUrls: ['./edit.component.css']
 })
-export class AddComponent implements OnInit {
+export class EditComponent implements OnInit {
+  // 该学期的周数范围
   weekRange: number[] = [];
   // 节次
   sections: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11];
@@ -25,24 +27,37 @@ export class AddComponent implements OnInit {
     end: new FormControl(null, Validators.required),
   });
 
-  constructor(
-    private courseService: CourseService,
-    private commonService: CommonService,
-    private router: Router) {
-  }
+  constructor(private activatedRoute: ActivatedRoute,
+              private courseService: CourseService,
+              private commonService: CommonService,
+              private router: Router) { }
 
   ngOnInit(): void {
-    // 获取学期及周数
-    this.courseService.getMessage().subscribe(data => {
-      console.log(data);
-      this.termName = data.term.term;
+    const id = this.activatedRoute.snapshot.params.id;
+    const courseInfoId = this.activatedRoute.snapshot.params.courseInfoId;
+    const httpParams = new HttpParams()
+      .append('id', id)
+      .append('courseInfoId', courseInfoId);
+    this.courseService.getCourseById(httpParams).subscribe(data => {
       this.weekRange = data.weeks;
+      this.termName = data.term.term;
+      this.formGroup.patchValue({
+        name: data.name,
+        type: data.type,
+        status: data.status,
+        start_weeks: data.start_weeks,
+        end_weeks: data.end_weeks,
+        week: data.week,
+        begin: data.begin,
+        end: data.end,
+      });
     }, error => console.log(error));
   }
 
   onSubmit(): void {
+    const courseInfoId = this.activatedRoute.snapshot.params.courseInfoId;
     const course = this.formGroup.value;
-    this.courseService.add(course).subscribe(data => {
+    this.courseService.update(courseInfoId, course).subscribe( data => {
       console.log(data);
       if (data.success) {
         this.commonService.showSuccessAlert(data.message);
