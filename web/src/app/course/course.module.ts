@@ -8,6 +8,7 @@ import {NzSelectModule} from "ng-zorro-antd/select";
 import { AddComponent } from './add/add.component';
 import {SchoolSelectModule} from "../user/school-select/school-select.module";
 import {NzRadioModule} from "ng-zorro-antd/radio";
+import { EditComponent } from './edit/edit.component';
 
 const routes: Routes = [
   {
@@ -17,13 +18,18 @@ const routes: Routes = [
   {
     path: 'add',
     component: AddComponent
+  },
+  {
+    path: 'edit/:id/:courseInfoId',
+    component: EditComponent
   }
 ]
 
 @NgModule({
   declarations: [
     CourseComponent,
-    AddComponent
+    AddComponent,
+    EditComponent
   ],
   imports: [
     CommonModule,

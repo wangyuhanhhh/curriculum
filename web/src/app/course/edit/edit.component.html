@@ -32,7 +32,7 @@
       <label class="col-sm-2 col-form-label">周类型</label>
       <div class="col-sm-10">
         <nz-radio-group formControlName="status">
-          <label nz-radio [nzValue]="3">全周</label>
+          <label nz-radio [nzValue]="0">全周</label>
           <label nz-radio [nzValue]="1">双周</label>
           <label nz-radio [nzValue]="2">单周</label>
         </nz-radio-group>
@@ -42,7 +42,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="formGroup.get('status')?.value" class="mb-3 row">
+    <div class="mb-3 row">
       <label class="col-sm-2 col-form-label">开始周</label>
       <div class="col-sm-10">
         <nz-select nzAllowClear nzPlaceHolder="选择开始周"
@@ -50,7 +50,7 @@
           <nz-option *ngFor="let week of weekRange"
                      [nzValue]="week" [nzLabel]="'第' + week + '周'"
                      [nzDisabled]="isWeekDisabled(week)">
-          {{ week }}
+            {{ week }}
           </nz-option>
         </nz-select>
         <div class="text-danger mt-1"
@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="formGroup.get('start_weeks')?.value" class="mb-3 row">
+    <div class="mb-3 row">
       <label class="col-sm-2 col-form-label">结束周</label>
       <div class="col-sm-10">
         <nz-select nzAllowClear nzPlaceHolder="选择结束周"
@@ -72,7 +72,7 @@
         </nz-select>
       </div>
     </div>
-    <div *ngIf="formGroup.get('end_weeks')?.value" class="mb-3 row mt-1">
+    <div class="mb-3 row mt-1">
       <label for="school_id" class="col-sm-2 col-form-label" id="school_id">星期</label>
       <div class="col-sm-10">
         <nz-select nzAllowClear  nzPlaceHolder="选择星期"
@@ -91,7 +91,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="formGroup.get('week')?.value" class="mb-3 row">
+    <div class="mb-3 row">
       <label class="col-sm-2 col-form-label">开始节次</label>
       <div class="col-sm-10">
         <nz-select nzAllowClear nzPlaceHolder="选择开始节次"
@@ -103,7 +103,7 @@
         </nz-select>
       </div>
     </div>
-    <div *ngIf="formGroup.get('begin')?.value" class="mb-3 row">
+    <div class="mb-3 row">
       <label class="col-sm-2 col-form-label">结束节次</label>
       <div class="col-sm-10">
         <nz-select nzAllowClear nzPlaceHolder="选择结束节次"
@@ -116,7 +116,7 @@
         </nz-select>
       </div>
     </div>
-
+  
     <div class="mb-3 row">
       <div class="col-sm-10 offset-2">
         <button class="btn btn-primary"
@@ -124,3 +124,5 @@
       </div>
     </div>
   </form>
+  
+  
