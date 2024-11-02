@@ -22,6 +22,12 @@ export class CourseService {
   checkTerm(): Observable<ResponseBody> {
     return this.httpClient.get<ResponseBody>(`${this.baseUrl}/checkTerm`);
   }
+
+  // 根据id获取课程信息
+  getCourseById(params: HttpParams): Observable<Course> {
+    return this.httpClient.get<Course>(`${this.baseUrl}/getCourseById/`, { params });
+  }
+
   // 获取当前登录用户的信息及学期
   getMessage(): Observable<any> {
     return this.httpClient.get<any>(`${this.baseUrl}/getMessage`);
@@ -30,5 +36,10 @@ export class CourseService {
   // 查询
   search(params: HttpParams): Observable<Page<Course>> {
     return this.httpClient.get<Page<Course>>(`${this.baseUrl}/search`, {params})
+  }
+
+  // 更新
+  update(courseInfoId: number, course: Course): Observable<ResponseBody> {
+    return this.httpClient.put<ResponseBody>(`${this.baseUrl}/update/${courseInfoId}`, course);
   }
 }
