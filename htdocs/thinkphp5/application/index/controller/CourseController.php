@@ -28,7 +28,6 @@ class CourseController extends IndexController {
         $term = $this->getTermByLoginUser();
         // 班级id
         $clazzId = $this->getClazzIdByLoginUser();
-
         // 当前登录用户的学期id
         $termId = $term->id;
         // 检查时间是否合法
@@ -51,7 +50,7 @@ class CourseController extends IndexController {
                     $course->term_id = $termId;
                     $course->clazz_id = $clazzId;
 
-                    if ((int)$data['type'] === 1) {
+                    if ($data['type'] === 1) {
                         $course->student_id = $studentId;
                     }
 
@@ -131,8 +130,9 @@ class CourseController extends IndexController {
         $id = Request::instance()->get('id');
         $courseInfoId = Request::instance()->get('courseInfoId');
         $course = Course::with(['courseInfos' => function ($query) use ($courseInfoId) {
-            $query->where('id', $courseInfoId);
-        }])->where('id', $id)->find();
+                             $query->where('id', $courseInfoId);
+                         }])
+                         ->where('id', $id)->find();
 
         $term = $this->getTermByLoginUser();
         $weekRange = $this->getWeek();
@@ -343,7 +343,7 @@ class CourseController extends IndexController {
         $currentPage = Request::instance()->get('currentPage', 1);
 
         // 构建查询条件
-        $query = Course::with('courseInfos');
+        $query = Db::name('course');
 
         if (!empty($type)) {
             $query->where('type', $type);
@@ -351,35 +351,40 @@ class CourseController extends IndexController {
         if (!empty($name)) {
             $query->where('name', 'like', '%' . $name . '%');
         }
-        // 克隆查询对象，计算查询总记录数
-        $countQuery = clone $query;
-        $total = $countQuery->count();
+
+        // 获取课程id
+        $courseIds = $query->column('id');
+
+        // 计算该课程有多少条课程安排
+        $courseInfosQuery = CourseInfo::where('course_id', 'in', $courseIds);
+        $dataQuery = clone $courseInfosQuery;
+        $total = $courseInfosQuery->count();
+
         // 计算偏移量
         $offset = ($currentPage - 1) * $size;
-        // 查询当前页的数据
-        $data = $query->limit($offset, $size)->select();
+        // 查询当前页的数据(courseInfo中的数据)
+
+        $data = $dataQuery->limit($offset, $size)->select();
 
         // 根据课程id获取上课时间 一个上课时间对应的是一条数据
         // 处理获取的数据
-        foreach ($data as $course) {
-            if (!empty($course->courseInfos)) {
-                $courseInfos = $course->courseInfos;
-                foreach ($courseInfos as $courseInfo) {
-                    // 计算节次
-                    $start = $courseInfo->begin;
-                    $end = $courseInfo->begin + $courseInfo->length - 1;
-                    $range = "{$start}节-{$end}节";
-                    $dataDet[] = [
-                        'id' => $course->id,
-                        'name' => $course->name,
-                        'type' => $course->type,
-                        'courseInfoId' => $courseInfo->id,
-                        'weeks' => $courseInfo->start_weeks,
-                        'week' => $this->weekMap($courseInfo->week),
-                        'range' => $range
-                    ];
-                }
-            }
+        $dataDet = [];
+        foreach ($data as $courseInfo) {
+            $courseId = $courseInfo->course_id;
+            $course = Course::where('id', $courseId)->find();
+            // 计算节次
+            $start = $courseInfo->begin;
+            $end = $courseInfo->begin + $courseInfo->length - 1;
+            $range = "{$start}节-{$end}节";
+            $dataDet[] = [
+                'id' => $course->id,
+                'name' => $course->name,
+                'type' => $course->type,
+                'courseInfoId' => $courseInfo['id'],
+                'weeks' => $courseInfo['start_weeks'],
+                'week' => $this->weekMap($courseInfo->week),
+                'range' => $range
+            ];
         }
         // 构造分页结果
         $result = [

@@ -55,11 +55,11 @@ export class AddComponent implements OnInit {
 
   isWeekDisabled(week: number): boolean {
     const status = this.formGroup.get('status')?.value;
-    if (status === '1') {
+    if (status === 1) {
       // 禁用单周
       return week % 2 !== 0;
     }
-    if (status === '2') {
+    if (status === 2) {
       // 禁用双周
       return week % 2 === 0;
     }
