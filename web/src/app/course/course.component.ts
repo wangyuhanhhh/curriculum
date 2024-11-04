@@ -59,7 +59,16 @@ export class CourseComponent implements OnInit {
     );
   }
 
-  onDelete(id: number): void {
+  onDelete(courseInfoId: number): void {
+    this.commonService.showConfirmAlert(() => {
+      this.courseService.delete(courseInfoId).subscribe(data => {
+        if (data.success) {
+          this.commonService.showSuccessAlert(data.message);
+        } else {
+          this.commonService.showErrorAlert(data.message);
+        }
+      }, error => console.log(error));
+    }, '是否删除，此操作不可逆');
   }
 
   onSearch(): void {
