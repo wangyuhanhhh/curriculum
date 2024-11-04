@@ -111,6 +111,53 @@ class CourseController extends IndexController {
     }
 
     /**
+     * 删除
+     * 如果该课程对应多条课程安排，只删除对应的课程安排
+     * 如果该课程只有一条课程安排，把对应的课程也删除了
+     */
+    public function delete() {
+        $request = Request::instance();
+        $courseInfoId = IndexController::getParamId($request);
+        $courseInfo = CourseInfo::where('id', $courseInfoId)->find();
+        // 课程安排不存在
+        if (!$courseInfo) {
+            return json(['success' => false, 'message' => '课程安排不存在']);
+        }
+        $courseId = $courseInfo->course_id;
+        // 该课程对应的课程安排
+        $courseInfos = CourseInfo::where('course_id', $courseId)->select();
+        $count = count($courseInfos);
+        // 课程对应多条课程安排，只删除这一条课程安排的数据
+        if ($count > 1) {
+            if ($courseInfo->delete()) {
+                return json(['success' => true, 'message' => '课程删除成功']);
+            } else {
+                return json(['success' => false, 'message' => '课程删除失败']);
+            }
+        } else {
+            // 删除课程和课程安排的数据
+            Db::startTrans();
+            try {
+                // 第一步，先删除 teacher 中的数据
+                Db::name('course')
+                    ->where('id', $courseId)
+                    ->delete();
+
+                // 第二步，删除 user 中的数据
+                Db::name('courseInfo')
+                    ->where('id', $courseInfoId)
+                    ->delete();
+
+                Db::commit();
+                return json(['success' => true, 'message' => '课程删除成功']);
+            } catch (\Exception $e) {
+                Db::rollback();
+                return json(['success' => false, 'message' => $e->getMessage()]);
+            }
+        }
+    }
+
+    /**
      * 学生
      * 获取当前登录用户的班级id
      */

@@ -41,7 +41,7 @@
   <tr *ngFor="let course of pageData.content; index as i">
     <td>{{ i + 1 }}</td>
     <td>{{ course.name}}</td>
-    <td *ngIf="course.type === 0; else choose">必修</td>
+    <td *ngIf="course.type === 2; else choose">必修</td>
     <td>天津职业技术师范大学</td>
     <td>大数据2301班</td>
     <td>{{ course.range }}</td>
@@ -55,7 +55,7 @@
         <i class="fa fa-upload" aria-hidden="true"></i>
         添加
       </a>
-      <span class="btn btn-outline-danger btn-sm" (click)="onDelete(course.id)">
+      <span class="btn btn-outline-danger btn-sm" (click)="onDelete(course.courseInfoId)">
           <i class="far fa-trash-alt"></i>删除
         </span>
     </td>

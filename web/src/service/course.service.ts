@@ -23,6 +23,11 @@ export class CourseService {
     return this.httpClient.get<ResponseBody>(`${this.baseUrl}/checkTerm`);
   }
 
+  // 删除
+  delete(courseInfoId: number): Observable<ResponseBody> {
+    return this.httpClient.delete<ResponseBody>(`${this.baseUrl}/delete/${courseInfoId}`);
+  }
+
   // 根据id获取课程信息
   getCourseById(params: HttpParams): Observable<Course> {
     return this.httpClient.get<Course>(`${this.baseUrl}/getCourseById/`, { params });
