@@ -14,6 +14,7 @@ export class EditComponent implements OnInit {
     name: new FormControl('', Validators.required),
     username: new FormControl('', Validators.required),
     teacher_no: new FormControl(null, Validators.required),
+    school_id: new FormControl(null, Validators.required),
   });
 
   constructor(private activeRoute: ActivatedRoute,
@@ -29,6 +30,7 @@ export class EditComponent implements OnInit {
         name: teacher.name,
         username: teacher.username,
         teacher_no: teacher.teacher_no,
+        school_id: teacher.school.id
       });
     }, error => console.log(error));
   }

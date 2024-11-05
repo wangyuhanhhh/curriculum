@@ -6,6 +6,7 @@ import {TeacherComponent} from './teacher.component';
 import { AddComponent } from './add/add.component';
 import { EditComponent } from './edit/edit.component';
 import {PageModule} from '../clazz/page/page.module';
+import {SchoolSelectModule} from "../user/school-select/school-select.module";
 
 
 const routes: Routes = [
@@ -30,12 +31,13 @@ const routes: Routes = [
     AddComponent,
     EditComponent
   ],
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        RouterModule.forChild(routes),
-        FormsModule,
-        PageModule
-    ]
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
+    FormsModule,
+    PageModule,
+    SchoolSelectModule
+  ]
 })
 export class TeacherModule { }

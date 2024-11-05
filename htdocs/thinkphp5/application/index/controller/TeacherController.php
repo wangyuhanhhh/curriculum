@@ -2,6 +2,7 @@
 namespace app\index\controller;
 use app\common\model\Teacher;
 use app\common\model\User;
+use app\common\model\School;
 use app\common\validate\TeacherValidate;
 use think\Db;
 use think\Request;
@@ -45,6 +46,7 @@ class TeacherController extends IndexController {
             $teacher = new Teacher();
             $teacher->name = $data['name'];
             $teacher->teacher_no = $teacherNo;
+            $teacher->school_id = $data['school_id'];
             $teacher->user_id = $user->id;
 
             // 数据验证
@@ -105,10 +107,16 @@ class TeacherController extends IndexController {
         }
         // 使用 with 预加载于 teacher 相关的 user 数据；这里的user是定义在Teacher模型中的联系方法
         $teacherData = Teacher::with('user')->find($id);
+        $schoolId = $teacherData->school_id;
+        $school = School::where('id', $schoolId)->find();
         // 重新整合一个新数据组，只给前台发送name、username、teacher_no
         $teacher['name'] = $teacherData->name;
         $teacher['username'] = $teacherData->user->username;
         $teacher['teacher_no'] = $teacherData->teacher_no;
+        $teacher['school'] = [
+            'id' => $school->id,
+            'school' => $school->school,
+        ];
 
         return json($teacher);
     }
@@ -148,10 +156,23 @@ class TeacherController extends IndexController {
 
         // 查询当前页的数据
         $data = $query->limit($offset, $size)->select();
-
+        $dataDet = [];
+        foreach ($data as $teacher) {
+            $schoolId = $teacher['school_id'];
+            $school = School::where('id', $schoolId)->find();
+            $dataDet[] = [
+                'id' => $teacher['id'],
+                'name' => $teacher['name'],
+                'teacher_no' => $teacher['teacher_no'],
+                'school' => [
+                    'id' => $school->id,
+                    'school' => $school->school,
+                ]
+            ];
+        }
         // 构造分页结果
         $result = [
-            'content' => $data,
+            'content' => $dataDet,
             'number' => $currentPage,
             'size' => $size,
             'numberOfElements' => $total,
@@ -190,6 +211,9 @@ class TeacherController extends IndexController {
         if ($teacher->user->username !== $teacherData['username']) {
             $noChange = false;
         }
+        if ($teacher->school_id !== $teacherData['school_id']) {
+            $noChange = false;
+        }
 
         if ($noChange) {
             return json(['success' => false, 'message' => '没有任何改动，更新失败']);
@@ -204,6 +228,7 @@ class TeacherController extends IndexController {
                 ->update([
                     'name' => $teacherData['name'],
                     'teacher_no' => $teacherData['teacher_no'],
+                    'school_id' => $teacherData['school_id'],
                 ]);
 
             // 更新 user 表
