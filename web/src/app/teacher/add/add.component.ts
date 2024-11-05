@@ -15,6 +15,7 @@ export class AddComponent implements OnInit {
     name: new FormControl('', Validators.required),
     username: new FormControl('', Validators.required),
     teacher_no: new FormControl(null, Validators.required),
+    school_id: new FormControl(null, Validators.required),
   });
 
   constructor(private teacherService: TeacherService,

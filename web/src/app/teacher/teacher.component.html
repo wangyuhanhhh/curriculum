@@ -17,6 +17,7 @@
       <th>序号</th>
       <th>姓名</th>
       <th>工号</th>
+      <th>学校</th>
       <th>操作</th>
     </tr>
     </thead>
@@ -25,6 +26,7 @@
       <td>{{ i + 1 }}</td>
       <td>{{ teacher.name }}</td>
       <td>{{ teacher.teacher_no}}</td>
+      <td>{{ teacher.school.school}}</td>
       <td>
         <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + teacher.id">
           <i class="fa fa-pen"></i>编辑
