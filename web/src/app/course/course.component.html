@@ -46,14 +46,10 @@
     <td>大数据2301班</td>
     <td>{{ course.range }}</td>
     <td>{{ course.week }}</td>
-    <td>5-7</td>
+    <td>{{ course.weeks}}</td>
     <td>
       <a class="btn btn-outline-primary btn-sm" [routerLink]="['edit/', course.id, course.courseInfoId]">
         <i class="fa fa-pen"></i>编辑
-      </a>
-      <a *ngIf="course.type === 1" class="btn btn-outline-success btn-sm">
-        <i class="fa fa-upload" aria-hidden="true"></i>
-        添加
       </a>
       <span class="btn btn-outline-danger btn-sm" (click)="onDelete(course.courseInfoId)">
           <i class="far fa-trash-alt"></i>删除
