@@ -461,7 +461,9 @@ class CourseController extends IndexController {
 
         // 构建查询条件
         $query = Db::name('course');
-
+        // 根据班级id过滤课程
+        $clazzId = $this->getClazzIdByLoginUser();
+        $query->where('clazz_id', $clazzId);
         if (!empty($type)) {
             $query->where('type', $type);
         }
@@ -471,7 +473,16 @@ class CourseController extends IndexController {
 
         // 获取课程id
         $courseIds = $query->column('id');
-
+        //  如果当前班级没有对应的课程，返回空数据
+        if (empty($courseIds)) {
+            return json([
+                'content' => [],
+                'number' => $currentPage,
+                'size' => $size,
+                'numberOfElements' => 0,
+                'totalPages' => 0,
+            ]);
+        }
         // 计算该课程有多少条课程安排
         $courseInfosQuery = CourseInfo::where('course_id', 'in', $courseIds);
         $dataQuery = clone $courseInfosQuery;
@@ -489,6 +500,11 @@ class CourseController extends IndexController {
         foreach ($data as $courseInfo) {
             $courseId = $courseInfo->course_id;
             $course = Course::where('id', $courseId)->find();
+            // 拼接周数范围
+            $startWeeks = $courseInfo['start_weeks'];
+            $endWeeks = $courseInfo['end_weeks'];
+            $status = $courseInfo['status'];
+            $weeksRange = $this->weeksRange($startWeeks, $endWeeks, $status);
             // 计算节次
             $start = $courseInfo->begin;
             $end = $courseInfo->begin + $courseInfo->length - 1;
@@ -498,7 +514,7 @@ class CourseController extends IndexController {
                 'name' => $course->name,
                 'type' => $course->type,
                 'courseInfoId' => $courseInfo['id'],
-                'weeks' => $courseInfo['start_weeks'],
+                'weeks' => $weeksRange,
                 'week' => $this->weekMap($courseInfo->week),
                 'range' => $range
             ];
@@ -529,6 +545,24 @@ class CourseController extends IndexController {
         ];
         $week = $weekMap[$week];
         return $week;
+    }
+
+    /**
+     * 上课周数范围
+     */
+    public function weeksRange($start, $end, $status) {
+        if ($status === 1) {
+            $weeksRange = "{$start}-{$end}双";
+            return $weeksRange;
+        }
+        if ($status === 2) {
+            $weeksRange = "{$start}-{$end}单";
+            return $weeksRange;
+        }
+        if ($status === 3) {
+            $weeksRange = "{$start}-{$end}全";
+            return $weeksRange;
+        }
     }
 
     /**
