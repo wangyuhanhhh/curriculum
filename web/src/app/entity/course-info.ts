@@ -5,7 +5,7 @@ export interface CourseInfo {
 
 // 定义单日的课表结构
 export type DaySchedule = {
-  [time: string]: CourseInfo; // 时间段（如 '08:00-08:45'）作为键，值为课程信息
+  [time: number]: CourseInfo; // 课程小节数（1 表示第一小节）作为键，值为课程信息
 };
 
 // 定义整周课表的结构
