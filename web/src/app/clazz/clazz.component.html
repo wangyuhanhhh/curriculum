@@ -17,32 +17,32 @@
 </div>
 <table class="table table-striped mt-2">
   <thead>
-    <tr class="table-primary">
-      <th>序号</th>
-      <th>学校</th>
-      <th>班级</th>
-      <th>班主任</th>
-      <th>操作</th>
-    </tr>
+  <tr class="table-primary">
+    <th>序号</th>
+    <th>学校</th>
+    <th>班级</th>
+    <th>班主任</th>
+    <th>操作</th>
+  </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let clazz of pageData.content; index as i">
-      <td>{{ i + 1 }}</td>
-      <td>{{ clazz.school.school }}</td>
-      <td>{{ clazz.clazz}}</td>
-      <td>{{ clazz.teacher.name }}</td>
-      <td>
-        <a class="btn btn-outline-success btn-sm" [routerLink]="['setHeadTeacher/', clazz.id, clazz.school.id]">
-          <i class="fa fa-cogs" aria-hidden="true"></i>设置班主任
-        </a>
-        <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + clazz.id">
-          <i class="fa fa-pen"></i>编辑
-        </a>
-        <span class="btn btn-outline-danger btn-sm" (click)="onDelete(i, clazz.id)">
+  <tr *ngFor="let clazz of pageData.content; index as i">
+    <td>{{ i + 1 }}</td>
+    <td>{{ clazz.school.school }}</td>
+    <td>{{ clazz.clazz}}</td>
+    <td>{{ clazz.teacher.name }}</td>
+    <td>
+      <a class="btn btn-outline-success btn-sm" (click)="checkBeforeSetHeadTeacher(clazz.id)">
+        <i class="fa fa-cogs" aria-hidden="true"></i>设置班主任
+      </a>
+      <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + clazz.id">
+        <i class="fa fa-pen"></i>编辑
+      </a>
+      <span class="btn btn-outline-danger btn-sm" (click)="onDelete(i, clazz.id)">
           <i class="far fa-trash-alt"></i>删除
         </span>
-      </td>
-    </tr>
+    </td>
+  </tr>
   </tbody>
 </table>
 <!--$event是angular的一个关键字，表示子组件弹出的内容-->

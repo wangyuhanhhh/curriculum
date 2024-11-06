@@ -18,6 +18,10 @@ export class ClazzService {
     return this.httpClient.post<ResponseBody>(`${this.baseUrl}/add`, clazz);
   }
 
+  checkTeacher(id: number): Observable<ResponseBody> {
+    return this.httpClient.get<ResponseBody>(`${this.baseUrl}/checkTeacher/${id}`);
+  }
+
   // 删除班级
   delete(clazzId: number): Observable<ResponseBody> {
     return this.httpClient.delete<any>(`${this.baseUrl}/delete/${clazzId}`);
@@ -35,8 +39,8 @@ export class ClazzService {
 
   // 根据id获取对应的班级信息 根据学校id获取对应的教师信息
   // 因为从后台传过来的数据，包括班级信息和教师信息，所以这里使用any
-  getMessage(params: HttpParams): Observable<any> {
-    return this.httpClient.get<any>(`${this.baseUrl}/getMessage/`, { params });
+  getMessage(id: number): Observable<any> {
+    return this.httpClient.get<any>(`${this.baseUrl}/getMessage/${id}`);
   }
 
   // 根据id获取对应的班级信息

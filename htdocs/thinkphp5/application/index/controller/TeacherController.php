@@ -3,6 +3,7 @@ namespace app\index\controller;
 use app\common\model\Teacher;
 use app\common\model\User;
 use app\common\model\School;
+use app\common\model\Clazz;
 use app\common\validate\TeacherValidate;
 use think\Db;
 use think\Request;
@@ -72,9 +73,16 @@ class TeacherController extends IndexController {
     public function delete() {
         $request = Request::instance();
         $id = IndexController::getParamId($request);
+
         $teacher = Teacher::get($id);
         if (!$teacher) {
             return json(['success' => false, 'message' => '该教师不存在，删除失败']);
+        }
+
+        // 查询该教师是否已经关联了班级
+        $clazzes = Clazz::where('teacher_id', $id)->select();
+        if (!empty($clazzes)) {
+            return json(['success' => false, 'message' => '该教师是班主任，无法删除']);
         }
 
         // 开启事务

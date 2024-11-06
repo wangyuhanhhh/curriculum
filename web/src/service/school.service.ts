@@ -22,6 +22,7 @@ export class SchoolService {
   checkSchool(id: number): Observable<ResponseBody> {
     return this.httpClient.get<ResponseBody>(`${this.baseUrl}/checkSchool/${id}`);
   }
+
   // 删除学校
   delete(schoolId: number): Observable<ResponseBody> {
     return this.httpClient.delete<any>(`${this.baseUrl}/delete/${schoolId}`);

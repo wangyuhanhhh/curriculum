@@ -8,7 +8,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { EditComponent } from './edit/edit.component';
 import {PageModule} from './page/page.module';
 import { HeadTeacherComponent } from './head-teacher/head-teacher.component';
-import {NzSelectModule} from "ng-zorro-antd/select";
+import {NzSelectModule} from 'ng-zorro-antd/select';
 
 const routes: Routes = [
   {
@@ -24,7 +24,7 @@ const routes: Routes = [
     component: EditComponent
   },
   {
-    path: 'setHeadTeacher/:id/:schoolId',
+    path: 'setHeadTeacher/:id',
     component: HeadTeacherComponent
   }
 ];
@@ -35,15 +35,15 @@ const routes: Routes = [
     EditComponent,
     HeadTeacherComponent
   ],
-    imports: [
-        CommonModule,
-        RouterModule,
-        RouterModule.forChild(routes),
-        SchoolSelectModule,
-        ReactiveFormsModule,
-        PageModule,
-        FormsModule,
-        NzSelectModule
-    ]
+  imports: [
+    CommonModule,
+    RouterModule,
+    RouterModule.forChild(routes),
+    SchoolSelectModule,
+    ReactiveFormsModule,
+    PageModule,
+    FormsModule,
+    NzSelectModule
+  ]
 })
 export class ClazzModule {}
