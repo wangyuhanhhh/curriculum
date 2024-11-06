@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {CourseService} from "../../../service/course.service";
-import {HttpParams} from "@angular/common/http";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {CommonService} from "../../../service/common.service";
+import {ActivatedRoute, Router} from '@angular/router';
+import {CourseService} from '../../../service/course.service';
+import {HttpParams} from '@angular/common/http';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {CommonService} from '../../../service/common.service';
 
 @Component({
   selector: 'app-edit',
@@ -14,7 +14,7 @@ export class EditComponent implements OnInit {
   // 该学期的周数范围
   weekRange: number[] = [];
   // 节次
-  sections: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11];
+  sections: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
   termName: string;
   formGroup = new FormGroup({
     name: new FormControl('', Validators.required),

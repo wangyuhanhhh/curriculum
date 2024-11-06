@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {CourseService} from "../../../service/course.service";
-import {CommonService} from "../../../service/common.service";
-import {Router} from "@angular/router";
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {CourseService} from '../../../service/course.service';
+import {CommonService} from '../../../service/common.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-add',
@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
 export class AddComponent implements OnInit {
   weekRange: number[] = [];
   // 节次
-  sections: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11];
+  sections: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
   termName: string;
   formGroup = new FormGroup({
     name: new FormControl('', Validators.required),

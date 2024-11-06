@@ -102,12 +102,12 @@ class CourseController extends IndexController {
                      ->where('status', 1)
                      ->find();
             if (empty($term)) {
-                return json(['success' => false, 'message' => '当前用户没有激活的学期，请先激活学期']);
+                return json(['success' => false, 'message' => '当前用户没有激活的学期，请先激活学期', 'data' => false]);
             }
         } else {
-            return json(['success' => false, 'message' => '当前用户没有学期信息，请先添加学期']);
+            return json(['success' => false, 'message' => '当前用户没有学期信息，请先添加学期', 'data' => false]);
         }
-        return json(['success' => true]);
+        return json(['success' => true, 'data' => true]);
     }
 
     /**
@@ -203,6 +203,76 @@ class CourseController extends IndexController {
             ];
         }
         return json($courseDet);
+    }
+
+    /**
+     * 获取当前登录用户（确定是学生）确定周的课表
+     */
+    public function getCourseTableByWeek() {
+        // 获取前台传的 week 值
+        $week = input('get.week', '');
+
+        // 获取当前学生的 clazz_id
+        $userId = $this->getUserIdByLoginUser();
+        $clazzId = Student::where('user_id', $userId)->value('clazz_id');
+
+        // 获取班级的必修课（Required courses）的课程
+        $rqCourses = Course::where('clazz_id', $clazzId)
+                            ->where('type', 0) //值筛选 type 为 0 ，也就是必修课
+                            ->select();
+
+        // 获取当前学生的选修课（Elective courses）的课程
+        $studentId = Student::where('user_id', $userId)->value('id');
+        $etCourse = Course::where('student_id', $studentId)
+                            ->where('type', 1)
+                            ->select();
+
+        // 通过 course_id 获取对应课程安排，过滤条件为周数
+        $courseInfoList = [];
+        $myCourseInfoList = [];
+
+        if (!empty($etCourse)) {
+            foreach ($rqCourses as $course) {
+                $courseInfo = CourseInfo::where('course_id', $course->id)
+                    ->where('start_weeks', '<=', $week)
+                    ->where('end_weeks', '>=', $week)
+                    ->select();
+
+                // 为每个课程安排添加课程名称
+                foreach ($courseInfo as &$info) {
+                    $info['courseName'] = $course->name;
+                }
+
+                // 将符合条件的课程安排添加到列表
+                $courseInfoList = array_merge($courseInfoList, $courseInfo);
+            }
+        }
+
+        // 处理 etCourse 为空的情况
+        if (!empty($etCourse)) {
+            foreach ($etCourse as $course) {
+                $myCourseInfo = CourseInfo::where('course_id', $course->id)
+                    ->where('start_weeks', '<=', $week)
+                    ->where('end_weeks', '>=', $week)
+                    ->select();
+
+                // 为每个课程安排添加课程名称
+                foreach ($myCourseInfo as &$info) {
+                    $info['courseName'] = $course->name;
+                }
+
+                $myCourseInfoList = array_merge($myCourseInfoList, $myCourseInfo);
+            }
+
+            // 将选修课安排添加到课程信息列表中(合并必修和选修课程安排)
+            if (!empty($myCourseInfoList)) {
+                $courseInfoList = array_merge($courseInfoList, $myCourseInfoList);
+            }
+        }
+
+        // 整合数据，传到前台
+        $json = json_encode($courseInfoList, JSON_UNESCAPED_UNICODE);
+        return $json;
     }
 
     /**

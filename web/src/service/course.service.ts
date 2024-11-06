@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {Course} from "../app/entity/course";
-import {Page} from "../app/entity/page";
-import {ResponseBody} from "../app/entity/response-body";
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {Course} from '../app/entity/course';
+import {Page} from '../app/entity/page';
+import {ResponseBody} from '../app/entity/response-body';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,11 @@ export class CourseService {
     return this.httpClient.get<Course>(`${this.baseUrl}/getCourseById/`, { params });
   }
 
+  // 根据周数获取当前学生的课表
+  getCourseTableByWeek(params: HttpParams): Observable<any> {
+    return this.httpClient.get<any>(`${this.baseUrl}/getCourseTableByWeek/`, { params });
+  }
+
   // 获取当前登录用户的信息及学期
   getMessage(): Observable<any> {
     return this.httpClient.get<any>(`${this.baseUrl}/getMessage`);
@@ -40,7 +45,7 @@ export class CourseService {
 
   // 查询
   search(params: HttpParams): Observable<Page<Course>> {
-    return this.httpClient.get<Page<Course>>(`${this.baseUrl}/search`, {params})
+    return this.httpClient.get<Page<Course>>(`${this.baseUrl}/search`, {params});
   }
 
   // 更新
