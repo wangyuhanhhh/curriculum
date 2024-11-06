@@ -24,8 +24,8 @@ import { LayoutComponent } from './layout/layout.component';
 import { NavComponent } from './layout/nav/nav.component';
 import { PersonalCenterComponent } from './personal-center/personal-center.component';
 import { HeaderComponent } from './layout/header/header.component';
-import { CourseTableComponent } from './course-table/course-table.component';
-import {NzSelectModule} from "ng-zorro-antd/select";
+import {NzSelectModule} from 'ng-zorro-antd/select';
+import {CourseTableModule} from './course-table/course-table.module';
 
 registerLocaleData(en);
 
@@ -38,7 +38,6 @@ registerLocaleData(en);
     NavComponent,
     PersonalCenterComponent,
     HeaderComponent,
-    CourseTableComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +53,8 @@ registerLocaleData(en);
     TermModule,
     ClazzModule,
     TeacherModule,
-    NzSelectModule
+    NzSelectModule,
+    CourseTableModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

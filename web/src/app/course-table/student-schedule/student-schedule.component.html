@@ -1,0 +1,58 @@
+<nav *ngIf="termStatus" class="navbar navbar-light bg-light">
+  <form class="form-inline">
+    <div class="form-group mr-sm-2">
+      <label for="term" class="sr-only">Term</label>
+      <input type="text" readonly class="form-control-plaintext" id="term" value="{{ term.term }}">
+    </div>
+    <div class="mr-sm-2">
+      <nz-select nzPlaceHolder="选择周次"
+                 [(ngModel)]="selectedWeek"
+                  name="selectedWeek">
+        <nz-option  *ngFor="let week of allWeeks" [nzValue]="week" [nzLabel]="'第' + week + '周'"></nz-option>
+      </nz-select>
+    </div>
+    <button class="btn btn-outline-success my-2 my-sm-0" (click)="getCourseTableByWeek()">搜索</button>
+  </form>
+</nav>
+
+<div *ngIf="termStatus" class="row">
+  <div class="col-12 text-right">
+    <a class="btn btn-primary mr-2" routerLink="./look-all"><i class="fa fa-puzzle-piece"></i>查看总课表</a>
+  </div>
+</div>
+<div *ngIf="termStatus" class="schedule-container">
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>时间</th>
+      <th>周一</th>
+      <th>周二</th>
+      <th>周三</th>
+      <th>周四</th>
+      <th>周五</th>
+      <th>周六</th>
+      <th>周日</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 遍历时间段 -->
+    <tr *ngFor="let period of periods">
+      <td>{{ period.time }}</td>
+
+      <!-- 遍历每天的课程信息 -->
+      <td *ngFor="let day of days">
+        <ng-container *ngIf="getClassInfo(day, period.time) as classInfo; else noCourse">
+          {{ classInfo.courseName }}
+        </ng-container>
+        <ng-template #noCourse></ng-template>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="!termStatus" class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">请确认当前学校存在合法激活学期！</h1>
+  </div>
+</div>

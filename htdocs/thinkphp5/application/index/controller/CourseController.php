@@ -158,6 +158,67 @@ class CourseController extends IndexController {
     }
 
     /**
+     * 获取当前学生的学期总课表
+     */
+    public function getAllCourseByLoginUser() {
+        // 获取当前学生的班级
+        $clazzId = $this->getClazzIdByLoginUser();
+        $userId = $this->getUserIdByLoginUser();
+
+        // 获取该班级的所有必修课（type 为 2）
+        // 获取班级的必修课（Required courses）的课程
+        $rqCourses = Course::where('clazz_id', $clazzId)
+            ->where('type', 2) //值筛选 type 为 2 ，也就是必修课
+            ->select();
+
+        // 获取该学生的选修课，根据 student_id、 type = 1 筛选
+        $studentId = Student::where('user_id', $userId)->value('id');
+        $etCourse = Course::where('student_id', $studentId)
+            ->where('type', 1)
+            ->select();
+
+        // 获取选修和必修课的课程安排
+        $courseInfoList = [];
+        $myCourseInfoList = [];
+
+        if (!empty($etCourse)) {
+            foreach ($rqCourses as $course) {
+                $courseInfo = CourseInfo::where('course_id', $course->id)->select();
+
+                // 为每个课程安排添加课程名称
+                foreach ($courseInfo as &$info) {
+                    $info['courseName'] = $course->name;
+                }
+
+                // 将符合条件的课程安排添加到列表
+                $courseInfoList = array_merge($courseInfoList, $courseInfo);
+            }
+        }
+
+        // 处理 etCourse 为空的情况
+        if (!empty($etCourse)) {
+            foreach ($etCourse as $course) {
+                $myCourseInfo = CourseInfo::where('course_id', $course->id)->select();
+
+                // 为每个课程安排添加课程名称
+                foreach ($myCourseInfo as &$info) {
+                    $info['courseName'] = $course->name;
+                }
+
+                $myCourseInfoList = array_merge($myCourseInfoList, $myCourseInfo);
+            }
+
+            // 将选修课安排添加到课程信息列表中(合并必修和选修课程安排)
+            if (!empty($myCourseInfoList)) {
+                $courseInfoList = array_merge($courseInfoList, $myCourseInfoList);
+            }
+        }
+        // 整合数据，返回前台
+        $json = json_encode($courseInfoList, JSON_UNESCAPED_UNICODE);
+        return $json;
+    }
+
+    /**
      * 学生
      * 获取当前登录用户的班级id
      */

@@ -50,7 +50,7 @@ const routes: Routes = [
       },
       {
         path: 'course-table',
-        component: CourseTableComponent
+        loadChildren: () => import('./course-table/course-table.module').then(m => m.CourseTableModule)
       }
     ]
   },

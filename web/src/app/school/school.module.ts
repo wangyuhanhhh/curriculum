@@ -7,7 +7,7 @@ import { EditComponent } from './edit/edit.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PageModule} from '../clazz/page/page.module';
 import { AdminComponent } from './admin/admin.component';
-import {NzSelectModule} from "ng-zorro-antd/select";
+import {NzSelectModule} from 'ng-zorro-antd/select';
 
 // routes是常量，它的类型是Routes
 const routes: Routes = [

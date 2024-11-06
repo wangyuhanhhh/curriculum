@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {Course} from "../entity/course";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {Page} from "../entity/page";
-import {HttpParams} from "@angular/common/http";
-import {CourseService} from "../../service/course.service";
-import {Router} from "@angular/router";
-import {CommonService} from "../../service/common.service";
+import {Course} from '../entity/course';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Page} from '../entity/page';
+import {HttpParams} from '@angular/common/http';
+import {CourseService} from '../../service/course.service';
+import {Router} from '@angular/router';
+import {CommonService} from '../../service/common.service';
 
 @Component({
   selector: 'app-course',
@@ -28,7 +28,7 @@ export class CourseComponent implements OnInit {
     size: 5,
     numberOfElements: 0,
     totalPages: 0
-  })
+  });
   constructor(
     private courseService: CourseService,
     private router: Router,
@@ -96,6 +96,6 @@ export class CourseComponent implements OnInit {
       } else {
         this.commonService.showErrorAlert(data.message);
       }
-    })
+    });
   }
 }
