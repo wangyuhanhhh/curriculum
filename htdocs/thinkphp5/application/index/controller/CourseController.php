@@ -10,6 +10,9 @@ use app\common\model\Clazz;
 use app\common\model\Term;
 
 class CourseController extends IndexController {
+    private $doubleWeek = 1;    // 双周
+    private $singleWeek = 2;    // 单周
+
     /**
      * 新增
      * 课程名重复但是课程类型不同 新增失败
@@ -292,42 +295,89 @@ class CourseController extends IndexController {
         $courseInfoList = [];
         $myCourseInfoList = [];
 
-        if (!empty($etCourse)) {
-            foreach ($rqCourses as $course) {
-                $courseInfo = CourseInfo::where('course_id', $course->id)
-                    ->where('start_weeks', '<=', $week)
-                    ->where('end_weeks', '>=', $week)
-                    ->select();
+        // 判断当前所查询的 week 是基数还是偶数
+        if ($week % 2 == 1) {
+            // 基数，则过滤 status = 1（双周）；反之，过滤 status = 2（单周）
+            if (!empty($etCourse)) {
+                foreach ($rqCourses as $course) {
+                    $courseInfo = CourseInfo::where('course_id', $course->id)
+                        ->where('start_weeks', '<=', $week)
+                        ->where('end_weeks', '>=', $week)
+                        ->where('status', 'neq', $this->doubleWeek)
+                        ->select();
 
-                // 为每个课程安排添加课程名称
-                foreach ($courseInfo as &$info) {
-                    $info['courseName'] = $course->name;
+                    // 为每个课程安排添加课程名称
+                    foreach ($courseInfo as &$info) {
+                        $info['courseName'] = $course->name;
+                    }
+
+                    // 将符合条件的课程安排添加到列表
+                    $courseInfoList = array_merge($courseInfoList, $courseInfo);
                 }
-
-                // 将符合条件的课程安排添加到列表
-                $courseInfoList = array_merge($courseInfoList, $courseInfo);
-            }
-        }
-
-        // 处理 etCourse 为空的情况
-        if (!empty($etCourse)) {
-            foreach ($etCourse as $course) {
-                $myCourseInfo = CourseInfo::where('course_id', $course->id)
-                    ->where('start_weeks', '<=', $week)
-                    ->where('end_weeks', '>=', $week)
-                    ->select();
-
-                // 为每个课程安排添加课程名称
-                foreach ($myCourseInfo as &$info) {
-                    $info['courseName'] = $course->name;
-                }
-
-                $myCourseInfoList = array_merge($myCourseInfoList, $myCourseInfo);
             }
 
-            // 将选修课安排添加到课程信息列表中(合并必修和选修课程安排)
-            if (!empty($myCourseInfoList)) {
-                $courseInfoList = array_merge($courseInfoList, $myCourseInfoList);
+            // 处理 etCourse 为空的情况
+            if (!empty($etCourse)) {
+                foreach ($etCourse as $course) {
+                    $myCourseInfo = CourseInfo::where('course_id', $course->id)
+                        ->where('start_weeks', '<=', $week)
+                        ->where('end_weeks', '>=', $week)
+                        ->where('status', 'neq', $this->doubleWeek)
+                        ->select();
+
+                    // 为每个课程安排添加课程名称
+                    foreach ($myCourseInfo as &$info) {
+                        $info['courseName'] = $course->name;
+                    }
+
+                    $myCourseInfoList = array_merge($myCourseInfoList, $myCourseInfo);
+                }
+
+                // 将选修课安排添加到课程信息列表中(合并必修和选修课程安排)
+                if (!empty($myCourseInfoList)) {
+                    $courseInfoList = array_merge($courseInfoList, $myCourseInfoList);
+                }
+            }
+        } else {
+            if (!empty($etCourse)) {
+                foreach ($rqCourses as $course) {
+                    $courseInfo = CourseInfo::where('course_id', $course->id)
+                        ->where('start_weeks', '<=', $week)
+                        ->where('end_weeks', '>=', $week)
+                        ->where('status', 'neq', $this->singleWeek)
+                        ->select();
+
+                    // 为每个课程安排添加课程名称
+                    foreach ($courseInfo as &$info) {
+                        $info['courseName'] = $course->name;
+                    }
+
+                    // 将符合条件的课程安排添加到列表
+                    $courseInfoList = array_merge($courseInfoList, $courseInfo);
+                }
+            }
+
+            // 处理 etCourse 为空的情况
+            if (!empty($etCourse)) {
+                foreach ($etCourse as $course) {
+                    $myCourseInfo = CourseInfo::where('course_id', $course->id)
+                        ->where('start_weeks', '<=', $week)
+                        ->where('end_weeks', '>=', $week)
+                        ->where('status', 'neq', $this->singleWeek)
+                        ->select();
+
+                    // 为每个课程安排添加课程名称
+                    foreach ($myCourseInfo as &$info) {
+                        $info['courseName'] = $course->name;
+                    }
+
+                    $myCourseInfoList = array_merge($myCourseInfoList, $myCourseInfo);
+                }
+
+                // 将选修课安排添加到课程信息列表中(合并必修和选修课程安排)
+                if (!empty($myCourseInfoList)) {
+                    $courseInfoList = array_merge($courseInfoList, $myCourseInfoList);
+                }
             }
         }
 
