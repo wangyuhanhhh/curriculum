@@ -4,7 +4,7 @@ import {SchoolService} from '../../service/school.service';
 import {CommonService} from '../../service/common.service';
 import {HttpParams} from '@angular/common/http';
 import {Page} from '../entity/page';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-school',
@@ -43,9 +43,9 @@ export class SchoolComponent implements OnInit {
 
     this.schoolService.search(httpParams).subscribe(
       (data: Page<School>) => {
-      this.pageData = data;
-      this.currentPage = currentPage;
-    }, error => console.log(error));
+        this.pageData = data;
+        this.currentPage = currentPage;
+      }, error => console.log(error));
   }
 
   // index 索引 schoolId 当前迭代到的学校的ID

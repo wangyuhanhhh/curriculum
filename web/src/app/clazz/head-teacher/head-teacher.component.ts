@@ -3,9 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ClazzService} from '../../../service/clazz.service';
 import {CommonService} from '../../../service/common.service';
-import {Observable} from 'rxjs';
-import {HttpParams} from "@angular/common/http";
-import {Teacher} from "../../entity/teacher";
+import {Teacher} from '../../entity/teacher';
 
 @Component({
   selector: 'app-head-teacher',
@@ -29,11 +27,7 @@ export class HeadTeacherComponent implements OnInit {
     // 获取班级id 后台查询出班级对应的学校 填充表单
     // 获取学校id 学校id要从后台查询 后台查询出符合条件的教师
     const id = this.activateRoute.snapshot.params.id;
-    const schoolId = this.activateRoute.snapshot.params.schoolId;
-    const httpParams = new HttpParams()
-      .append('id', id)
-      .append('schoolId', schoolId);
-    this.clazzService.getMessage(httpParams).subscribe( data => {
+    this.clazzService.getMessage(id).subscribe( data => {
       this.school = data.school.school;
       this.clazz = data.clazz;
       this.teachers = data.teachers;
@@ -41,7 +35,7 @@ export class HeadTeacherComponent implements OnInit {
       if (data.teacher_id) {
         this.formGroup.patchValue({
           teacherId: data.teacher_id,
-        })
+        });
       }
     }, error => console.log(error));
   }
@@ -50,7 +44,7 @@ export class HeadTeacherComponent implements OnInit {
   onSubmit(): void {
     const id = this.activateRoute.snapshot.params.id;
     const teacherId = this.formGroup.value.teacherId;
-    console.log('点击保存按钮',teacherId);
+    console.log('点击保存按钮', teacherId);
     // 保存对应的teacher_id到数据表中
     this.clazzService.saveTeacher(id, teacherId).subscribe(data => {
       if (data.success) {

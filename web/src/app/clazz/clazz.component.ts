@@ -5,6 +5,7 @@ import { Clazz } from '../entity/clazz';
 import {Page} from '../entity/page';
 import {HttpParams} from '@angular/common/http';
 import {FormControl, FormGroup} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-clazz',
@@ -29,7 +30,8 @@ export class ClazzComponent implements OnInit {
     totalPages: 0
   });
   constructor(private clazzService: ClazzService,
-              private commonService: CommonService) {
+              private commonService: CommonService,
+              private router: Router) {
   }
   ngOnInit(): void {
     this.loadByPage();
@@ -82,6 +84,17 @@ export class ClazzComponent implements OnInit {
   }
 
   onSearch(): void {
-  this.loadByPage(1, this.size);
+    this.loadByPage(1, this.size);
+  }
+
+  // 如果该班级对应的学校没有教师，不进行页面跳转并提示用户
+  checkBeforeSetHeadTeacher(id: number): void {
+    this.clazzService.checkTeacher(id).subscribe(data => {
+      if (data.success) {
+        this.router.navigate(['/clazz/setHeadTeacher', id]);
+      } else {
+        this.commonService.showErrorAlert(data.message);
+      }
+    }, error => console.log(error));
   }
 }

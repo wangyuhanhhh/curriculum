@@ -4,6 +4,7 @@ use app\common\model\Teacher;
 use think\Db;
 use think\Request;
 use app\common\model\Clazz;
+use app\common\model\School;
 use app\common\validate\ClazzValidate;
 
 class ClazzController extends IndexController {
@@ -83,6 +84,21 @@ class ClazzController extends IndexController {
     }
 
     /**
+     * 检查该班级对应的学校下有没有教师
+     */
+    public function checkTeacher() {
+        // 根据班级获取学校id
+        $clazz = ClazzController::getClazz();
+        $schoolId = $clazz->school_id;
+        // 根据学校id查询该学校下是否有教师
+        $teachers = Teacher::where('school_id', $schoolId) -> select();
+        if (empty($teachers)) {
+            return json(['success' => false, 'message' => '该学校下没有教师，请先添加教师']);
+        }
+        return json(['success' => true]);
+    }
+
+    /**
      * 删除
      * 如果班级下有用户（学生）/班级下有课程安排，不可删除
      */
@@ -131,46 +147,31 @@ class ClazzController extends IndexController {
 
     /**
      * 根据id获取对应的班级信息
-     * 获取没有关联班级的教师
-     * 获取同学校的已经关联班级的教师
+     * 获取当前学校的教师
      */
     public function getMessage() {
-        // 获取school id
-        $schoolId = (int)Request::instance()->get('schoolId');
-        $id = Request::instance()->get('id');
-        // 班级详细信息，包括对应的学校 clazz
-        $clazz = Clazz::with('school')->find($id);
-        // 没有关联班级的教师
-        $teachersWithoutClass = Teacher::where('status', 0)->select();
-        // 查询出已经关联班级的教师
-        $teachersWithClass = Teacher::alias('t')
-            ->join('yunzhi_clazz c', 't.id = c.teacher_id')
-            ->field('t.id, t.name, c.school_id')
-            ->group('t.id, t.name, c.school_id') // 去重
-            ->select();
-        // specialTeacher 同学校的教师（教师对应的school_id和前台传过来的学校id相同）
-        $speTeacher = [];
-        foreach ($teachersWithClass as $teacher) {
-            if ($teacher['school_id'] === $schoolId) {
-                $speTeacher[] = $teacher;
-            }
+        $clazz = $this->getClazz();
+        if(!$clazz) {
+            return (['success' => false, 'message' => '该班级不存在']);
         }
-        $teachers = array_merge($speTeacher, $teachersWithoutClass);
+        // 获取schoolId
+        $schoolId = $clazz->school_id;
+        $school = School::where('id', $schoolId)->find();
+        $teachers = Teacher::where('school_id', $schoolId)->select();
         $teacherDet = [];
-        // 构建班级信息
         foreach ($teachers as $teacher) {
             $teacherDet[] = [
                 'id' => $teacher->id,
                 'name' => $teacher->name
             ];
         }
-        // 数组保存班级，教师信息
+        // 数组保存班级、教师信息
         $data = [
             'id' => $clazz->id,
             'clazz' => $clazz->clazz,
             'school' => [
-                'id' => $clazz->school->id,
-                'school' => $clazz->school->school
+                'id' => $school->id,
+                'school' => $school->school
             ],
             'teacher_id' => $clazz->teacher_id,
             'teachers' => $teacherDet
