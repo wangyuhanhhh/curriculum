@@ -218,7 +218,7 @@ class CourseController extends IndexController {
 
         // 获取班级的必修课（Required courses）的课程
         $rqCourses = Course::where('clazz_id', $clazzId)
-                            ->where('type', 0) //值筛选 type 为 0 ，也就是必修课
+                            ->where('type', 2) //值筛选 type 为 2 ，也就是必修课
                             ->select();
 
         // 获取当前学生的选修课（Elective courses）的课程

@@ -174,7 +174,7 @@ class StudentController extends IndexController
         // 获取前台查询条件
         $name = input('name', '', 'trim');
         $studentNo = input('student_no', '', 'trim');
-        $currentPage = Request::instance()->param('page', 1);
+        $currentPage = Request::instance()->param('currentPage', 1);
         $size = Request::instance()->param('size', 5);
 
         // 构建查询条件
