@@ -38,6 +38,11 @@ export class CourseService {
     return this.httpClient.get<any>(`${this.baseUrl}/getCourseTableByWeek/`, { params });
   }
 
+  // 获取当前学期的课程表(所有课程安排)
+  getAllCourseByLoginUser(): Observable<any>{
+    return this.httpClient.get<any>(`${this.baseUrl}/getAllCourseByLoginUser`);
+  }
+
   // 获取当前登录用户的信息及学期
   getMessage(): Observable<any> {
     return this.httpClient.get<any>(`${this.baseUrl}/getMessage`);
