@@ -36,7 +36,7 @@ export class LookAllComponent implements OnInit {
 
   // 获取该学生当前学期的所有课程安排
   getAllCourseByLoginUser(): void {
-    this.courseService.getAllCourseByLoginUser().subscribe(
+    this.courseService.getAllCourseByStudent().subscribe(
       data => {
         this.termSchedule = this.convertToWeeklySchedule(data);
       }

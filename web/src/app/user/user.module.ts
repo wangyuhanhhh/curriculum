@@ -4,7 +4,7 @@ import {UserComponent} from './user.component';
 import {AddComponent} from './add/add.component';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { ClazzSelectComponent } from './clazz-select/clazz-select.component';
+import { ClazzSelectModule } from './clazz-select/clazz-select.module';
 import {SchoolSelectModule} from './school-select/school-select.module';
 import {NzSelectModule} from 'ng-zorro-antd/select';
 import { EditComponent } from './edit/edit.component';
@@ -31,7 +31,6 @@ const routes: Routes = [
   declarations: [
     UserComponent,
     AddComponent,
-    ClazzSelectComponent,
     EditComponent
   ],
     imports: [
@@ -39,6 +38,7 @@ const routes: Routes = [
         ReactiveFormsModule,
         RouterModule.forChild(routes),
         SchoolSelectModule,
+        ClazzSelectModule,
         NzSelectModule,
         PageModule,
         FormsModule
