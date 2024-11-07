@@ -163,7 +163,7 @@ class CourseController extends IndexController {
     /**
      * 获取当前学生的学期总课表
      */
-    public function getAllCourseByLoginUser() {
+    public function getAllCourseByStudent() {
         // 获取当前学生的班级
         $clazzId = $this->getClazzIdByLoginUser();
         $userId = $this->getUserIdByLoginUser();
@@ -216,6 +216,47 @@ class CourseController extends IndexController {
                 $courseInfoList = array_merge($courseInfoList, $myCourseInfoList);
             }
         }
+        // 整合数据，返回前台
+        $json = json_encode($courseInfoList, JSON_UNESCAPED_UNICODE);
+        return $json;
+    }
+
+    /**
+     * 根据 clazz_id 获取该班级的学期总课表
+     */
+    public function getAllCourseByClazz() {
+        // 获取前台传的 clazz_id
+        $request = Request::instance();
+        $clazzId = IndexController::getParamId($request);
+
+        // 判断 clazz_id 为 null 的情况
+        if (is_null($clazzId)) {
+            $isNull = [];
+            return json($isNull);
+        }
+
+        // 只查询该班级下的必修课（考虑为空的情况）
+        $rqCourses = Course::where('clazz_id', $clazzId)
+                            ->where('type', 2)
+                            ->select();
+
+        // 获取必修课的课程安排
+        $courseInfoList = [];
+
+        if (!empty($rqCourses)) {
+            foreach ($rqCourses as $course) {
+                $courseInfo = CourseInfo::where('course_id', $course->id)->select();
+
+                // 为每个课程安排添加课程名称
+                foreach ($courseInfo as &$info) {
+                    $info['courseName'] = $course->name;
+                }
+
+                // 将符合条件的课程安排添加到列表
+                $courseInfoList = array_merge($courseInfoList, $courseInfo);
+            }
+        }
+
         // 整合数据，返回前台
         $json = json_encode($courseInfoList, JSON_UNESCAPED_UNICODE);
         return $json;

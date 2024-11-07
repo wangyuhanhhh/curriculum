@@ -39,10 +39,14 @@ export class CourseService {
   }
 
   // 获取当前学期的课程表(所有课程安排)
-  getAllCourseByLoginUser(): Observable<any>{
-    return this.httpClient.get<any>(`${this.baseUrl}/getAllCourseByLoginUser`);
+  getAllCourseByStudent(): Observable<any>{
+    return this.httpClient.get<any>(`${this.baseUrl}/getAllCourseByStudent`);
   }
 
+  // 查询对应班级的学期总课表
+  getAllCourseByClazz(clazzId: number): Observable<any> {
+    return this.httpClient.get<any>(`${this.baseUrl}/getAllCourseByClazz/${clazzId}`);
+  }
   // 获取当前登录用户的信息及学期
   getMessage(): Observable<any> {
     return this.httpClient.get<any>(`${this.baseUrl}/getMessage`);

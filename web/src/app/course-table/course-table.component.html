@@ -1,4 +1,6 @@
 <ng-container *ngIf="person.role === 3">
   <app-student-schedule></app-student-schedule>
 </ng-container>
-
+<ng-container *ngIf="person.role === 2 || person.role === 4">
+  <app-teacher-schedule></app-teacher-schedule>
+</ng-container>
