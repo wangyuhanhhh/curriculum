@@ -1,9 +1,10 @@
 // 定义课程信息的接口
 export interface CourseInfo {
-  courseName: string;   // 课程名称
+  courseName ?: string;   // 课程名称
   startWeek ?: number;   // 开始周数
   endWeek ?: number;     // 结束周数
   status ?: string;     // 状态(单周、双周、全周)
+  students ?: string[];
 }
 
 // 定义单日的课表结构

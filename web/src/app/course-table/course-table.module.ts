@@ -8,6 +8,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NzSelectModule} from 'ng-zorro-antd/select';
 import {TeacherScheduleComponent} from './teacher-schedule/teacher-schedule.component';
 import {ClazzSelectModule} from '../user/clazz-select/clazz-select.module';
+import { AdminScheduleComponent } from './admin-schedule/admin-schedule.component';
+import {SchoolSelectModule} from '../user/school-select/school-select.module';
 
 const routes: Routes = [
   {
@@ -26,6 +28,7 @@ const routes: Routes = [
     StudentScheduleComponent,
     CourseTableComponent,
     TeacherScheduleComponent,
+    AdminScheduleComponent,
   ],
   imports: [
     CommonModule,
@@ -34,7 +37,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule,
     NzSelectModule,
-    ClazzSelectModule
+    ClazzSelectModule,
+    SchoolSelectModule
   ]
 })
 export class CourseTableModule { }
