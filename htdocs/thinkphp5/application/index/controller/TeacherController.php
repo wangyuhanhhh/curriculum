@@ -129,6 +129,18 @@ class TeacherController extends IndexController {
         return json($teacher);
     }
 
+    /**
+     * 根据 userId 获取到对应教师的 school_id
+     * @return $schoolId
+     */
+    public function getSchoolIdByLoginUser() {
+        // 获取前台传入的 userId，根据 userId 查询 schoolId
+        $request = Request::instance();
+        $userId = IndexController::getParamId($request);
+        $schoolId = Teacher::where('user_id', $userId)->value('school_id');
+
+        return json($schoolId);
+    }
     public function index() {
         $totalTeacher = Teacher::select();
         return json($totalTeacher);

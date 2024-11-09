@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Course} from '../entity/course';
-import {FormControl, FormGroup } from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Page} from '../entity/page';
 import {HttpParams} from '@angular/common/http';
 import {CourseService} from '../../service/course.service';
@@ -47,7 +47,6 @@ export class CourseComponent implements OnInit, OnDestroy {
     this.router.navigate(['/course/edit', id, courseInfoId]);
   }
 
-
   // 通用分页加载方法，支持搜索和分页
   loadByPage(currentPage = 1, size = 5): void {
     // 保证用户在搜索框无内容时，点击搜索查询到的结果是所有数据
@@ -60,6 +59,7 @@ export class CourseComponent implements OnInit, OnDestroy {
       .append('size', size.toString());
     this.courseService.search(httpParams).subscribe(
       (data: Page<Course>) => {
+        console.log(data);
         this.pageData = data;
         this.currentPage = currentPage;
       },

@@ -38,9 +38,29 @@ export class CourseService {
     return this.httpClient.get<any>(`${this.baseUrl}/getCourseTableByWeek/`, { params });
   }
 
+  // 获取当前学期的课程表(所有课程安排)
+  getAllCourseByStudent(): Observable<any>{
+    return this.httpClient.get<any>(`${this.baseUrl}/getAllCourseByStudent`);
+  }
+
+  // 查询对应班级的学期总课表
+  getAllCourseByClazz(clazzId: number): Observable<any> {
+    return this.httpClient.get<any>(`${this.baseUrl}/getAllCourseByClazz/${clazzId}`);
+  }
+
+  // 根据学校和周数，获取该学校所有学生的空闲时间表
+  getAllStudentsCourse(params: HttpParams): Observable<any> {
+    return this.httpClient.get<any>(`${this.baseUrl}/getAllStudentsCourse`, { params });
+  }
+
   // 获取当前登录用户的信息及学期
   getMessage(): Observable<any> {
     return this.httpClient.get<any>(`${this.baseUrl}/getMessage`);
+  }
+
+  // 根据 schoolId 获取对应学期、所有周数
+  getTermAndWeeks(schoolId: number): Observable<any> {
+    return this.httpClient.get<any>(`${this.baseUrl}/getTermAndWeeksBySchoolId/${schoolId}`);
   }
 
   // 查询

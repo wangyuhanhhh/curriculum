@@ -41,9 +41,15 @@ export class TeacherService {
   getById(id: number): Observable<Teacher> {
     return this.http.get<Teacher>(`${this.baseUrl}/getByID/${id}`);
   }
+
   // 如果教师已经被设置成A学校的班主任，那么在为B学校选择教师的时候，不显示该教师
   getTeacher(schoolId: number): Observable<Teacher[]> {
     return this.http.get<Teacher[]>(`${this.baseUrl}/getTeacher/${schoolId}`);
+  }
+
+  // 根据当前登录用户的 userId 获取对应学校ID
+  getSchoolIdByLoginUser(userId: number): Observable<number> {
+    return this.http.get<number>(`${this.baseUrl}/getSchoolIdByLoginUser/${userId}`);
   }
   // 查询
   search(params: HttpParams): Observable<Page<Teacher>> {
