@@ -51,12 +51,12 @@ export class SchoolComponent implements OnInit, OnDestroy {
   }
 
   // index 索引 schoolId 当前迭代到的学校的ID
-  onDelete(index: number, schoolId: number): void {
+  onDelete(schoolId: number): void {
     this.commonService.showConfirmAlert(() => {
       this.schoolService.delete(schoolId)
         .subscribe(data => {
           if (data.success) {
-            this.schools.splice(index, 1);
+            this.loadByPage(this.currentPage, this.size);
             this.commonService.showSuccessAlert(data.message);
           } else {
             this.commonService.showErrorAlert(data.message);

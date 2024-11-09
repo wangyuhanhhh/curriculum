@@ -49,6 +49,7 @@ export class TeacherComponent implements OnInit, OnDestroy {
       this.teacherService.delete(teacherId)
         .subscribe((responseBody) => {
           if (responseBody.success) {
+            this.loadByPage(this.currentPage, this.size);
             this.commonService.showSuccessAlert(responseBody.message);
             this.getAll();
           } else {

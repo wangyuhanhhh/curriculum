@@ -71,6 +71,7 @@ export class CourseComponent implements OnInit, OnDestroy {
     this.commonService.showConfirmAlert(() => {
       this.courseService.delete(courseInfoId).subscribe(data => {
         if (data.success) {
+          this.loadByPage(this.currentPage, this.size);
           this.commonService.showSuccessAlert(data.message);
         } else {
           this.commonService.showErrorAlert(data.message);
