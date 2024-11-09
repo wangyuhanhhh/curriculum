@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UserService} from '../../service/user.service';
 import {User} from '../entity/user';
-import {ClazzService} from '../../service/clazz.service';
 import {Clazz} from '../entity/clazz';
 import {CommonService} from '../../service/common.service';
 import {HttpParams} from '@angular/common/http';
 import {Page} from '../entity/page';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, OnDestroy {
   searchName = '';
   searchStudentNo = '';
   users: User[] = [];
@@ -28,13 +28,16 @@ export class UserComponent implements OnInit {
     numberOfElements: 0,
     totalPages: 0
   });
+  shouldSavePage = false;
+
   constructor(private userService: UserService,
-              private clazzService: ClazzService,
-              private commonService: CommonService) { }
+              private commonService: CommonService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.getAll();
-    this.loadByPage();
+    const currentPage = parseInt(localStorage.getItem('currentPage'), 10) || 1;
+    this.loadByPage(currentPage, this.size);
   }
 
   loadByPage(currentPage = 1, size = 5): void {
@@ -83,6 +86,7 @@ export class UserComponent implements OnInit {
       this.userService.freeze(id).subscribe((responseBody) => {
         if (responseBody.success) {
           this.commonService.showSuccessAlert(responseBody.message);
+          this.shouldSavePage = true;
           this.getAll();
         } else {
           this.commonService.showErrorAlert(responseBody.message);
@@ -91,17 +95,32 @@ export class UserComponent implements OnInit {
     }, '是否冻结, 此操作不可逆');
   }
 
+  onEdit(id: number): void {
+    this.shouldSavePage = true;
+    console.log(this.currentPage.toString());
+    this.router.navigate(['/user/edit', id]);
+  }
+
   /**
    * loadByPage方法接受两个参数，这里调用loadByPage方法也应该传递两个参数
    */
   onPage(currentPage: number): void {
     this.loadByPage(currentPage, this.size);
   }
+
   onSize(size: number): void {
     this.loadByPage(this.currentPage, size);
   }
 
   onSearch(): void {
     this.loadByPage(1, this.size);
+  }
+
+  ngOnDestroy(): void {
+    if (this.shouldSavePage) {
+      localStorage.setItem('currentPage', this.currentPage.toString());
+    } else {
+      localStorage.removeItem('currentPage');
+    }
   }
 }

@@ -28,7 +28,7 @@
       <td>{{ teacher.teacher_no}}</td>
       <td>{{ teacher.school.school}}</td>
       <td>
-        <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + teacher.id">
+        <a class="btn btn-outline-primary btn-sm" (click)="onEdit(teacher.id)">
           <i class="fa fa-pen"></i>编辑
         </a>
         <span class="btn btn-outline-danger btn-sm" (click)="onDelete(teacher.id)">
