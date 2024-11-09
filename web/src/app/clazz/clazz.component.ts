@@ -61,11 +61,11 @@ export class ClazzComponent implements OnInit, OnDestroy {
     );
   }
 
-  onDelete(index: number, id: number): void {
+  onDelete(id: number): void {
     this.commonService.showConfirmAlert(() => {
       this.clazzService.delete(id).subscribe(data => {
           if (data.success) {
-            this.clazzes.splice(index, 1);
+            this.loadByPage(this.currentPage, this.size);
             this.commonService.showSuccessAlert(data.message);
           } else {
             this.commonService.showErrorAlert(data.message);

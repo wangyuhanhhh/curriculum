@@ -72,7 +72,7 @@ export class UserComponent implements OnInit, OnDestroy {
         .subscribe((responseBody) => {
           if (responseBody.success) {
             this.commonService.showSuccessAlert(responseBody.message);
-            this.getAll();
+            this.loadByPage(this.currentPage, this.size);
           } else {
             this.commonService.showErrorAlert(responseBody.message);
           }
@@ -87,7 +87,7 @@ export class UserComponent implements OnInit, OnDestroy {
         if (responseBody.success) {
           this.commonService.showSuccessAlert(responseBody.message);
           this.shouldSavePage = true;
-          this.getAll();
+          this.loadByPage(this.currentPage, this.size);
         } else {
           this.commonService.showErrorAlert(responseBody.message);
         }

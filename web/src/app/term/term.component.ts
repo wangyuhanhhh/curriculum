@@ -70,7 +70,7 @@ export class TermComponent implements OnInit, OnDestroy {
       this.termService.active(id).subscribe((responseBody) => {
         if (responseBody.success) {
           this.commonService.showSuccessAlert(responseBody.message);
-          this.getAll();
+          this.loadByPage(this.currentPage, this.size);
         } else {
           this.commonService.showErrorAlert(responseBody.message);
         }
