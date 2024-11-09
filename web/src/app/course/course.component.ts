@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Course} from '../entity/course';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Page} from '../entity/page';
@@ -12,7 +12,7 @@ import {CommonService} from '../../service/common.service';
   templateUrl: './course.component.html',
   styleUrls: ['./course.component.css']
 })
-export class CourseComponent implements OnInit {
+export class CourseComponent implements OnInit, OnDestroy {
   course = [] as Course[];
   formGroup = new FormGroup({
     type: new FormControl(''),
@@ -22,13 +22,15 @@ export class CourseComponent implements OnInit {
   currentPage = 1;
   // 每页默认5条
   size = 5;
-  pageData = new Page<Course> ({
+  pageData = new Page<Course>({
     content: [],
     number: 1,
     size: 5,
     numberOfElements: 0,
     totalPages: 0
   });
+  shouldSavePage = false;
+
   constructor(
     private courseService: CourseService,
     private router: Router,
@@ -36,7 +38,13 @@ export class CourseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadByPage();
+    const currentPage = parseInt(localStorage.getItem('currentPage'), 10) || 1;
+    this.loadByPage(currentPage, this.size);
+  }
+
+  onEdit(id: number, courseInfoId: number): void {
+    this.shouldSavePage = true;
+    this.router.navigate(['/course/edit', id, courseInfoId]);
   }
 
   // 通用分页加载方法，支持搜索和分页
@@ -97,5 +105,13 @@ export class CourseComponent implements OnInit {
         this.commonService.showErrorAlert(data.message);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.shouldSavePage) {
+      localStorage.setItem('currentPage', this.currentPage.toString());
+    } else {
+      localStorage.removeItem('currentPage');
+    }
   }
 }

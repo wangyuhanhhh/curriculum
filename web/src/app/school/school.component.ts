@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {School} from '../entity/school';
 import {SchoolService} from '../../service/school.service';
 import {CommonService} from '../../service/common.service';
@@ -11,20 +11,21 @@ import {Router} from '@angular/router';
   templateUrl: './school.component.html',
   styleUrls: ['./school.component.css']
 })
-export class SchoolComponent implements OnInit {
+export class SchoolComponent implements OnInit, OnDestroy {
   schools = [] as School[];
   searchName = '';
   // 默认显示第一页
   currentPage = 1;
   // 每页默认5条
   size = 5;
-  pageData = new Page<School> ({
+  pageData = new Page<School>({
     content: [],
     number: 1,
     size: 5,
     numberOfElements: 0,
     totalPages: 0
   });
+  shouldSavePage = false;
 
   constructor(private schoolService: SchoolService,
               private commonService: CommonService,
@@ -32,7 +33,8 @@ export class SchoolComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadByPage();
+    const currentPage = parseInt(localStorage.getItem('currentPage'), 10) || 1;
+    this.loadByPage(currentPage, this.size);
   }
 
   loadByPage(currentPage = 1, size = 5): void {
@@ -63,6 +65,12 @@ export class SchoolComponent implements OnInit {
     }, '是否删除，此操作不可逆');
   }
 
+  onEdit(id: number): void {
+    this.shouldSavePage = true;
+    console.log(this.currentPage.toString());
+    this.router.navigate(['/school/edit', id]);
+  }
+
   /**
    * loadByPage方法接受两个参数，这里调用loadByPage方法也应该传递两个参数
    */
@@ -83,10 +91,19 @@ export class SchoolComponent implements OnInit {
   checkBeforeSetAdmin(id: number): void {
     this.schoolService.checkSchool(id).subscribe( data => {
       if (data.success) {
+        this.shouldSavePage = true;
         this.router.navigate(['/school/setAdmin', id]);
       } else {
         this.commonService.showErrorAlert(data.message);
       }
     }, error => console.log(error));
+  }
+
+  ngOnDestroy(): void {
+    if (this.shouldSavePage) {
+      localStorage.setItem('currentPage', this.currentPage.toString());
+    } else {
+      localStorage.removeItem('currentPage');
+    }
   }
 }

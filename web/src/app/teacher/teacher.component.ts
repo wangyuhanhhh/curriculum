@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Teacher} from '../entity/teacher';
 import {TeacherService} from '../../service/teacher.service';
 import {HttpParams} from '@angular/common/http';
 import {Page} from '../entity/page';
 import {CommonService} from '../../service/common.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-teacher',
   templateUrl: './teacher.component.html',
   styleUrls: ['./teacher.component.css']
 })
-export class TeacherComponent implements OnInit {
+export class TeacherComponent implements OnInit, OnDestroy {
   teachers = [] as Teacher[];
   searchName = '';
   searchTeacherNo = '';
@@ -25,11 +26,15 @@ export class TeacherComponent implements OnInit {
     numberOfElements: 0,
     totalPages: 0
   });
+  shouldSavePage = false;
+
   constructor(private teacherService: TeacherService,
-              private commonService: CommonService) { }
+              private commonService: CommonService,
+              private router: Router) { }
 
   ngOnInit(): void {
-    this.loadByPage();
+    const currentPage = parseInt(localStorage.getItem('currentPage'), 10) || 1;
+    this.loadByPage(currentPage, this.size);
   }
 
   // 获取所有教师
@@ -51,6 +56,12 @@ export class TeacherComponent implements OnInit {
           }
         }, error => this.commonService.showErrorAlert('请求失败，请稍后'));
     }, '是否删除，此操作不可逆');
+  }
+
+  onEdit(id: number): void {
+    this.shouldSavePage = true;
+    console.log(this.currentPage.toString());
+    this.router.navigate(['/teacher/edit', id]);
   }
 
   // 通用分页加载方法，支持搜索和分页
@@ -84,5 +95,13 @@ export class TeacherComponent implements OnInit {
   // 触发搜索
   onSearch(): void {
     this.loadByPage(1, this.size); // 重新从第一页开始搜索
+  }
+
+  ngOnDestroy(): void {
+    if (this.shouldSavePage) {
+      localStorage.setItem('currentPage', this.currentPage.toString());
+    } else {
+      localStorage.removeItem('currentPage');
+    }
   }
 }

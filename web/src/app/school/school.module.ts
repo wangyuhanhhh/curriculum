@@ -3,10 +3,10 @@ import {CommonModule} from '@angular/common';
 import {AddComponent} from './add/add.component';
 import {RouterModule, Routes} from '@angular/router';
 import {SchoolComponent} from './school.component';
-import { EditComponent } from './edit/edit.component';
+import {EditComponent} from './edit/edit.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PageModule} from '../clazz/page/page.module';
-import { AdminComponent } from './admin/admin.component';
+import {AdminComponent} from './admin/admin.component';
 import {NzSelectModule} from 'ng-zorro-antd/select';
 
 // routes是常量，它的类型是Routes

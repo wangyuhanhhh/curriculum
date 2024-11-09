@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { TermService } from '../../service/term.service';
-import { ActivatedRoute } from '@angular/router';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {TermService} from '../../service/term.service';
+import {Router} from '@angular/router';
 import {CommonService} from '../../service/common.service';
 import {School} from '../entity/school';
-import { SchoolService } from '../../service/school.service';
 import {HttpParams} from '@angular/common/http';
 import {Page} from '../entity/page';
-import {Clazz} from '../entity/clazz';
 import {Term} from '../entity/term';
 import {FormControl, FormGroup} from '@angular/forms';
 
@@ -15,7 +13,7 @@ import {FormControl, FormGroup} from '@angular/forms';
   templateUrl: './term.component.html',
   styleUrls: ['./term.component.css']
 })
-export class TermComponent implements OnInit {
+export class TermComponent implements OnInit, OnDestroy {
   formGroup = new FormGroup({
     school_id: new FormControl(''),
   });
@@ -35,14 +33,16 @@ export class TermComponent implements OnInit {
     numberOfElements: 0,
     totalPages: 0
   });
+  shouldSavePage = false;
+
   constructor(private termService: TermService,
-              private schoolService: SchoolService,
-              private activeRoute: ActivatedRoute,
-              private commonService: CommonService) {
+              private commonService: CommonService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
-   this.loadByPage();
+    const currentPage = parseInt(localStorage.getItem('currentPage'), 10) || 1;
+    this.loadByPage(currentPage, this.size);
   }
 
   loadByPage(currentPage = 1, size = 5): void {
@@ -78,6 +78,12 @@ export class TermComponent implements OnInit {
     }, '是否激活, 此操作不可逆');
   }
 
+  onEdit(id: number): void {
+    this.shouldSavePage = true;
+    console.log(this.currentPage.toString());
+    this.router.navigate(['/term/edit', id]);
+  }
+
   /**
    * loadByPage方法接受两个参数，这里调用loadByPage方法也应该传递两个参数
    */
@@ -92,5 +98,13 @@ export class TermComponent implements OnInit {
 
   onSearch(): void {
     this.loadByPage(1, this.size);
+  }
+
+  ngOnDestroy(): void {
+    if (this.shouldSavePage) {
+      localStorage.setItem('currentPage', this.currentPage.toString());
+    } else {
+      localStorage.removeItem('currentPage');
+    }
   }
 }

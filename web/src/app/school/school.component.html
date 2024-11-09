@@ -10,40 +10,41 @@
     <a class="btn btn-primary mr-2" routerLink="./add"><i class="fas fa-plus"></i>新增</a>
   </div>
 </div>
-  <table class="table table-striped mt-2">
-    <thead>
-    <tr class="table-primary">
-      <th>序号</th>
-      <th>学校</th>
-      <th>管理员</th>
-      <th>操作</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let school of pageData.content; index as i">
-      <td>{{ i + 1 }}</td>
-      <td>{{school.school}}</td>
-      <td>
-        <!-- 使用*ngFor遍历teacher数组并拼接姓名-->
-        <div *ngFor="let teacher of school.teacher">
-          {{teacher.name}}
-        </div>
-      </td>
-      <td>
-        <a class="btn btn-outline-success btn-sm" (click)="checkBeforeSetAdmin(school.id)">
-          <i class="fa fa-cogs" aria-hidden="true"></i>设置管理员
-        </a>
-        <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + school.id">
-          <i class="fa fa-pen"></i>编辑
-        </a>
-        <span class="btn btn-outline-danger btn-sm" (click)="onDelete(i, school.id)">
+<table class="table table-striped mt-2">
+  <thead>
+  <tr class="table-primary">
+    <th>序号</th>
+    <th>学校</th>
+    <th>管理员</th>
+    <th>操作</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let school of pageData.content; index as i">
+    <td>{{ i + 1 }}</td>
+    <td>{{school.school}}</td>
+    <td>
+      <!-- 使用*ngFor遍历teacher数组并拼接姓名-->
+      <div *ngFor="let teacher of school.teacher">
+        {{teacher.name}}
+      </div>
+    </td>
+    <td>
+      <a class="btn btn-outline-success btn-sm" (click)="checkBeforeSetAdmin(school.id)">
+        <i class="fa fa-cogs" aria-hidden="true"></i>设置管理员
+      </a>
+      <a class="btn btn-outline-primary btn-sm" (click)="onEdit(school.id)">
+        <i class="fa fa-pen"></i>编辑
+      </a>
+      <span class="btn btn-outline-danger btn-sm" (click)="onDelete(i, school.id)">
           <i class="far fa-trash-alt"></i>删除
         </span>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
 <!--$event是angular的一个关键字，表示子组件弹出的内容-->
 <div class="text-right mr-2">
-  <app-page [page]="pageData" (beCurrentPageChange)="onPage($event)" (beSizeChange)="onSize($event)"></app-page>
+  <app-page [page]="pageData" [current]="currentPage" (beCurrentPageChange)="onPage($event)"
+            (beSizeChange)="onSize($event)"></app-page>
 </div>

@@ -35,7 +35,7 @@
       <a class="btn btn-outline-success btn-sm" (click)="checkBeforeSetHeadTeacher(clazz.id)">
         <i class="fa fa-cogs" aria-hidden="true"></i>设置班主任
       </a>
-      <a class="btn btn-outline-primary btn-sm" [routerLink]="'edit/' + clazz.id">
+      <a class="btn btn-outline-primary btn-sm" (click)="onEdit(clazz.id)">
         <i class="fa fa-pen"></i>编辑
       </a>
       <span class="btn btn-outline-danger btn-sm" (click)="onDelete(i, clazz.id)">
@@ -47,5 +47,5 @@
 </table>
 <!--$event是angular的一个关键字，表示子组件弹出的内容-->
 <div class="text-right mr-2">
-  <app-page [page]="pageData" (beCurrentPageChange)="onPage($event)" (beSizeChange)="onSize($event)"></app-page>
+  <app-page [page]="pageData" [current]="currentPage" (beCurrentPageChange)="onPage($event)" (beSizeChange)="onSize($event)"></app-page>
 </div>
