@@ -161,6 +161,143 @@ class CourseController extends IndexController {
     }
 
     /**
+     * 根据 schoolId、week 获取该学校所有学生的有课时间表
+     */
+    public function getAllStudentsCourse() {
+        $schoolId = input('get.schoolId', '');
+        $week = input('get.week', '');
+
+        // 根据 schoolId 获取对应学校所有的班级的id（clazzId）
+        $clazzIds = $this->getClazzIdBySchoolId($schoolId);
+        $courseList = [];
+        $rqCourseInfoList = [];
+        $etCourseInfoList = []; // 用于保存选修课
+
+        if ($clazzIds) {
+            foreach ($clazzIds as $clazzId) {
+                // 查询 clazz_id 对应的课程信息
+                $courses = Course::where('clazz_id', 'in', $clazzId)
+                    ->column('id, clazz_id, name as course_name, type, student_id');
+
+                $courseList = array_merge($courseList, $courses);
+            }
+        }
+
+        // 判断当前所查询的 week 是基数还是偶数
+        if ($week % 2 == 1) {
+            // 基数
+            if ($courseList) {
+                foreach ($courseList as $course) {
+                    if (is_null($course['student_id'])) {
+                        $rqCourseInfo = CourseInfo::where('course_id', $course['id'])
+                            ->where('start_weeks', '<=', $week)
+                            ->where('end_weeks', '>=', $week)
+                            ->where('status', 'neq', $this->doubleWeek)
+                            ->select();
+
+                        // 如果 student_id 为 null，根据 clazz_id 获取班级的所有学生
+                        $students = Student::where('clazz_id', $course['clazz_id'])->column('name');
+
+                        // 为每个必修课安排添加学生姓名
+                        foreach ($rqCourseInfo as $info) {
+                            $info['students'] = $students;
+                        }
+
+                        $rqCourseInfoList = array_merge($rqCourseInfoList, $rqCourseInfo);
+                    } else {
+                        $etCourseInfo = CourseInfo::where('course_id', $course['id'])
+                            ->where('start_weeks', '<=', $week)
+                            ->where('end_weeks', '>=', $week)
+                            ->where('status', 'neq', $this->doubleWeek)
+                            ->select();
+
+                        // student_id 不会 null， 根据 student_id 获取该学生姓名
+                        $student = Student::where('id', $course['student_id'])->find();
+
+                        // 为每个必修课安排添加学生姓名
+                        foreach ($etCourseInfo as $info) {
+                            $info['students'] = $student->name;
+                        }
+
+                        $etCourseInfoList = array_merge($etCourseInfoList, $etCourseInfo);
+                    }
+                }
+
+            }  else {
+            // 不存在课程
+            $isNull = [];
+            return json($isNull);
+            }
+        } else {
+            if ($courseList) {
+                foreach ($courseList as $course) {
+                    if (is_null($course['student_id'])) {
+                        $rqCourseInfo = CourseInfo::where('course_id', $course['id'])
+                            ->where('start_weeks', '<=', $week)
+                            ->where('end_weeks', '>=', $week)
+                            ->where('status', 'neq', $this->singleWeek)
+                            ->select();
+
+                        // 如果 student_id 为 null，根据 clazz_id 获取班级的所有学生
+                        $students = Student::where('clazz_id', $course['clazz_id'])->column('name');
+
+                        // 为每个必修课安排添加学生姓名
+                        foreach ($rqCourseInfo as $info) {
+                            $info['students'] = $students;
+                        }
+
+                        $rqCourseInfoList = array_merge($rqCourseInfoList, $rqCourseInfo);
+                    } else {
+                        $etCourseInfo = CourseInfo::where('course_id', $course['id'])
+                            ->where('start_weeks', '<=', $week)
+                            ->where('end_weeks', '>=', $week)
+                            ->where('status', 'neq', $this->singleWeek)
+                            ->select();
+
+                        // student_id 不会 null， 根据 student_id 获取该学生姓名
+                        $student = Student::where('id', $course['student_id'])->find();
+
+                        // 为每个必修课安排添加学生姓名
+                        foreach ($etCourseInfo as $info) {
+                            $info['students'] = $student->name;
+                        }
+
+                        $etCourseInfoList = array_merge($etCourseInfoList, $etCourseInfo);
+                    }
+                }
+            } else {
+                // 不存在课程
+                $isNull = [];
+                return json($isNull);
+            }
+        }
+
+        $courseInfoList = array_merge($rqCourseInfoList, $etCourseInfoList);
+        return json($courseInfoList);
+    }
+
+    /**
+     * 根据 schoolId 获取所有 clazzId
+     * @return $clazzId
+     */
+    public function getClazzIdBySchoolId($schoolId) {
+        $clazzId = Clazz::where('school_id', $schoolId)->column('id');
+        return $clazzId;
+    }
+
+    /**
+     * 根据 clazzId 获取该班级所有学生
+     */
+    public function getAllStudentByClazzId($clazzId) {
+        $students = Student::where('clazz_id', $clazzId)
+            ->where('status', 1) // 激活状态的学生
+            ->value('name')
+            ->select();
+
+        return $students;
+    }
+
+    /**
      * 获取当前学生的学期总课表
      */
     public function getAllCourseByStudent() {
@@ -455,6 +592,45 @@ class CourseController extends IndexController {
             ->where('status', 1)
             ->find();
         return $term;
+    }
+
+    /**
+     * 根据前台传过来的 schoolId ，获取该学校下激活状态的学期
+     * 同时计算该学期下的总周数
+     */
+    public function getTermAndWeeksBySchoolId() {
+        $request = Request::instance();
+        $schoolId = IndexController::getParamId($request);
+
+        // 查询对应学校激活状态的学期
+        $term = Term::where('school_id', $schoolId)
+            ->where('status', 1)
+            ->find();
+
+        // 计算总周数(如果 term 存在)
+        if (!empty($term)) {
+            $start = $term->start_time;
+            $end = $term->end_time;
+            // 将字符串解析成DateTime对象
+            $startDate = new DateTime($start);
+            $endDate = new DateTime($end);
+            $interval = $startDate->diff($endDate);
+            // 结束的那天是周一，也算一周
+            $days = $interval->days + 7;
+            $weekCount = $days / 7;
+            $weekRange = range(1, $weekCount);
+
+            $data = [
+                'term' => $term,
+                'weeks' => $weekRange
+            ];
+
+            return json(['success' => true, 'data' => $data]);
+
+        } else {
+            $data = [];
+            return json(['success' => false, 'message' => '该学校下没有合法学期段', 'data' => $data]);
+        }
     }
 
     /**
