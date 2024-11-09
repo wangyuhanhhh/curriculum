@@ -266,10 +266,10 @@ class CourseController extends IndexController {
                     }
                 }
             } else {
-                         // 不存在课程
-                         $isNull = [];
-                         return json($isNull);
-                         }
+                // 不存在课程
+                $isNull = [];
+                return json($isNull);
+            }
         }
 
         $courseInfoList = array_merge($rqCourseInfoList, $etCourseInfoList);
