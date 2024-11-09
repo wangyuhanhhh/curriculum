@@ -105,10 +105,10 @@ class CourseController extends IndexController {
                      ->where('status', 1)
                      ->find();
             if (empty($term)) {
-                return json(['success' => false, 'message' => '当前用户没有激活的学期，请先激活学期', 'data' => false]);
+                return json(['success' => false, 'message' => '当前用户所在学校没有激活的学期，请先激活学期', 'data' => false]);
             }
         } else {
-            return json(['success' => false, 'message' => '当前用户没有学期信息，请先添加学期', 'data' => false]);
+            return json(['success' => false, 'message' => '当前用户所在学校没有学期信息，请先添加学期', 'data' => false]);
         }
         return json(['success' => true, 'data' => true]);
     }
@@ -455,7 +455,7 @@ class CourseController extends IndexController {
         // 基数，则过滤 status = 1（双周）；反之，过滤 status = 2（单周）
         $statusFilter = ($week % 2 == 1) ? $this->doubleWeek : $this->singleWeek;
 
-        if (!empty($etCourse)) {
+        if (!empty($rqCourses)) {
             foreach ($rqCourses as $course) {
                 $courseInfo = CourseInfo::where('course_id', $course->id)
                     ->where('start_weeks', '<=', $week)
@@ -566,7 +566,7 @@ class CourseController extends IndexController {
 
         } else {
             $data = [];
-            return json(['success' => false, 'message' => '该学校下没有合法学期段', 'data' => $data]);
+            return json(['success' => false, 'message' => '该学校下没有激活的学期', 'data' => $data]);
         }
     }
 
