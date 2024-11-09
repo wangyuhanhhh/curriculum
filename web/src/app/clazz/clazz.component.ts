@@ -77,7 +77,7 @@ export class ClazzComponent implements OnInit, OnDestroy {
 
   onEdit(id: number): void {
     this.shouldSavePage = true;
-    this.router.navigate(['/school/edit', id]);
+    this.router.navigate(['/clazz/edit', id]);
   }
 
   /**
