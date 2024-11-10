@@ -180,10 +180,13 @@ class TeacherController extends IndexController {
         foreach ($data as $teacher) {
             $schoolId = $teacher['school_id'];
             $school = School::where('id', $schoolId)->find();
+            $userId = $teacher['user_id'];
+            $user = User::where('id', $userId)->find();
             $dataDet[] = [
                 'id' => $teacher['id'],
                 'name' => $teacher['name'],
                 'teacher_no' => $teacher['teacher_no'],
+                'role' => $user->role,
                 'school' => [
                     'id' => $school->id,
                     'school' => $school->school,

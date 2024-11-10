@@ -12,7 +12,8 @@
       </nz-select>
     </div>
     <div>
-      <input formControlName="searchCourse" name="searchTeacherNo" class="form-control mr-sm-2" type="search" placeholder="请输入课程名称" aria-label="Search" >
+      <input formControlName="searchCourse" name="searchTeacherNo" class="form-control mr-sm-2" type="search"
+             placeholder="请输入课程名称" aria-label="Search">
     </div>
     <button class="btn btn-outline-success my-2 my-sm-0" (click)="onSearch()">搜索</button>
   </form>
@@ -29,8 +30,6 @@
     <th>序号</th>
     <th>课名</th>
     <th>类型</th>
-    <th>学校</th>
-    <th>班级</th>
     <th>节次</th>
     <th>星期</th>
     <th>周</th>
@@ -42,8 +41,6 @@
     <td>{{ i + 1 }}</td>
     <td>{{ course.name}}</td>
     <td *ngIf="course.type === 2; else choose">必修</td>
-    <td>天津职业技术师范大学</td>
-    <td>大数据2301班</td>
     <td>{{ course.range }}</td>
     <td>{{ course.week }}</td>
     <td>{{ course.weeks}}</td>
@@ -63,5 +60,6 @@
 </ng-template>
 <!--$event是angular的一个关键字，表示子组件弹出的内容-->
 <div class="text-right mr-2">
-  <app-page [page]="pageData" [current]="currentPage" (beCurrentPageChange)="onPage($event)" (beSizeChange)="onSize($event)"></app-page>
+  <app-page [page]="pageData" [current]="currentPage" (beCurrentPageChange)="onPage($event)"
+            (beSizeChange)="onSize($event)"></app-page>
 </div>
