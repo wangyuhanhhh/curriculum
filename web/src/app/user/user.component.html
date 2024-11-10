@@ -17,6 +17,7 @@
       <th>序号</th>
       <th>姓名</th>
       <th>学号</th>
+      <th>学校</th>
       <th>班级</th>
       <th>状态</th>
       <th>操作</th>
@@ -26,7 +27,8 @@
     <tr *ngFor="let user of pageData.content; index as i">
       <td>{{ i + 1 }}</td>
       <td>{{ user.name }}</td>
-      <td>{{ user.student_no}}</td>
+      <td>{{ user.student_no }}</td>
+      <td>{{ user.school.school }}</td>
       <td>{{ user.clazz.clazz }}</td>
       <td *ngIf="user.status; else userIsFreeze">
         <span class="badge badge-pill badge-success">激活</span>

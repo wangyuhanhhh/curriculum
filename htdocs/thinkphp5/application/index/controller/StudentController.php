@@ -1,5 +1,7 @@
 <?php
 namespace app\index\controller;
+use app\common\model\Clazz;
+use app\common\model\School;
 use app\common\model\Student;
 use app\common\model\User;
 use app\common\validate\StudentValidate;
@@ -128,7 +130,9 @@ class StudentController extends IndexController
         $student['username'] = $studentData->user->username;
         $student['student_no'] = $studentData->student_no;
         $student['clazz_id'] = $studentData->clazz_id;
-        $student['school_id'] = $schoolId;
+        $student['school'] = [
+            'id' => $schoolId
+        ];
         return json($student);
     }
 
@@ -200,11 +204,20 @@ class StudentController extends IndexController
         // 班级详细信息
         $studentDet = [];
         foreach ($students as $student) {
+            // 学生对应的班级id
+            $clazzId = $student->clazz_id;
+            $clazz = Clazz::get($clazzId);
+            $schoolId = $clazz->school_id;
+            $school = School::get($schoolId);
             $studentDet[] = [
                 'id' => $student->id,
                 'name' => $student->name,
                 'student_no' => $student->student_no,
                 'status' => $student->status,
+                'school' => [
+                    'id' => $school->id,
+                    'school' => $school->school,
+                ],
                 'clazz' => [
                     'id' => $student->clazz->id,
                     'clazz' => $student->clazz->clazz

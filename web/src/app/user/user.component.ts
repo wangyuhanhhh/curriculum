@@ -60,12 +60,6 @@ export class UserComponent implements OnInit, OnDestroy {
     );
   }
 
-  // 根据clazz_id找到对应班级名称
-  getClazzName(clazzId: number): string {
-    const clazz = this.clazzes.find(c => c.id === clazzId);
-    return clazz ? clazz.clazz : '-';
-  }
-
   onDelete(id: number): void {
     this.commonService.showConfirmAlert(() => {
       this.userService.delete(id)

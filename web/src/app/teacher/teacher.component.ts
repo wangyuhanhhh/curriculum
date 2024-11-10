@@ -12,7 +12,6 @@ import {Router} from '@angular/router';
   styleUrls: ['./teacher.component.css']
 })
 export class TeacherComponent implements OnInit, OnDestroy {
-  teachers = [] as Teacher[];
   searchName = '';
   searchTeacherNo = '';
   // 默认显示第一页
@@ -27,10 +26,17 @@ export class TeacherComponent implements OnInit, OnDestroy {
     totalPages: 0
   });
   shouldSavePage = false;
+  private roleMap: Map<number, string> = new Map([
+    [0, '超级管理员'],
+    [1, '管理员'],
+    [2, '教师'],
+    [4, '班主任']
+  ]);
 
   constructor(private teacherService: TeacherService,
               private commonService: CommonService,
-              private router: Router) { }
+              private router: Router) {
+  }
 
   ngOnInit(): void {
     const currentPage = parseInt(localStorage.getItem('currentPage'), 10) || 1;
@@ -96,6 +102,10 @@ export class TeacherComponent implements OnInit, OnDestroy {
   // 触发搜索
   onSearch(): void {
     this.loadByPage(1, this.size); // 重新从第一页开始搜索
+  }
+
+  getRoleName(role: number): string {
+    return this.roleMap.get(role) || '未知角色';
   }
 
   ngOnDestroy(): void {

@@ -37,11 +37,11 @@ export class EditComponent implements OnInit {
         username: user.username,
         student_no: user.student_no,
         clazz_id: user.clazz_id,
-        school_id: user.school_id,
+        school_id: user.school.id,
       });
       // 调用 getSchoolBySchoolId 方法获取学校名称填充表单
-      if (user.school_id) {
-        this.getSchoolBySchoolId(user.school_id);
+      if (user.school.id) {
+        this.getSchoolBySchoolId(user.school.id);
       }
     }, error => {
       console.log(error);

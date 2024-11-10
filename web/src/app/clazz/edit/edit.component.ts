@@ -10,10 +10,11 @@ import {CommonService} from '../../../service/common.service';
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent implements OnInit {
+  school: string;
   formGroup = new FormGroup({
-    clazz: new FormControl('', Validators.required),
-    school_id: new FormControl(null, Validators.required)
+    clazz: new FormControl('', Validators.required)
   });
+
   constructor(private activeRoute: ActivatedRoute,
               private clazzService: ClazzService,
               private commonService: CommonService,
@@ -25,11 +26,12 @@ export class EditComponent implements OnInit {
     this.clazzService.getClazzById(id).subscribe(data => {
       // 填充编辑前的信息
       this.formGroup.patchValue({
-        clazz: data.clazz,
-        school_id: data.school.id,
+        clazz: data.clazz
       });
+      this.school = data.school.school;
     }, error => console.log(error));
   }
+
   onSubmit(): void {
     const id = this.activeRoute.snapshot.params.id;
     const editClazz = this.formGroup.value;
