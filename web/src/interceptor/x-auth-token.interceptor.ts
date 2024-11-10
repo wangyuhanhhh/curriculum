@@ -23,8 +23,8 @@ export class XAuthTokenInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     // 每次从 sessionStorage 获取最新的 token
     const token = sessionStorage.getItem('x-auth-token');
-    console.log(token);
     let authReq = request;
+
     // 如果 token 存在，克隆请求并将其添加到请求头中
     if (token !== null) {
       authReq = request.clone({

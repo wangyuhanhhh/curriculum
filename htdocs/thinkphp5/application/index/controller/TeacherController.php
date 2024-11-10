@@ -14,14 +14,19 @@ class TeacherController extends IndexController {
         // 接收前台的数据
         $request = Request::instance()->getContent();
         $data = json_decode($request, true);
-        // 查重
+        // 查重(teacher_no、username)
         $teacherNo = $data['teacher_no'];
+        $username = $data['username'];
         $teachers = Teacher::where('teacher_no', $teacherNo)->find();
+        $username = User::where('username', $username)->find();
 
         if ($teachers) {
             return json(['success' => false, 'message' => '该工号教师已存在，新增失败']);
         }
 
+        if ($username) {
+            return json(['success' => false, 'message' => '该用户名已存在。新增失败']);
+        }
 
         // 开启事务
         Db::startTrans();

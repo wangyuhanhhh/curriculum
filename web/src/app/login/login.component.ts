@@ -21,15 +21,15 @@ export class LoginComponent implements OnInit {
 
   onLogin(): void {
     this.loginService.login(this.username, this.password).subscribe(
-      (response: any) => {
+      response => {
         if (response.body.success) {
           // 登录成功后，跳转到 dashboard 页面
-          console.log('登录成功！');
+          this.commonService.showSuccessAlert(response.body.message);
           this.router.navigate(['/dashboard']);
         } else {
           this.commonService.showErrorAlert(response.body.message);
         }
-      }, error => this.commonService.showErrorAlert('请求失败。请稍后')
+      }, error => this.commonService.showErrorAlert('请求失败，请稍后')
     );
   }
 }
