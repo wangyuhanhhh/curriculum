@@ -34,10 +34,14 @@ class LoginController extends IndexController {
         if (empty($user)) {
             return json(['success' => false, 'message' => '用户不存在，登录失败']);
         } else {
-            $student = Student::where('user_id', $user->id)->find();
-            // 判断是否冻结
-            if ($student->status == 0) {
-                return json(['success' => false, 'message' => '该用户被冻结，登录失败']);
+            // 如果是学生用户（role = 3）判断是否冻结
+            if ($user->role == 3) {
+                $student = Student::where('user_id', $user->id)->find();
+
+                if ($student->status == 0) {
+                    return json(['success' => false, 'message' => '该用户被冻结，登录失败']);
+                }
+
             }
         }
 
