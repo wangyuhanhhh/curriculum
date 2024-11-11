@@ -70,8 +70,8 @@ export class StudentScheduleComponent implements OnInit {
 
   checkTermStatus(): void {
     // 检查学期状态的逻辑
-    this.courseService.checkTerm().subscribe(data => {
-      this.termStatus = data.data;
+    this.courseService.checkTerm().subscribe(ResponseBody => {
+      this.termStatus = ResponseBody.data;
     });
   }
 

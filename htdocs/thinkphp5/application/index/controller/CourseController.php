@@ -1,5 +1,6 @@
 <?php
 namespace app\index\controller;
+use app\common\model\Teacher;
 use DateTime;
 use think\Request;
 use think\Db;
@@ -113,6 +114,21 @@ class CourseController extends IndexController {
         return json(['success' => true, 'data' => true]);
     }
 
+    public function checkTermOfTeacher() {
+        $schoolId = $this->getSchoolIdByLoginUser();
+        $terms = Term::where('school_id', $schoolId)->select();
+        if (!empty($terms)) {
+            $term = Term::where('school_id', $schoolId)->where('status', 1)->find();
+            if (empty($term)) {
+                return json(['success' => false, 'message' => '当前用户所在学校没有激活的学期，请先激活学期', 'data' => false]);
+            }
+        } else {
+            return json(['success' => false, 'message' => '当前用户所在学校没有学期信息，请先添加学期', 'data' => false]);
+        }
+
+        return json(['success' => true, 'data' => true]);
+    }
+
     /**
      * 删除
      * 如果该课程对应多条课程安排，只删除对应的课程安排
@@ -161,6 +177,28 @@ class CourseController extends IndexController {
     }
 
     /**
+     * 接收参数 schoolId
+     * 根据学校 id 获取对应的激活学期 id
+     * @return $termId
+     */
+    public function getActiveTermId($schoolId) {
+        $terms = Term::where('school_id', $schoolId)->select();
+
+        if (!empty($terms)) {
+            $termId = Term::where('school_id', $schoolId)->where('status', 1)->value('id');
+            if (empty($termId)) {
+                // 如果该学校下没有激活的学期，返回 0
+                return 0;
+            }
+        } else {
+            // 学校下没有学期数据
+            return 0;
+        }
+
+        return $termId;
+    }
+
+    /**
      * 根据 schoolId、week 获取该学校所有学生的有课时间表
      */
     public function getAllStudentsCourse() {
@@ -169,6 +207,11 @@ class CourseController extends IndexController {
 
         // 根据 schoolId 获取对应学校所有的班级的id（clazzId）
         $clazzIds = $this->getClazzIdBySchoolId($schoolId);
+        // 根据 schoolId 获取对应激活的学期 id
+        $termId = $this->getActiveTermId($schoolId);
+        if ($termId == 0) {
+            return json([]);
+        }
         $courseList = [];
         $rqCourseInfoList = [];
         $etCourseInfoList = []; // 用于保存选修课
@@ -177,6 +220,7 @@ class CourseController extends IndexController {
             foreach ($clazzIds as $clazzId) {
                 // 查询 clazz_id 对应的课程信息
                 $courses = Course::where('clazz_id', 'in', $clazzId)
+                    ->where('term_id', $termId)
                     ->column('id, clazz_id, name as course_name, type, student_id');
 
                 $courseList = array_merge($courseList, $courses);
@@ -283,15 +327,24 @@ class CourseController extends IndexController {
         $clazzId = $this->getClazzIdByLoginUser();
         $userId = $this->getUserIdByLoginUser();
 
+        // 获取 school_id，并且获取激活的 term_id
+        $schoolId = Clazz::where('id', $clazzId)->value('school_id');
+        $termId = $this->getActiveTermId($schoolId);
+        if ($termId == 0) {
+            return json([]);
+        }
+
         // 获取该班级的所有必修课（type 为 2）
         // 获取班级的必修课（Required courses）的课程
         $rqCourses = Course::where('clazz_id', $clazzId)
+            ->where('term_id', $termId)
             ->where('type', 2) //值筛选 type 为 2 ，也就是必修课
             ->select();
 
         // 获取该学生的选修课，根据 student_id、 type = 1 筛选
         $studentId = Student::where('user_id', $userId)->value('id');
         $etCourse = Course::where('student_id', $studentId)
+            ->where('term_id', $termId)
             ->where('type', 1)
             ->select();
 
@@ -346,12 +399,19 @@ class CourseController extends IndexController {
 
         // 判断 clazz_id 为 null 的情况
         if (is_null($clazzId)) {
-            $isNull = [];
-            return json($isNull);
+            return json([]);
+        }
+
+        $schoolId = Clazz::where('id', $clazzId)->value('school_id');
+        $termId = $this->getActiveTermId($schoolId);
+
+        if ($termId == 0) {
+            return json([]);
         }
 
         // 只查询该班级下的必修课（考虑为空的情况）
         $rqCourses = Course::where('clazz_id', $clazzId)
+                            ->where('term_id', $termId)
                             ->where('type', 2)
                             ->select();
 
@@ -388,6 +448,17 @@ class CourseController extends IndexController {
         // 根据学生的clazzId查找是哪个班级
         $clazzId = $student->clazz_id;
         return $clazzId;
+    }
+
+    /**
+     * 教师
+     * 获取当前登录用户的学校id
+     */
+    public function getSchoolIdByLoginUser() {
+        $id = $this->getUserIdByLoginUser();
+        // 根据 id 获取当前登录的是哪个教师
+        $schoolId = Teacher::where('user_id', $id)->value('school_id');
+        return $schoolId;
     }
 
     /**
@@ -436,14 +507,24 @@ class CourseController extends IndexController {
         $userId = $this->getUserIdByLoginUser();
         $clazzId = Student::where('user_id', $userId)->value('clazz_id');
 
+        // 获取 school_id 以及已被激活的 term_id
+        $schoolId = Clazz::where('id', $clazzId)->value('school_id');
+        $termId = $this->getActiveTermId($schoolId);
+
+        if ($termId == 0) {
+            return json([]);
+        }
+
         // 获取班级的必修课（Required courses）的课程
         $rqCourses = Course::where('clazz_id', $clazzId)
+                            ->where('term_id', $termId)
                             ->where('type', 2) //值筛选 type 为 2 ，也就是必修课
                             ->select();
 
         // 获取当前学生的选修课（Elective courses）的课程
         $studentId = Student::where('user_id', $userId)->value('id');
         $etCourse = Course::where('student_id', $studentId)
+                            ->where('term_id', $termId)
                             ->where('type', 1)
                             ->select();
 

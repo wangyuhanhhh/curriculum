@@ -19,6 +19,7 @@ export class TeacherScheduleComponent implements OnInit {
     clazzId: new FormControl(null),
   });
   termSchedule: WeeklySchedule = {};
+  termStatus = false;
   days = ['1', '2', '3', '4', '5', '6', '7'];
   periods = [
     { time: 1 },
@@ -50,11 +51,19 @@ export class TeacherScheduleComponent implements OnInit {
         });
       }
     });
+    this.checkTermStatus();
+  }
+
+  checkTermStatus(): void {
+    // 检查学期状态的逻辑
+    this.courseService.checkTermOfTeacher().subscribe(ResponseBody => {
+      this.termStatus = ResponseBody.data;
+      console.log(this.termStatus);
+    });
   }
 
   getCourseTableByClazz(): void {
     const clazzId = this.formGroup.get('clazzId')?.value;
-    console.log('查询班级id', clazzId);
     if (clazzId) {
       this.courseService.getAllCourseByClazz(clazzId).subscribe(data => {
         this.termSchedule = this.convertToWeeklySchedule(data);
