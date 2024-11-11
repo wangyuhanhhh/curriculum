@@ -41,6 +41,13 @@ class TermController extends IndexController
         // 接收前台数据
         $request = Request::instance()->getContent();
         $data = json_decode($request, true);
+
+        // 查重
+        $termName = $data['term'];
+        $term = Term::where('term', $termName)->where('school_id', $data['school_id'])->find();
+        if ($term) {
+            return json(['success' => false, 'message' => '该学期名称已存在，新增失败']);
+        }
   
         // 将毫秒级时间戳转换为秒级时间戳  
         $startTimeStamp = (int)($data['start_time'] / 1000);  
@@ -59,33 +66,31 @@ class TermController extends IndexController
         // 进行数据验证
         if(!$validate->scene('add')->check($term)) {
             // 验证失败，返回错误信息
-            $success = false;
-            $message = $validate->getError();
-            return json([
-                'success' => $success,
-                'message' => $message
-            ]);
+            return json(['success' => false, 'message' => $validate->getError()]);
         }
         // 验证通过，处理数据
-        $result = $term->save();
-
-        if($result) {
-            $success = true;
-            $message = '学期新增成功';
-
+        if($term->save()) {
             // 返回json响应
-            return json([
-                'success' => $success,
-                'message' => $message
-            ]);
+            return json(['success' => true, 'message' => '学期新增成功']);
         } else {
-            $success = false;
-            $message = '学期新增失败';
-            
-            return json([
-                'success' => $success,
-                'message' => $message
-            ]);
+            return json(['success' => false, 'message' => '学期新增失败']);
+        }
+    }
+
+    // 删除
+    public function delete() {
+        $request = Request::instance();
+        $id = IndexController::getParamId($request);
+        $term = Term::where('id', $id)->find();
+        if(!$term) {
+            return (['success' => false, 'message' => '该学期不存在']);
+        }
+
+        // 删除
+        if ($term->delete()) {
+            return json(['success' => true, 'message' => '删除成功']);
+        } else {
+            return json(['success' => false, 'message' => '删除失败']);
         }
     }
 

@@ -28,6 +28,12 @@ export class TermService {
     return this.http.post<ResponseBody>(addUrl, termData);
   }
 
+  // 学期的删除
+  delete(id: number): Observable<ResponseBody> {
+    const deleteUrl = `${this.baseUrl}/delete/${id}`;
+    return this.http.delete<any>(deleteUrl);
+  }
+
   edit(id: number): Observable<any> {
     const updateUrl = `${this.baseUrl}/edit/${id}`;
     return this.http.get<any>(updateUrl);
