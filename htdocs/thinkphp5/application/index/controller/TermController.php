@@ -1,9 +1,8 @@
 <?php
 namespace app\index\controller;
-use think\Db;
-use think\Paginator;
+
 use think\Request;
-use app\common\model\Term;use think\Controller;
+use app\common\model\Term;
 use app\common\validate\TermValidate;
 
 class TermController extends IndexController
