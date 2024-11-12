@@ -1,57 +1,11 @@
-<ul class="nav flex-column nav-pills p-2">
-  <li class="nav-item">
+<div *ngIf="isLoading" class="loading-indicator">Loading...</div>
+<ul class="nav flex-column nav-pills p-2" *ngIf="!isLoading && filteredMenus">
+  <li class="nav-item" *ngFor="let menu of filteredMenus">
     <a class="nav-link spacing"
-       routerLink="dashboard"
+       [routerLink]="menu.link"
        routerLinkActive="active"
-       [routerLinkActiveOptions]="{exact: true}"><i class="fa-solid fa-house"></i>首页
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link spacing"
-       routerLink="school"
-       routerLinkActive="active"><i class="fas fa-university"></i>学校管理
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link spacing"
-       routerLink="term"
-       routerLinkActive="active"><i class="fa-solid fa-calendar-days"></i>学期管理
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link spacing"
-       routerLink="teacher"
-       routerLinkActive="active"><i class="fa fa-users" aria-hidden="true"></i>教师管理
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link spacing"
-       routerLink="clazz"
-       routerLinkActive="active"><i class="fa fa-graduation-cap" aria-hidden="true"></i>班级管理
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link spacing"
-       routerLink="user"
-       routerLinkActive="active"><i class="fa-solid fa-address-book"></i>学生管理
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link spacing"
-       routerLink="course"
-       routerLinkActive="active"><i class="fa fa-book" aria-hidden="true"></i>课程管理
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link spacing"
-       routerLink="course-table"
-       routerLinkActive="active"><i class="fa-solid fa-layer-group"></i>课表查询
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link spacing"
-       routerLink="personal-center"
-       routerLinkActive="active"><i class="fa-solid fa-circle-user"></i>个人中心
+       [routerLinkActiveOptions]="{exact: menu.exact}">
+      <i [class]="menu.icon"></i>{{ menu.name }}
     </a>
   </li>
 </ul>

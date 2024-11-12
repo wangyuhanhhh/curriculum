@@ -6,6 +6,7 @@ import {Page} from '../entity/page';
 import {HttpParams} from '@angular/common/http';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
+import {LoginService} from '../../service/login.service';
 
 @Component({
   selector: 'app-clazz',
@@ -34,10 +35,20 @@ export class ClazzComponent implements OnInit, OnDestroy {
 
   constructor(private clazzService: ClazzService,
               private commonService: CommonService,
-              private router: Router) {
+              private router: Router,
+              private loginService: LoginService) {
   }
 
   ngOnInit(): void {
+    this.loginService.getCurrentUser().subscribe(data => {
+      // @ts-ignore
+      const user = JSON.parse(data);
+      const role = user.role;
+      console.log(role);
+      if (role !== 0 && role !== 1) {
+        this.router.navigate(['dashboard']);
+      }
+    }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败'));
     const currentPage = parseInt(localStorage.getItem('currentPage'), 10) || 1;
     this.loadByPage(currentPage, this.size);
   }

@@ -1,5 +1,5 @@
-<nz-select nzShowSearch nzAllowClear  nzPlaceHolder="选择班级"
-           [formControl]="clazzIdControl" >
+<nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择班级"
+           [formControl]="clazzIdControl">
   <nz-option nzCustomContent *ngFor="let clazz of clazzes" [nzLabel]="clazz.clazz"
              [nzValue]="clazz.id">
     {{clazz.clazz}}

@@ -106,14 +106,18 @@ class ClazzController extends IndexController {
         $request = Request::instance();
         $id = IndexController::getParamId($request);
         // 查询该id对应的班级信息，同时查询该班级对应的学生信息
-        $clazz = Clazz::with('students')->find($id);
+        $clazz = Clazz::with(['students', 'courses'])->find($id);
         // 班级不存在
         if (!$clazz) {
             return json(['success' => false, 'message' => '班级不存在']);
         }
         // 该班级下是否有用户（学生）
         if (!empty($clazz->students)) {
-            return json(['success' => false, 'message' => '该班级有用户，无法删除']);
+            return json(['success' => false, 'message' => '该班级下有用户，无法删除']);
+        }
+        // 查询班级对应的课程信息
+        if (!empty($clazz->courses)) {
+            return json(['success' => false, 'message' => '该班级下有课程，无法删除']);
         }
         // 删除班级
         if ($clazz->delete()) {

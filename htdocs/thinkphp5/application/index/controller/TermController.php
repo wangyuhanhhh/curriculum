@@ -1,9 +1,9 @@
 <?php
 namespace app\index\controller;
-use think\Db;
-use think\Paginator;
+use app\common\model\Student;
 use think\Request;
-use app\common\model\Term;use think\Controller;
+use app\common\model\Term;
+use app\common\model\Clazz;
 use app\common\validate\TermValidate;
 
 class TermController extends IndexController
@@ -100,6 +100,21 @@ class TermController extends IndexController
         return json($term);
     }
 
+    /**
+     * 获取当前登录用户对应的学校id
+     * id:user表中的id
+     */
+    public function getLoginUserSchoolId($userId, $role) {
+        if ($role === 3) {
+            // 查询出该学生所在班级id
+            $clazzId = Student::where('user_id', $userId)->value('clazz_id');
+            // 查询出该班级对应的schoolId
+            $schoolId = Clazz::where('id', $clazzId)->value('school_id');
+            return $schoolId;
+        }
+        return null;
+    }
+
     // 显示学期列表
     public function index() {
         $Term = new Term;
@@ -119,6 +134,16 @@ class TermController extends IndexController
 
         // 构建查询条件
         $query = Term::with('school'); // 加载关联的 school 数据
+        // 获取当前登录用户的id(user表中的id)
+        $Course = new CourseController();
+        $userId = $Course->getUserIdByLoginUser();
+        // 获取当前登录用户的角色
+        $Student = new StudentController();
+        $role = $Student->getLoginUserRole($userId);
+        $schoolId = $this->getLoginUserSchoolId($userId, $role);
+        if (!empty($schoolId)) {
+            $query->where('school_id', $schoolId);
+        }
 
         if (!empty($name)) {
             $query->where('term', 'like', '%' . $name . '%');

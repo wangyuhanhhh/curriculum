@@ -7,6 +7,7 @@ import {HttpParams} from '@angular/common/http';
 import {Page} from '../entity/page';
 import {Term} from '../entity/term';
 import {FormControl, FormGroup} from '@angular/forms';
+import {LoginService} from '../../service/login.service';
 
 @Component({
   selector: 'app-term',
@@ -34,15 +35,24 @@ export class TermComponent implements OnInit, OnDestroy {
     totalPages: 0
   });
   shouldSavePage = false;
+  role: number;
 
   constructor(private termService: TermService,
               private commonService: CommonService,
-              private router: Router) {
+              private router: Router,
+              private loginService: LoginService) {
   }
 
   ngOnInit(): void {
     const currentPage = parseInt(localStorage.getItem('currentPage'), 10) || 1;
     this.loadByPage(currentPage, this.size);
+    this.loginService.getCurrentUser().subscribe(data => {
+        // @ts-ignore
+        const user = JSON.parse(data);
+        this.role = user.role;
+        console.log(this.role);
+      }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败')
+    );
   }
 
   loadByPage(currentPage = 1, size = 5): void {

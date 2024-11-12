@@ -6,17 +6,35 @@
   <component name="ChangeListManager">
     <list default="true" id="9ade97b7-7291-46ce-a267-1963dc307b31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thinkphp5/application/common/model/Clazz.php" beforeDir="false" afterPath="$PROJECT_DIR$/thinkphp5/application/common/model/Clazz.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thinkphp5/application/index/controller/ClazzController.php" beforeDir="false" afterPath="$PROJECT_DIR$/thinkphp5/application/index/controller/ClazzController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/thinkphp5/application/index/controller/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/thinkphp5/application/index/controller/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thinkphp5/application/index/controller/TeacherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/thinkphp5/application/index/controller/TeacherController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/clazz/edit/edit.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/clazz/edit/edit.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thinkphp5/application/index/controller/TermController.php" beforeDir="false" afterPath="$PROJECT_DIR$/thinkphp5/application/index/controller/TermController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/clazz/add/add.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/clazz/add/add.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/clazz/clazz.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/clazz/clazz.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../web/src/app/clazz/edit/edit.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/clazz/edit/edit.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/course/course.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/course/course.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/entity/teacher.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/entity/teacher.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/clazz/head-teacher/head-teacher.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/clazz/head-teacher/head-teacher.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/course-table/student-schedule/look-all/look-all.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/course-table/student-schedule/look-all/look-all.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/dashboard/dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/dashboard/dashboard.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../web/src/app/entity/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/entity/user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/layout/nav/nav.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/layout/nav/nav.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/layout/nav/nav.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/layout/nav/nav.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/school/add/add.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/school/add/add.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/school/admin/admin.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/school/admin/admin.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/school/edit/edit.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/school/edit/edit.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/school/school.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/school/school.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/teacher/add/add.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/teacher/add/add.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/teacher/edit/edit.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/teacher/edit/edit.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../web/src/app/teacher/teacher.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/teacher/teacher.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../web/src/app/teacher/teacher.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/teacher/teacher.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/teacher/teacher.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/teacher/teacher.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/term/add/add.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/term/add/add.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/term/edit/edit.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/term/edit/edit.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/term/term.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/term/term.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/term/term.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/term/term.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/user/add/add.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/user/add/add.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/user/clazz-select/clazz-select.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/user/clazz-select/clazz-select.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../web/src/app/user/edit/edit.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/user/edit/edit.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/user/user.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/user/user.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../web/src/app/user/user.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/user/user.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,19 +65,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "153",
-    "last_opened_file_path": "/home/hyh/桌面/local/curriculum/htdocs",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;162&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/hyh/桌面/local/curriculum/htdocs&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -87,6 +105,7 @@
       <workItem from="1730876328496" duration="1628000" />
       <workItem from="1730954373699" duration="1204000" />
       <workItem from="1731059937949" duration="2432000" />
+      <workItem from="1731348262681" duration="14497000" />
     </task>
     <servers />
   </component>

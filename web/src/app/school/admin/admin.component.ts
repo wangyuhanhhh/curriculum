@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {SchoolService} from "../../../service/school.service";
-import {Teacher} from "../../entity/teacher";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {CommonService} from "../../../service/common.service";
+import {ActivatedRoute, Router} from '@angular/router';
+import {SchoolService} from '../../../service/school.service';
+import {Teacher} from '../../entity/teacher';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {CommonService} from '../../../service/common.service';
+import {LoginService} from '../../../service/login.service';
 
 @Component({
   selector: 'app-admin',
@@ -16,14 +17,24 @@ export class AdminComponent implements OnInit {
   formGroup = new FormGroup({
     teacherId: new FormControl(null, Validators.required)
   });
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private schoolService: SchoolService,
     private commonService: CommonService,
-    private router: Router) {
+    private router: Router,
+    private loginService: LoginService) {
   }
 
   ngOnInit(): void {
+    this.loginService.getCurrentUser().subscribe(data => {
+      // @ts-ignore
+      const user = JSON.parse(data);
+      const role = user.role;
+      if (role === 3) {
+        this.router.navigate(['dashboard']);
+      }
+    }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败'));
     const id = this.activatedRoute.snapshot.params.id;
     this.schoolService.getMessage(id).subscribe( data => {
       this.school = data.school;
@@ -31,7 +42,7 @@ export class AdminComponent implements OnInit {
       if (data.teacher_id) {
         this.formGroup.patchValue({
           teacherId: data.teacher_id,
-        })
+        });
       }
     }, error => console.log(error));
   }

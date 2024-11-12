@@ -5,6 +5,7 @@ import {CommonService} from '../../../service/common.service';
 import {User} from '../../entity/user';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {SchoolService} from '../../../service/school.service';
+import {LoginService} from '../../../service/login.service';
 
 @Component({
   selector: 'app-edit',
@@ -26,9 +27,18 @@ export class EditComponent implements OnInit {
               private userService: UserService,
               private schoolService: SchoolService,
               private commonService: CommonService,
-              private router: Router) { }
+              private router: Router,
+              private loginService: LoginService) { }
 
   ngOnInit(): void {
+    this.loginService.getCurrentUser().subscribe(data => {
+      // @ts-ignore
+      const user = JSON.parse(data);
+      const role = user.role;
+      if (role === 3) {
+        this.router.navigate(['dashboard']);
+      }
+    }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败'));
     const id = this.activeRoute.snapshot.params.id;
     this.userService.edit(id).subscribe((user) => {
       this.formGroup.patchValue({
