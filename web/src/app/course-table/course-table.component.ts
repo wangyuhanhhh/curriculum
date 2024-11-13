@@ -21,10 +21,7 @@ export class CourseTableComponent implements OnInit {
   getRole(): void {
     this.loginService.getCurrentUser().subscribe(user => {
       if (user) {
-        const jsonString = user;
-        // @ts-ignore
-        const userdata = JSON.parse(jsonString);
-        this.person.role = userdata.role;
+        this.person.role = user.role;
       }
     });
   }

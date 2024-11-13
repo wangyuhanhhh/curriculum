@@ -40,12 +40,9 @@ export class TeacherScheduleComponent implements OnInit {
               private courseService: CourseService) { }
 
   ngOnInit(): void {
-    this.loginService.getCurrentUser().subscribe(data => {
-      if (data) {
-        const jsonString = data;
-        // @ts-ignore
-        const userdata = JSON.parse(jsonString);
-        const userId = userdata.id;
+    this.loginService.getCurrentUser().subscribe(user => {
+      if (user) {
+        const userId = user.id;
         this.teacherService.getSchoolIdByLoginUser(userId).subscribe(id => {
           this.schoolID$.next(id);
         });

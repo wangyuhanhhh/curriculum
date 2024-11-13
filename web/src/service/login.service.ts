@@ -34,9 +34,12 @@ export class LoginService {
     return this.http.get<ResponseBody>(`${this.baseUrl}/currentLoginUser`).pipe(tap(value => {
       let user;
       if (typeof value.data === 'string') {
+        // 如果是 JSON 字符串，先解析为对象
         user = JSON.parse(value.data) as User;
+      } else {
+        // 如果是对象，直接赋值给 user
+        user = value.data as User;
       }
-      user = value.data as User;
       this.setCurrentUser(user);
     }));
   }

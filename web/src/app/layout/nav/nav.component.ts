@@ -81,12 +81,9 @@ export class NavComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loginService.getCurrentUser().subscribe(data => {
+    this.loginService.getCurrentUser().subscribe(user => {
         try {
-          if (data) {
-            console.log(data);
-            // @ts-ignore
-            const user = JSON.parse(data);
+          if (user) {
             this.filteredMenus = this.menus.filter(menu => menu.roles.includes(user.role));
           }
         } catch (error) {

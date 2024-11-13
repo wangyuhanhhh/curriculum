@@ -22,13 +22,10 @@ export class PersonalCenterComponent implements OnInit {
   ngOnInit(): void {
     this.loginService.getCurrentUser().subscribe(user => {
       if (user) {
-        const jsonString = user;
-        // @ts-ignore
-        const userdata = JSON.parse(jsonString);
-        this.person.name = userdata.name;
-        this.person.username = userdata.username;
-        this.person.role = userdata.role;
-        this.person.no = userdata.no;
+        this.person.name = user.name;
+        this.person.username = user.username;
+        this.person.role = user.role;
+        this.person.no = user.no;
       }
     });
   }
