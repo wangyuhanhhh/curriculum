@@ -74,6 +74,13 @@ export class TeacherScheduleComponent implements OnInit {
     return this.termSchedule[day]?.[time] || null;
   }
 
+  // 判断是否在当前时间段显示单元格
+  shouldShowCell(day: any, time: number): boolean {
+    const classInfo = this.getClassInfo(day, time);
+    // 仅在课程的开始时间显示单元格
+    return !classInfo || classInfo.begin === time;
+  }
+
   convertToWeeklySchedule(data: any[]): WeeklySchedule {
     const weeklySchedule: WeeklySchedule = {};
 
@@ -103,6 +110,8 @@ export class TeacherScheduleComponent implements OnInit {
           courseName: item.courseName,
           startWeek: item.start_weeks,
           endWeek: item.end_weeks,
+          begin: item.begin,
+          length: item.length,
           status: statusMapping[item.status] || '未知'  // 映射状态
         };
       }

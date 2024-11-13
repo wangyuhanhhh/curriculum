@@ -5,6 +5,8 @@ export interface CourseInfo {
   endWeek ?: number;     // 结束周数
   status ?: string;     // 状态(单周、双周、全周)
   students ?: string[];
+  begin ?: number;  // 第几小节开始上课
+  length?: number;  // 总共的小节数
 }
 
 // 定义单日的课表结构
