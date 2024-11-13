@@ -18,8 +18,11 @@ export class User {
   // tslint:disable-next-line:variable-name
   clazz_id: number;
   clazz: Clazz;
+  // 用于个人中心，有可能是工号、也有可能是学号
+  no: string;
 
   // tslint:disable-next-line:variable-name max-line-length
+
   constructor(id?: number, name?: string, username?: string, password?: string, student_no?: string, role?: number,
               status?: number, school?: School, clazz?: Clazz, clazz_id?: number) {
     this.id = id as number;

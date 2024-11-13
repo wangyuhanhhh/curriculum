@@ -33,9 +33,7 @@ export class EditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loginService.getCurrentUser().subscribe(data => {
-      // @ts-ignore
-      const user = JSON.parse(data);
+    this.loginService.getCurrentUser().subscribe(user => {
       const role = user.role;
       if (role === 3) {
         this.router.navigate(['dashboard']);

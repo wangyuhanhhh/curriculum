@@ -41,11 +41,8 @@ export class TeacherComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loginService.getCurrentUser().subscribe(data => {
-      // @ts-ignore
-      const user = JSON.parse(data);
+    this.loginService.getCurrentUser().subscribe(user => {
       const role = user.role;
-      console.log(role);
       if (role !== 0 && role !== 1) {
         this.router.navigate(['dashboard']);
       }

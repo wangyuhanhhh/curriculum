@@ -46,11 +46,8 @@ export class TermComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const currentPage = parseInt(localStorage.getItem('currentPage'), 10) || 1;
     this.loadByPage(currentPage, this.size);
-    this.loginService.getCurrentUser().subscribe(data => {
-        // @ts-ignore
-        const user = JSON.parse(data);
+    this.loginService.getCurrentUser().subscribe(user => {
         this.role = user.role;
-        console.log(this.role);
       }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败')
     );
   }
