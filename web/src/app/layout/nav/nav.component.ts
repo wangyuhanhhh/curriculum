@@ -82,11 +82,16 @@ export class NavComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginService.getCurrentUser().subscribe(data => {
-        if (data) {
-          console.log(data);
-          // @ts-ignore
-          const user = JSON.parse(data);
-          this.filteredMenus = this.menus.filter(menu => menu.roles.includes(user.role));
+        try {
+          if (data) {
+            console.log(data);
+            // @ts-ignore
+            const user = JSON.parse(data);
+            this.filteredMenus = this.menus.filter(menu => menu.roles.includes(user.role));
+          }
+        } catch (error) {
+          console.log('当前登录用户数据解析失败');
+        } finally {
           this.isLoading = false;
         }
       }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败')
