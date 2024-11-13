@@ -43,6 +43,13 @@ export class AdminScheduleComponent implements OnInit {
     return this.schedule[day]?.[time] || null;
   }
 
+  // 判断是否在当前时间段显示单元格
+  shouldShowCell(day: any, time: number): boolean {
+    const classInfo = this.getClassInfo(day, time);
+    // 仅在课程的开始时间显示单元格
+    return !classInfo || classInfo.begin === time;
+  }
+
   onSchoolChange(schoolId: number): void {
     // 当学校被重新选择之后，清空周数选择器的内容
     this.allWeeks = [];
@@ -95,6 +102,8 @@ export class AdminScheduleComponent implements OnInit {
         const time = begin + i;
         daySchedule[time] = {
           students: item.students,
+          begin: item.begin,
+          length: item.length,
         };
       }
     });

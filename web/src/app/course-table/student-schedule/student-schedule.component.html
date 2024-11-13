@@ -40,12 +40,14 @@
       <td>{{ period.time }}</td>
 
       <!-- 遍历每天的课程信息 -->
-      <td *ngFor="let day of days">
-        <ng-container *ngIf="getClassInfo(day, period.time) as classInfo; else noCourse">
-          {{ classInfo.courseName }}
-        </ng-container>
-        <ng-template #noCourse></ng-template>
-      </td>
+      <ng-container *ngFor="let day of days">
+        <td *ngIf="shouldShowCell(day, period.time)"
+            [attr.rowspan]="getClassInfo(day, period.time)?.length || 1">
+          <ng-container *ngIf="getClassInfo(day, period.time) as classInfo">
+            {{ classInfo.courseName }}
+          </ng-container>
+        </td>
+      </ng-container>
     </tr>
     </tbody>
   </table>

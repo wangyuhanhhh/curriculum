@@ -41,6 +41,13 @@ export class StudentScheduleComponent implements OnInit {
     return this.weeklySchedule[day]?.[time] || null;
   }
 
+  // 判断是否在当前时间段显示单元格
+  shouldShowCell(day: any, time: number): boolean {
+    const classInfo = this.getClassInfo(day, time);
+    // 仅在课程的开始时间显示单元格
+    return !classInfo || classInfo.begin === time;
+  }
+
   ngOnInit(): void {
     this.getMessage();
     this.checkTermStatus();
@@ -104,6 +111,8 @@ export class StudentScheduleComponent implements OnInit {
         const time = begin + i;
         daySchedule[time] = {
           courseName: item.courseName,
+          begin: item.begin,
+          length: item.length,
         };
       }
     });
