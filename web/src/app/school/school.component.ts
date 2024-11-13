@@ -5,6 +5,7 @@ import {CommonService} from '../../service/common.service';
 import {HttpParams} from '@angular/common/http';
 import {Page} from '../entity/page';
 import {Router} from '@angular/router';
+import {LoginService} from '../../service/login.service';
 
 @Component({
   selector: 'app-school',
@@ -29,10 +30,19 @@ export class SchoolComponent implements OnInit, OnDestroy {
 
   constructor(private schoolService: SchoolService,
               private commonService: CommonService,
-              private router: Router) {
+              private router: Router,
+              private loginService: LoginService) {
   }
 
   ngOnInit(): void {
+    this.loginService.getCurrentUser().subscribe(data => {
+      // @ts-ignore
+      const user = JSON.parse(data);
+      const role = user.role;
+      if (role === 3) {
+        this.router.navigate(['dashboard']);
+      }
+    }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败'));
     const currentPage = parseInt(localStorage.getItem('currentPage'), 10) || 1;
     this.loadByPage(currentPage, this.size);
   }

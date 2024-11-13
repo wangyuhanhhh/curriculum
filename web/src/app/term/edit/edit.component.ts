@@ -7,6 +7,7 @@ import {HttpClient} from '@angular/common/http';
 import {School} from '../../entity/school';
 import {Router} from '@angular/router';
 import {CommonService} from '../../../service/common.service';
+import {LoginService} from '../../../service/login.service';
 
 @Component({
   selector: 'app-edit',
@@ -27,10 +28,19 @@ export class EditComponent implements OnInit {
               private termSeries: TermService,
               private httpClient: HttpClient,
               private router: Router,
-              private commonService: CommonService){
+              private commonService: CommonService,
+              private loginService: LoginService){
   }
 
   ngOnInit(): void {
+    this.loginService.getCurrentUser().subscribe(data => {
+      // @ts-ignore
+      const user = JSON.parse(data);
+      const role = user.role;
+      if (role === 3) {
+        this.router.navigate(['dashboard']);
+      }
+    }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败'));
     // 获取所有学校
     this.httpClient.get<School[]>('http://localhost:8088/api/school/index')
       .subscribe(schoolJson => {

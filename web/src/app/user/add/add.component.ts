@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../../service/user.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CommonService} from '../../../service/common.service';
 import {Router} from '@angular/router';
-
+import {LoginService} from '../../../service/login.service';
 
 @Component({
   selector: 'app-add',
@@ -18,11 +18,21 @@ export class AddComponent implements OnInit {
     school_id: new FormControl(null, Validators.required),
     clazz_id: new FormControl(null, Validators.required),
   });
+
   constructor(private studentService: UserService,
               private commonService: CommonService,
-              private router: Router) { }
+              private router: Router,
+              private loginService: LoginService) { }
 
   ngOnInit(): void {
+    this.loginService.getCurrentUser().subscribe(data => {
+      // @ts-ignore
+      const user = JSON.parse(data);
+      const role = user.role;
+      if (role === 3) {
+        this.router.navigate(['dashboard']);
+      }
+    }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败'));
   }
 
   onSubmit(): void {

@@ -30,10 +30,10 @@
       <td>{{ teacher.school.school}}</td>
       <td>{{ getRoleName(teacher.role) }}</td>
       <td>
-        <a class="btn btn-outline-primary btn-sm" (click)="onEdit(teacher.id)">
+        <a class="btn btn-outline-primary btn-sm" *ngIf="teacher.role !== 0" (click)="onEdit(teacher.id)">
           <i class="fa fa-pen"></i>编辑
         </a>
-        <span class="btn btn-outline-danger btn-sm" (click)="onDelete(teacher.id)">
+        <span class="btn btn-outline-danger btn-sm" *ngIf="teacher.role !== 0" (click)="onDelete(teacher.id)">
           <i class="far fa-trash-alt"></i>删除
         </span>
       </td>

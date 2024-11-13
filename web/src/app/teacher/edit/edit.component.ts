@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TeacherService} from '../../../service/teacher.service';
 import {CommonService} from '../../../service/common.service';
+import {LoginService} from '../../../service/login.service';
 
 @Component({
   selector: 'app-edit',
@@ -20,9 +21,19 @@ export class EditComponent implements OnInit {
   constructor(private activeRoute: ActivatedRoute,
               private teacherService: TeacherService,
               private commonService: CommonService,
-              private router: Router) { }
+              private router: Router,
+              private loginService: LoginService) { }
 
   ngOnInit(): void {
+    this.loginService.getCurrentUser().subscribe(data => {
+      // @ts-ignore
+      const user = JSON.parse(data);
+      const role = user.role;
+      console.log(role);
+      if (role !== 0 && role !== 1) {
+        this.router.navigate(['dashboard']);
+      }
+    }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败'));
     const id = this.activeRoute.snapshot.params.id;
     this.teacherService.getById(id).subscribe((teacher) => {
       this.formGroup.patchValue({

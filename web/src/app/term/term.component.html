@@ -4,7 +4,8 @@
       <app-school-select formControlName="school_id"></app-school-select>
     </div>
     <div>
-      <input [(ngModel)]="searchTerm" name="searchTerm" class="form-control mr-sm-2" type="search" placeholder="请输入学期名称" aria-label="Search" >
+      <input [(ngModel)]="searchTerm" name="searchTerm" class="form-control mr-sm-2" type="search"
+             placeholder="请输入学期名称" aria-label="Search">
     </div>
     <button class="btn btn-outline-success my-2 my-sm-0" (click)="onSearch()">搜索</button>
   </form>
@@ -12,7 +13,7 @@
 
 <div class="row">
   <div class="col-12 text-right">
-    <a class="btn btn-primary mr-2" routerLink="./add"><i class="fas fa-plus"></i>新增</a>
+    <a class="btn btn-primary mr-2" routerLink="./add" *ngIf="role !== 3"><i class="fas fa-plus"></i>新增</a>
   </div>
 
   <table class="table table-striped mt-2">
@@ -24,7 +25,7 @@
       <th>开学日期</th>
       <th>结束日期</th>
       <th>状态</th>
-      <th>操作</th>
+      <th *ngIf="role !== 3">操作</th>
     </tr>
     </thead>
     <tbody>
@@ -37,7 +38,7 @@
       <td *ngIf="term.status; else termIsFreeze">
         <span class="badge badge-pill badge-success">激活</span>
       </td>
-      <td>
+      <td *ngIf="role !== 3">
         <a class="btn btn-outline-primary btn-sm" (click)="onEdit(term.id)">
           <i class="fa fa-pen"></i>编辑
         </a>
@@ -59,5 +60,6 @@
 </div>
 <!--$event是angular的一个关键字，表示子组件弹出的内容-->
 <div class="text-right mr-2">
-  <app-page [page]="pageData" [current]="currentPage" (beCurrentPageChange)="onPage($event)" (beSizeChange)="onSize($event)"></app-page>
+  <app-page [page]="pageData" [current]="currentPage" (beCurrentPageChange)="onPage($event)"
+            (beSizeChange)="onSize($event)"></app-page>
 </div>

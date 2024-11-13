@@ -5,19 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ade97b7-7291-46ce-a267-1963dc307b31" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thinkphp5/application/index/controller/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/thinkphp5/application/index/controller/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thinkphp5/application/index/controller/TeacherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/thinkphp5/application/index/controller/TeacherController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/clazz/edit/edit.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/clazz/edit/edit.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/clazz/edit/edit.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/clazz/edit/edit.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/course/course.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/course/course.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/entity/teacher.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/entity/teacher.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/entity/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/entity/user.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/teacher/teacher.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/teacher/teacher.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/teacher/teacher.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/teacher/teacher.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/user/edit/edit.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/user/edit/edit.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/user/user.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/user/user.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../web/src/app/user/user.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/user/user.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/app/layout/nav/nav.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/app/layout/nav/nav.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/src/service/login.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../web/src/service/login.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,13 +39,14 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "153",
+    "git-widget-placeholder": "162",
     "last_opened_file_path": "/home/hyh/桌面/local/curriculum/htdocs",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "/opt/phpstorm/plugins/javascript-impl/jsLanguageServicesImpl/external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -87,6 +77,7 @@
       <workItem from="1730876328496" duration="1628000" />
       <workItem from="1730954373699" duration="1204000" />
       <workItem from="1731059937949" duration="2432000" />
+      <workItem from="1731348262681" duration="15098000" />
     </task>
     <servers />
   </component>

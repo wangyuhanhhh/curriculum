@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {School} from '../../entity/school';
-import Swal from 'sweetalert2';
 import {SchoolService} from '../../../service/school.service';
 import {CommonService} from '../../../service/common.service';
+import {LoginService} from '../../../service/login.service';
 
 @Component({
   selector: 'app-edit',
@@ -15,13 +15,23 @@ export class EditComponent implements OnInit {
     id: 0,
     school: ''
   } as School;
+
   constructor(private activeRoute: ActivatedRoute,
               private schoolService: SchoolService,
               private commonService: CommonService,
-              private router: Router) {
+              private router: Router,
+              private loginService: LoginService) {
   }
 
   ngOnInit(): void {
+    this.loginService.getCurrentUser().subscribe(data => {
+      // @ts-ignore
+      const user = JSON.parse(data);
+      const role = user.role;
+      if (role === 3) {
+        this.router.navigate(['dashboard']);
+      }
+    }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败'));
     const id = this.activeRoute.snapshot.params.id;
     this.schoolService.getSchoolById(id)
       .subscribe(data => {
@@ -30,6 +40,7 @@ export class EditComponent implements OnInit {
         console.log('获取编辑数据失败', error);
       });
   }
+
   onSubmit(): void {
     console.log(this.editSchool);
     const id = this.activeRoute.snapshot.params.id;

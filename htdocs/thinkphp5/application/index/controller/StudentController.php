@@ -3,6 +3,7 @@ namespace app\index\controller;
 use app\common\model\Clazz;
 use app\common\model\School;
 use app\common\model\Student;
+use app\common\model\Teacher;
 use app\common\model\User;
 use app\common\validate\StudentValidate;
 use think\Request;
@@ -172,11 +173,32 @@ class StudentController extends IndexController
         }
     }
 
-    public function index() {
+    /**
+     * 获取当前登录用户的role
+     */
+    public function getLoginUserRole($userId) {
+        $user = User::where('id', $userId)->find();
+        $role = $user->role;
+        return $role;
+    }
+
+    /**
+     * 如果当前登录用户的role是2(教师)或4(班主任),获取该用户的school_id
+     * $id:user表中的id
+     */
+    public function getLoginUserSchoolId($userId, $role) {
+        if ($role == 2 || $role == 4) {
+            $schoolId = Teacher::where('user_id', $userId)->value('school_id');
+            return $schoolId;
+        }
+        return null;
+    }
+
+    public function index()
+    {
         $Student = new Student;
         $totalStudent = Student::select();
         return json($totalStudent);
-        // return '<style type="text/css">*{ padding: 0; margin: 0; } .think_default_text{ padding: 4px 48px;} a{color:#2E5CD5;cursor: pointer;text-decoration: none} a:hover{text-decoration:underline; } body{ background: #fff; font-family: "Century Gothic","Microsoft yahei"; color: #333;font-size:18px} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.6em; font-size: 42px }</style><div style="padding: 24px 48px;"> <h1>:)</h1><p> ThinkPHP V5<br/><span style="font-size:30px">十年磨一剑 - 为API开发设计的高性能框架</span></p><span style="font-size:22px;">[ V5.0 版本由 <a href="http://www.qiniu.com" target="qiniu">七牛云</a> 独家赞助发布 ]</span></div><script type="text/javascript" src="http://tajs.qq.com/stats?sId=9347272" charset="UTF-8"></script><script type="text/javascript" src="http://ad.topthink.com/Public/static/client.js"></script><thinkad id="ad_bd568ce7058a1091"></thinkad>';
     }
 
     // 分页查询
@@ -189,6 +211,23 @@ class StudentController extends IndexController
 
         // 构建查询条件
         $query = Student::with('clazz');
+
+        // 获取当前登录用户的id(user表中的id)
+        $Course = new CourseController();
+        $userId = $Course->getUserIdByLoginUser();
+        // 获取当前登录用户的角色
+        $role = $this->getLoginUserRole($userId);
+        $schoolId = $this->getLoginUserSchoolId($userId, $role);
+        if ($schoolId) {
+            $clazzes = Clazz::where('school_id', $schoolId)->select();
+            if (!empty($clazzes)) {
+                $clazzId = [];
+                foreach ($clazzes as $clazz) {
+                    $clazzId[] = $clazz->id;
+                }
+                $query->where('clazz_id', 'in', $clazzId);
+            }
+        }
 
         if (!empty($name)) {
             $query->where('name', 'like', '%' . $name . '%');

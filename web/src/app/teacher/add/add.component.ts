@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CommonService} from '../../../service/common.service';
 import {TeacherService} from '../../../service/teacher.service';
 import {Router} from '@angular/router';
+import {LoginService} from '../../../service/login.service';
 
 
 @Component({
@@ -20,9 +21,19 @@ export class AddComponent implements OnInit {
 
   constructor(private teacherService: TeacherService,
               private commonService: CommonService,
-              private router: Router) { }
+              private router: Router,
+              private loginService: LoginService) { }
 
   ngOnInit(): void {
+    this.loginService.getCurrentUser().subscribe(data => {
+      // @ts-ignore
+      const user = JSON.parse(data);
+      const role = user.role;
+      console.log(role);
+      if (role !== 0 && role !== 1) {
+        this.router.navigate(['dashboard']);
+      }
+    }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败'));
   }
 
   onSubmit(): void {

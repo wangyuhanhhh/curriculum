@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {CourseService} from '../../../../service/course.service';
 import {CourseInfo, WeeklySchedule} from '../../../entity/course-info';
+import {LoginService} from '../../../../service/login.service';
+import {Router} from '@angular/router';
+import {CommonService} from '../../../../service/common.service';
 
 @Component({
   selector: 'app-look-all',
@@ -24,9 +27,20 @@ export class LookAllComponent implements OnInit {
     { time: 11 },
   ];
 
-  constructor(private courseService: CourseService) { }
+  constructor(private courseService: CourseService,
+              private loginService: LoginService,
+              private router: Router,
+              private commonService: CommonService) { }
 
   ngOnInit(): void {
+    this.loginService.getCurrentUser().subscribe(data => {
+      // @ts-ignore
+      const user = JSON.parse(data);
+      const role = user.role;
+      if (role !== 3) {
+        this.router.navigate(['dashboard']);
+      }
+    }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败'));
     this.getAllCourseByLoginUser();
   }
 

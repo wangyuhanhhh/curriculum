@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { TermService } from '../../../service/term.service';
-import { Term } from '../../entity/term';
-import { School } from '../../entity/school';
-import {ControlValueAccessor, FormControl, FormGroup, Validators} from '@angular/forms';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {TermService} from '../../../service/term.service';
+import {Term} from '../../entity/term';
+import {School} from '../../entity/school';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
 import {SchoolService} from '../../../service/school.service';
 import {CommonService} from '../../../service/common.service';
+import {LoginService} from '../../../service/login.service';
 
 @Component({
   selector: 'app-add',
@@ -25,9 +26,18 @@ export class AddComponent implements OnInit {
   constructor(private termService: TermService,
               private schoolService: SchoolService,
               private router: Router,
-              private commonService: CommonService) { }
+              private commonService: CommonService,
+              private loginService: LoginService) { }
 
   ngOnInit(): void {
+    this.loginService.getCurrentUser().subscribe(data => {
+      // @ts-ignore
+      const user = JSON.parse(data);
+      const role = user.role;
+      if (role === 3) {
+        this.router.navigate(['dashboard']);
+      }
+    }, error => this.commonService.showErrorAlert('当前登录用户数据获取失败'));
     // 获取所有学校
     this.schoolService.getAll()
       .subscribe(schoolJson => {
