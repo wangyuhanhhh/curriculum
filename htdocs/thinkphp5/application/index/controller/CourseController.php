@@ -114,6 +114,26 @@ class CourseController extends IndexController {
         return json(['success' => true, 'data' => true]);
     }
 
+    /**
+     * 获取当前学生用户所在的学期的 termId
+     */
+    public function getTermIdForStudent() {
+        $clazzId = $this->getClazzIdByLoginUser();
+        // 根据clazzId获取学校信息
+        $clazz = Clazz::where('id', $clazzId)->find();
+        // 获取学校id
+        $schoolId = $clazz->school_id;
+        $term = Term::where('school_id', $schoolId)
+            ->where('status', 1)
+            ->find();
+        if (!empty($term)) {
+            $termId = $term->id;
+        } else {
+            $termId = 0;
+        }
+        return json([$termId]);
+    }
+
     public function checkTermOfTeacher() {
         $schoolId = $this->getSchoolIdByLoginUser();
         $terms = Term::where('school_id', $schoolId)->select();
@@ -846,6 +866,7 @@ class CourseController extends IndexController {
         foreach ($data as $courseInfo) {
             $courseId = $courseInfo->course_id;
             $course = Course::where('id', $courseId)->find();
+            $termId = $course->term_id;
             // 拼接周数范围
             $startWeeks = $courseInfo['start_weeks'];
             $endWeeks = $courseInfo['end_weeks'];
@@ -859,6 +880,9 @@ class CourseController extends IndexController {
                 'id' => $course->id,
                 'name' => $course->name,
                 'type' => $course->type,
+                'term' => [
+                    'id' => $termId,
+                ],
                 'courseInfoId' => $courseInfo['id'],
                 'weeks' => $weeksRange,
                 'week' => $this->weekMap($courseInfo->week),

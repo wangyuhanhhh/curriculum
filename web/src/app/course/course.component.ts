@@ -30,6 +30,7 @@ export class CourseComponent implements OnInit, OnDestroy {
     totalPages: 0
   });
   shouldSavePage = false;
+  termId: number | null;
 
   constructor(
     private courseService: CourseService,
@@ -40,6 +41,7 @@ export class CourseComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const currentPage = parseInt(localStorage.getItem('currentPage'), 10) || 1;
     this.loadByPage(currentPage, this.size);
+    this.getCurrentTermId();
   }
 
   onEdit(id: number, courseInfoId: number): void {
@@ -114,5 +116,12 @@ export class CourseComponent implements OnInit, OnDestroy {
     } else {
       localStorage.removeItem('currentPage');
     }
+  }
+
+  // 获取当前登录用户学校所在的激活学期（用于判断当前课程是否结课）
+  getCurrentTermId(): void {
+    this.courseService.getTermIdForStudent().subscribe(data => {
+      this.termId = data;
+    });
   }
 }
