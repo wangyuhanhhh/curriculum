@@ -23,10 +23,16 @@ export class CourseService {
     return this.httpClient.get<ResponseBody>(`${this.baseUrl}/checkTerm`);
   }
 
+  // 获取当前的 termId
+  getTermIdForStudent(): Observable<any> {
+    return this.httpClient.get<any>(`${this.baseUrl}/getTermIdForStudent`);
+  }
+
   // 检查教师用户所在学校下是否为激活学期
   checkTermOfTeacher(): Observable<ResponseBody> {
     return this.httpClient.get<ResponseBody>(`${this.baseUrl}/checkTermOfTeacher`);
   }
+
   // 删除
   delete(courseInfoId: number): Observable<ResponseBody> {
     return this.httpClient.delete<ResponseBody>(`${this.baseUrl}/delete/${courseInfoId}`);
