@@ -32,11 +32,21 @@ class LoginController extends IndexController {
         // 查询用户是否存在
         $user = User::where('username', $username)->find();
         if (empty($user)) {
-            return json(['success' => false, 'message' => '用户不存在']);
+            return json(['success' => false, 'message' => '用户不存在，登录失败']);
+        } else {
+            // 如果是学生用户（role = 3）判断是否冻结
+            if ($user->role == 3) {
+                $student = Student::where('user_id', $user->id)->find();
+
+                if ($student->status == 0) {
+                    return json(['success' => false, 'message' => '该用户被冻结，登录失败']);
+                }
+
+            }
         }
 
         if ($password != $user->password) {
-            return json(['success' => false, 'message' => '密码错误']);
+            return json(['success' => false, 'message' => '密码错误，登录失败']);
         }
 
         // 获取当前登录用户的姓名

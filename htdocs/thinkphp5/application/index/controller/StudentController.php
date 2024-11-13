@@ -29,12 +29,18 @@ class StudentController extends IndexController
       $request = Request::instance()->getContent();
       $data = json_decode($request, true);
 
-      // 查重
+      // 查重（学号和用户名都不能重复）
       $studentNo = $data['student_no'];
+      $username = $data['username'];
       $students = Student::where('student_no', $studentNo)->find();
+      $username = User::where('username', $username)->find();
 
-      if($students){
+      if($students) {
           return json(['success' => false, 'message' => '该学号学生已存在，新增失败']);
+      }
+
+      if ($username) {
+          return json(['success' => false, 'message' => '该用户名已存在，新增失败']);
       }
 
       // 开启事务

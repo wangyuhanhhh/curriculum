@@ -42,6 +42,9 @@
         <a class="btn btn-outline-primary btn-sm" (click)="onEdit(term.id)">
           <i class="fa fa-pen"></i>编辑
         </a>
+        <span class="btn btn-outline-danger btn-sm" (click)="onDelete(term.id)">
+          <i class="far fa-trash-alt"></i>删除
+        </span>
         <span *ngIf="term.status === 0" class="btn btn-sm btn-outline-success" (click)="onActive(term.id)">
           <i class="fa fa-refresh" aria-hidden="true"></i>激活
         </span>

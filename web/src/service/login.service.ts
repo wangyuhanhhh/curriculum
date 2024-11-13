@@ -55,8 +55,10 @@ export class LoginService {
       if (token) {
         sessionStorage.setItem('x-auth-token', token); // 存储 token
       }
-      const user = JSON.parse(response.body.data) as User;
-      this.setCurrentUser(user);
+      if (response.body.data) {
+        const user = JSON.parse(response.body.data) as User;
+        this.setCurrentUser(user);
+      }
     }));
   }
 

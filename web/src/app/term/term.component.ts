@@ -88,6 +88,20 @@ export class TermComponent implements OnInit, OnDestroy {
     }, '是否激活, 此操作不可逆');
   }
 
+  onDelete(id: number): void {
+    this.commonService.showConfirmAlert(() => {
+      this.termService.delete(id)
+        .subscribe((responseBody) => {
+          if (responseBody.success) {
+            this.commonService.showSuccessAlert(responseBody.message);
+            this.loadByPage(this.currentPage, this.size);
+          } else {
+            this.commonService.showErrorAlert(responseBody.message);
+          }
+        }, error => this.commonService.showErrorAlert('请求错误，请稍后'));
+    }, '是否删除，此操作不可逆');
+  }
+
   onEdit(id: number): void {
     this.shouldSavePage = true;
     console.log(this.currentPage.toString());

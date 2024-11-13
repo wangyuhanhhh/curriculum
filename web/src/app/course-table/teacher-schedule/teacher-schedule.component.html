@@ -1,4 +1,4 @@
-<nav class="navbar navbar-light bg-light">
+<nav *ngIf="termStatus" class="navbar navbar-light bg-light">
   <form class="form-inline" [formGroup]="formGroup">
     <div class="mr-sm-2">
       <app-clazz-select
@@ -10,7 +10,7 @@
   </form>
 </nav>
 
-<div class="schedule-container">
+<div *ngIf="termStatus" class="schedule-container">
   <table class="table table-bordered">
     <thead>
     <tr>
@@ -40,5 +40,11 @@
     </tr>
     </tbody>
   </table>
+</div>
+
+<div *ngIf="!termStatus" class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">请确认当前学校存在激活学期！</h1>
+  </div>
 </div>
 
