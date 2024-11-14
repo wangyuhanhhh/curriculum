@@ -22,7 +22,7 @@ class ClazzValidate extends Validate {
     // 验证场景
     protected $scene = [
         'add' => ['clazz', 'school_id'],
-        'edit' => ['clazz', 'school_id'],
+        'edit' => ['clazz'],
         'saveTeacher' => ['teacher_id'],
     ];
 }
