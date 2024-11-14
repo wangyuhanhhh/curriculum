@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ade97b7-7291-46ce-a267-1963dc307b31" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/thinkphp5/application/index/controller/ClazzController.php" beforeDir="false" afterPath="$PROJECT_DIR$/thinkphp5/application/index/controller/ClazzController.php" afterDir="false" />
-    </list>
+    <list default="true" id="9ade97b7-7291-46ce-a267-1963dc307b31" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,7 +36,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "184",
+    "git-widget-placeholder": "182",
     "last_opened_file_path": "/home/hyh/桌面/local/curriculum/htdocs",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",

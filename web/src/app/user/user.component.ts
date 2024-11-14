@@ -112,6 +112,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   onSize(size: number): void {
+    this.size = size;
     this.loadByPage(this.currentPage, size);
   }
 
