@@ -14,7 +14,7 @@ export class EditComponent implements OnInit {
   formGroup = new FormGroup({
     name: new FormControl('', Validators.required),
     username: new FormControl('', Validators.required),
-    teacher_no: new FormControl(null, Validators.required),
+    teacher_no: new FormControl(null, [Validators.required, Validators.minLength(6)]),
     school_id: new FormControl(null, Validators.required),
   });
 
@@ -62,4 +62,8 @@ export class EditComponent implements OnInit {
     );
   }
 
+  // tslint:disable-next-line:typedef
+  get teacherNo() {
+    return this.formGroup.get('teacher_no');
+  }
 }
