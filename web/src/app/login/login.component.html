@@ -1,14 +1,28 @@
 <div class="d-flex justify-content-center mt-5">
-<form class="border border-success p-3 w-50">
-  <div class="form-group">
-    <label for="username">用户名：</label>
-    <input [(ngModel)]="username" name="username" class="form-control" id="username">
-    <small id="Help" class="form-text text-muted">我们不会分享你的登录信息</small>
-  </div>
-  <div class="form-group">
-    <label for="password">密码：</label>
-    <input [(ngModel)]="password" name="password" class="form-control" id="password">
-  </div>
-  <button type="submit" class="btn btn-primary" (click)="onLogin()">登录</button>
-</form>
+  <form class="border border-success p-3 w-50">
+    <div class="form-group">
+      <label for="username">用户名：</label>
+      <input [(ngModel)]="username" name="username" class="form-control" id="username">
+      <small id="Help" class="form-text text-muted">我们不会分享你的登录信息</small>
+    </div>
+    <div class="form-group position-relative">
+      <label for="password">密码：</label>
+      <input
+        [(ngModel)]="password"
+        name="password"
+        [type]="showPassword ? 'text' : 'password'"
+        class="form-control"
+        id="password"
+        style="padding-right: 2.5rem;">
+      <!-- 小眼睛图标 -->
+      <span
+        class="position-absolute"
+        style="top: 70%; right: 0.75rem; cursor: pointer; transform: translateY(-50%); font-size: 1.2rem;"
+        (click)="togglePasswordVisibility()">
+        <!-- 使用直接的条件绑定来切换图标 -->
+      <i class="fa-solid" [ngClass]="{ 'fa-eye': !showPassword, 'fa-eye-slash': showPassword }"></i>
+      </span>
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="onLogin()">登录</button>
+  </form>
 </div>
