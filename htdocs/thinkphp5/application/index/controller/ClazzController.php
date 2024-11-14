@@ -379,12 +379,12 @@ class ClazzController extends IndexController {
         if ($validate->scene('edit')->check($data)){
             // 获取原班级信息
             $clazz = ClazzController::getClazz();
+            $schoolId = $clazz->school_id;
             $clazz->clazz = $data['clazz'];
-            $clazz->school_id = $data['school_id'];
             // 检查班级名称是否合法
             if ($this->endChar($data['clazz'])) {
                 // 查重
-                if ($this->checkRepeat($clazz, $data['clazz'], $data['school_id'])) {
+                if ($this->checkRepeat($clazz, $data['clazz'], $schoolId)) {
                     if ($clazz->save()) {
                         return json(['success' => true, 'message' => '编辑成功']);
                     } else {
