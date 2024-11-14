@@ -119,6 +119,34 @@ class ClazzController extends IndexController {
         if (!empty($clazz->courses)) {
             return json(['success' => false, 'message' => '该班级下有课程，无法删除']);
         }
+        // 获取原班级班主任id
+        $teacherId = $clazz->teacher_id;
+        // 查询班主任对应的userd
+        $userId = Teacher::where('id', $teacherId)->value('user_id');
+        // 查询原教师是否是其他班的班主任
+        $isTeacherWithClazz = Clazz::where('teacher_id', $teacherId)->select();
+        $count = count($isTeacherWithClazz);
+        if ($count === 1) {
+            // 如果原教师不是其他班级的班主任，则将role该成2
+            Db::startTrans();
+            try {
+                // 更新teacher表
+                Db::name('teacher')
+                    ->where('id', $teacherId)
+                    ->update([
+                        'status' => 0
+                    ]);
+                Db::name('user')
+                    ->where('id', $userId)
+                    ->update([
+                        'role' => 2
+                    ]);
+                Db::commit();
+            } catch (\Exception $e) {
+                Db::rollback();
+                return json(['success' => false, 'message' => $e->getMessage()]);
+            }
+        }
         // 删除班级
         if ($clazz->delete()) {
             return json(['success' => true, 'message' => '删除成功']);
