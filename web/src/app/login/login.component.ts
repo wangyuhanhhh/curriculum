@@ -11,12 +11,17 @@ import {CommonService} from '../../service/common.service';
 export class LoginComponent implements OnInit {
   username = '';
   password = '';
+  showPassword = false;
   constructor(private router: Router,
               private loginService: LoginService,
               private commonService: CommonService,
              ) {}
 
   ngOnInit(): void {
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 
   onLogin(): void {
