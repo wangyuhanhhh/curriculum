@@ -14,6 +14,8 @@ export class PersonalCenterComponent implements OnInit {
   person = {} as Person;
   oldPassword = '';
   newPassword = '';
+  showOldPassword = false;
+  showNewPassword = false;
 
   constructor(private loginService: LoginService,
               private personService: PersonService,
@@ -28,6 +30,10 @@ export class PersonalCenterComponent implements OnInit {
         this.person.no = user.no;
       }
     });
+  }
+
+  togglePasswordVisibility(): void {
+    this.showNewPassword = !this.showNewPassword;
   }
 
   changePassword(): void {

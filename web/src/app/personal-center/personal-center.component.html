@@ -23,19 +23,27 @@
             <form>
               <div class="form-group">
                 <label for="oldPassword" class="col-form-label">旧密码:</label>
-                <input type="text"
-                       class="form-control"
-                       id="oldPassword"
+                <input class="form-control"
                        [(ngModel)]="oldPassword"
-                       name="oldPassword">
+                       id="oldPassword"
+                       name="oldPassword"
+                       [type]="showOldPassword ? 'text' : 'password'">
               </div>
-              <div class="form-group">
+              <div class="form-group position-relative">
                 <label for="newPassword" class="col-form-label">新密码:</label>
-                <input type="text"
-                       class="form-control"
-                       id="newPassword"
+                <input class="form-control"
                        [(ngModel)]="newPassword"
-                       name="newPassword">
+                       id="newPassword"
+                       name="newPassword"
+                       [type]="showNewPassword ? 'text' : 'password'"
+                       style="padding-right: 2.5rem;">
+                <span
+                  class="position-absolute"
+                  style="top: 70%; right: 0.75rem; cursor: pointer; transform: translateY(-50%); font-size: 1.2rem;"
+                  (click)="togglePasswordVisibility()">
+                  <!-- 使用直接的条件绑定来切换图标 -->
+                <i class="fa-solid" [ngClass]="{ 'fa-eye': !showNewPassword, 'fa-eye-slash': showNewPassword }"></i>
+                </span>
               </div>
             </form>
           </div>
