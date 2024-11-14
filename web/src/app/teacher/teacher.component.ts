@@ -51,13 +51,6 @@ export class TeacherComponent implements OnInit, OnDestroy {
     this.loadByPage(currentPage, this.size);
   }
 
-  // 获取所有教师
-  getAll(): void {
-    this.teacherService.getAll().subscribe(
-      teachers => this.pageData.content = teachers
-    );
-  }
-
   onDelete(teacherId: number): void {
     this.commonService.showConfirmAlert(() => {
       this.teacherService.delete(teacherId)
@@ -65,7 +58,6 @@ export class TeacherComponent implements OnInit, OnDestroy {
           if (responseBody.success) {
             this.loadByPage(this.currentPage, this.size);
             this.commonService.showSuccessAlert(responseBody.message);
-            this.getAll();
           } else {
             this.commonService.showErrorAlert(responseBody.message);
           }
