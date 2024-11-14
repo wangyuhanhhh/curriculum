@@ -102,6 +102,7 @@ export class ClazzComponent implements OnInit, OnDestroy {
    * @param size 页面大小
    */
   onSize(size: number): void {
+    this.size = size;
     this.loadByPage(this.currentPage, size);
   }
 
