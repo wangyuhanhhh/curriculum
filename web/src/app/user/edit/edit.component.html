@@ -17,7 +17,10 @@
     <label for="student_no" class="col-sm-2 col-form-label">学号</label>
     <div class="col-sm-10">
       <input type="text" class="form-control" name="student_no" formControlName="student_no" id="student_no">
-      <div *ngIf="formGroup.get('student_no')?.invalid" class="text-danger mt-1">学号不能为空</div>
+      <div *ngIf="studentNo.invalid" class="text-danger mt-1">
+        <div *ngIf="studentNo?.errors?.required">学号不能为空</div>
+        <div *ngIf="studentNo?.errors?.minlength">学号不能小于六位</div>
+      </div>
     </div>
   </div>
   <div class="mb-3 row">
